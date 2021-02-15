@@ -1,41 +1,43 @@
-#include "glad/glad.h"
-#include <GLFW/glfw3.h>
 
-int main(void)
+#include "../inc/appl.hpp"
+#include "../inc/mainwindow.hpp"
+
+
+GLFWwindow* pStartWindow;
+
+void glfwKeyCallBack(GLFWwindow *pWindow, int key, int scancode, int action, int mode);
+std::array<bool,349> qkeys;
+
+int main(int argc, char** argv)
 {
-    GLFWwindow* window;
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
+
     
-    /* Initialize the library */
-    if (!glfwInit())
-        return -1;
+    SetWindow startWindow("Start_Window");
+    MyAppl myappl(startWindow);
+    if (startWindow.get_result()) startWindow.createWindow({640,480});
+    if (startWindow.get_result()) {
+        pStartWindow= startWindow.get_pWindow();        
+    } else pStartWindow = nullptr;
+    startWindow.init();
+
+    myappl.init();
+    myappl.go();
     
-    /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
-        return -1;
-    }
+//std::cout << "Renderer:"<<RenderEngine::Renderer::getRendererStr()<<std::endl;
+//std::cout << "Version:"<<RenderEngine::Renderer::getVersionString()<<std::endl;
     
-    /* Make the window's context current */
-    glfwMakeContextCurrent(window);
-    
-    /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
-    {
-        /* Render here */
-        //         glClear(GL_COLOR_BUFFER_BIT);
-        
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
-        
-        /* Poll for and process events */
-        glfwPollEvents();
-    }
-    
+   
     glfwTerminate();
+   
     return 0;
+}
+
+
+void glfwKeyCallBack(GLFWwindow *pWindow, int key, int scancode, int action, int mode)
+{
+    if (key== GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+    {
+        glfwSetWindowShouldClose(pWindow,GL_TRUE);
+    }
+   qkeys[key]=action;   
 }
