@@ -16,7 +16,7 @@ namespace RenderEngine{
         
         static std::string getRendererStr();
         static std::string getVersionString();
-        
+        static std::string getShaderVersionString();
     private:
         
     };

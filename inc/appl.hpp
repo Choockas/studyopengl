@@ -6,15 +6,16 @@
 #include <array>
 #include "mainwindow.hpp"
 
-
+void glfwKeyCallBack(GLFWwindow *pWindow, int key, int scancode, int action, int mode);
 
 class MyAppl{
     
 public:
     
-    MyAppl(SetWindow& pSWindow);
+    MyAppl(GLFWwindow* pSWindow);
     void init();
     void go();
+    
 private:
      
      GLFWwindow* _pwndw;

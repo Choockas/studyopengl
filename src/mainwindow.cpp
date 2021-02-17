@@ -30,23 +30,21 @@ void SetWindow::createWindow(const glm::ivec2 in_wsize)
     _pFWindow = glfwCreateWindow(_wsize.x, _wsize.y, _wname, nullptr, nullptr);
     if (!_pFWindow)
     {
-         std::cout<<"Can't create GLFW window"<<std::endl;
+        std::cout<<"Can't create GLFW window"<<std::endl;
         
         _result = false;
     }
     _result= true;
 }
-  
+
 
 
 void SetWindow::init()
 {
-//     glfwSetWindowSizeCallback(_pFWindow,glfwWindowSizeCallBack);
     glfwSetFramebufferSizeCallback(_pFWindow, framebuffer_size_callback);
-//     glfwSetKeyCallback(_pFWindow,glfwKeyCallBack);
     glfwMakeContextCurrent(_pFWindow);
     glfwSwapInterval(1);
-        if(!gladLoadGL()){
+    if(!gladLoadGL()){
         std::cout<<"Cant Load GLAD"<<std::endl;
         glfwTerminate();
         _result= false;

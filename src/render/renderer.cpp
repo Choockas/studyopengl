@@ -44,5 +44,13 @@ namespace RenderEngine{
         return (char*) glGetString(GL_VERSION);
     }
     
+    std::string Renderer::getShaderVersionString()
+    {
+        
+        return (char*) glGetString(GL_SHADING_LANGUAGE_VERSION);
+    }
+    
+    
+    
 }
 
