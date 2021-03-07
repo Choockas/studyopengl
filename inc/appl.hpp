@@ -5,6 +5,13 @@
 #include <iostream>
 #include <array>
 #include "mainwindow.hpp"
+#include "rapidjson/document.h"
+#include "rapidjson/error/en.h"
+#include "memory"
+#include <vector>
+#include <map>
+
+
 
 void glfwKeyCallBack(GLFWwindow *pWindow, int key, int scancode, int action, int mode);
 
@@ -13,12 +20,17 @@ class MyAppl{
 public:
     
     MyAppl(GLFWwindow* pSWindow);
-    void init();
+    ~MyAppl();
+    void init(const std::string& executablePath);
     void go();
     
+    
+    
+    
 private:
-     
+    
      GLFWwindow* _pwndw;
+     std::string _path;
      
      
     

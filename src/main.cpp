@@ -21,8 +21,8 @@ int main(int argc, char** argv)
     MyAppl myappl(pStartWindow);
     glfwSetKeyCallback(pStartWindow,glfwKeyCallBack);
     startWindow.init();
-    
-    myappl.init();
+// pass directory mame    
+    myappl.init(argv[0]);
     myappl.go();
 
    

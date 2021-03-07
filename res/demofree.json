@@ -1,0 +1,9 @@
+{
+"shaders":[
+{
+"name" : "freeshader1",
+"filepathvertex":"res/shader/vertfree.txt",
+"filepathfrag" : "res/shaders/fragfree.txt"
+}
+]
+}

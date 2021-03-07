@@ -1,0 +1,26 @@
+
+{
+"inits":[
+{
+  "name" : "demosprites",
+  "path" : "res/demospr.json",
+},
+{
+  "name" : "demofree",
+  "path" : "res/demofree.json"
+}
+],
+"menu":[
+"runSprites",
+"runFree",
+"exit"
+],
+"shaders": [
+    {
+      "name": "spriteShader",
+      "filePath_v": "res/shaders/vsprite.txt",
+      "filePath_f": "res/shaders/fsprite.txt"
+    }
+  ]
+
+}
