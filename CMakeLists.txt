@@ -15,7 +15,8 @@ set (SOURCE_EXE src/main.cpp
                 src/render/texture2D.cpp 
                 src/render/sprite.cpp 
                 src/appl/menu.cpp 
-                src/appl/resourcemanager.cpp)
+                src/appl/resourcemanager.cpp
+                src/render/animatesprite.cpp )
 
 add_executable(${PROJECT_NAME} ${SOURCE_EXE}) 
 

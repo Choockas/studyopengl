@@ -27,17 +27,42 @@ public:
     ResourceManager();
     void managerInit(const std::string& exepath);    
     virtual bool loadJsonResources(const std::string& resourcePath );
-    std::shared_ptr<RenderEngine::ShaderProgramm> loadShaders(const std::string& shaderName, const std::string& vertexPath, const std::string& fragmentPath );
+    std::shared_ptr<RenderEngine::Texture2D> getTextures(const std::string& textureName);
     std::shared_ptr<RenderEngine::Sprite> getSprites(const std::string& spriteName);
-    std::shared_ptr<RenderEngine::Texture2D> loadTextures(const std::string& textureName,const std::string& texturePath );
+    std::shared_ptr<RenderEngine::ShaderProgramm> getShaderProgram(const std::string& shaderName);
+    std::shared_ptr<RenderEngine::AnimateSprite> getAnimateSprites(const std::string& spriteName);
+    
+    std::shared_ptr<RenderEngine::ShaderProgramm> loadShaders(const std::string& shaderName,
+                                                              const std::string& vertexPath,
+                                                              const std::string& fragmentPath );
+    std::shared_ptr<RenderEngine::Texture2D> loadTextures(const std::string& resourcePath,
+                                                          const std::string& textureName,
+                                                          const std::string& texturePath );
+    std::shared_ptr<RenderEngine::Texture2D> loadTextureAtlas(const std::string& resourcePath,
+                                                              const std::string& textureName,
+                                                              const std::string& stexturePath,
+                                                              const std::vector<std::string> subTextures,
+                                                              const unsigned int subTexwidth,
+                                                              const unsigned int subTexheight);
+    std::shared_ptr<RenderEngine::Sprite> loadSprites(const std::string& spriteName,
+                                                           const std::string& textureName,
+                                                           const std::string& shaderName,
+                                                           const std::string& subtextureName = "default");
+    std::shared_ptr<RenderEngine::AnimateSprite> loadAnimateSprites(const std::string& spriteName,
+                                                                         const std::string& textureName,
+                                                                         const std::string& shaderName,
+                                                                         const std::string& subtextureName = "default");
     std::map<const std::string, std::string> get_resourceMap() const { return _resourcesMap;}
+    
 protected:
     typedef std::map<const std::string, std::shared_ptr<RenderEngine::ShaderProgramm>> ShaderProgramsMap;
     ShaderProgramsMap _shaderPrograms;
     typedef std::map<const std::string, std::shared_ptr<RenderEngine::Texture2D>> Texture2DMap;
-    static Texture2DMap _texture2D;    
+    Texture2DMap _texture2D;    
     typedef std::map<const std::string, std::shared_ptr<RenderEngine::Sprite>> SpriteMap;
-    static SpriteMap _sprites;
+    SpriteMap _sprites;
+    typedef std::map<const std::string, std::shared_ptr<RenderEngine::AnimateSprite>> AniSpriteMap;
+    AniSpriteMap _anisprites;
     
 private:
     std::string getFileString(const std::string& relativePath);
