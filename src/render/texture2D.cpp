@@ -32,6 +32,7 @@ Texture2D::Texture2D(const GLuint width,
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, filter);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, filter);  
     glBindTexture(GL_TEXTURE_2D,0);
+    std::cout<< "just created texture "<<m_ID<< std::endl;
 }
 
 void Texture2D::bind() const

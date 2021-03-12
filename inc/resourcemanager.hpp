@@ -25,6 +25,7 @@ struct ResourceBit{
 class ResourceManager{
 public:
     ResourceManager();
+    ~ResourceManager();
     void managerInit(const std::string& exepath);    
     virtual bool loadJsonResources(const std::string& resourcePath );
     std::shared_ptr<RenderEngine::Texture2D> getTextures(const std::string& textureName);
@@ -54,7 +55,10 @@ public:
                                                                          const std::string& subtextureName = "default");
     std::map<const std::string, std::string> get_resourceMap() const { return _resourcesMap;}
     
+    
 protected:
+    std::string getFileString(const std::string& relativePath);
+    std::string get_path()const{return _path;}
     typedef std::map<const std::string, std::shared_ptr<RenderEngine::ShaderProgramm>> ShaderProgramsMap;
     ShaderProgramsMap _shaderPrograms;
     typedef std::map<const std::string, std::shared_ptr<RenderEngine::Texture2D>> Texture2DMap;
@@ -65,11 +69,11 @@ protected:
     AniSpriteMap _anisprites;
     
 private:
-    std::string getFileString(const std::string& relativePath);
+    
     rapidjson::Document _document;
     std::vector<std::vector<std::string>> _vectorResourcesString;
     std::map<const std::string, std::string> _resourcesMap;
-    
+    std::string _path;
     
 };
 

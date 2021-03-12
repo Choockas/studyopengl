@@ -1,26 +1,75 @@
-
 {
 "inits":[
 {
-  "name" : "demosprites",
-  "path" : "res/demospr.json",
+  "name":"demosprites",
+  "path":"res/demospr.json"
 },
 {
-  "name" : "demofree",
-  "path" : "res/demofree.json"
+  "name":"demofree",
+  "path":"res/demofree.json"
 }
 ],
-"menu":[
+"menu":[ {
+"name":"regular",
+"points":[
 "runSprites",
 "runFree",
 "exit"
+]
+}
 ],
-"shaders": [
+"shaders":[
     {
-      "name": "spriteShader",
-      "filePath_v": "res/shaders/vsprite.txt",
-      "filePath_f": "res/shaders/fsprite.txt"
+      "name":"spriteShader",
+      "filePath_v":"res/shaders/vsprite.txt",
+      "filePath_f":"res/shaders/fsprite.txt"
     }
-  ]
-
+  ],
+"textureAtlass":[{    
+      "name":"menuTextureAtlas_3x8",
+      "filePath":"res/textures/sixwords.png",
+      "subTextureWidth": 8,
+      "subTextureHeight": 8,
+      "subTextureArray":[
+        "file",
+        "demo",
+        "free",
+        "file",
+        "demo",
+        "free",
+        "file",
+        "demo",
+        "free",
+        "file",
+        "demo",
+        "free",
+        "file",
+        "demo",
+        "free",
+        "file",
+        "demo",
+        "free",
+        "file",
+        "demo",
+        "free",
+        "file",
+        "demo",
+        "free"        
+      ]
+      }
+      ],
+"sprites":[
+    {
+      "name": "file",
+      "textureAtlas": "menuTextureAtlas_3x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "file"
+    },
+    {
+      "name": "demo",
+      "textureAtlas": "menuTextureAtlas_3x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "demo"
+    }
+    ]
 }

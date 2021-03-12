@@ -29,6 +29,7 @@ namespace RenderEngine{
             1.f,0.f,
             
         };
+        std::cout<<"sprites for "<<initialSubTexture<< " created"<<std::endl;
         auto subTexture2D = m_pTexture -> getSubtexture2D(std::move(initialSubTexture)); 
         
         const GLfloat texCoords[] ={
@@ -44,17 +45,10 @@ namespace RenderEngine{
             2,3,0             
         };
         
-        
-        
-        
-        
         m_vertexCoordsBuffer.init(vertexCoords,2*4*sizeof(GLfloat));
         VertexBufferLayout vertexCordsLayout;
         vertexCordsLayout.addElementLayoutFloat(2,false);
         m_vertexArray.addBuffer(m_vertexCoordsBuffer, vertexCordsLayout);
-        
-        
-        
         
         m_textureCoordsBuffer.init(texCoords,2*4*sizeof(GLfloat));
         
@@ -62,18 +56,17 @@ namespace RenderEngine{
         textureCoordsLayout.addElementLayoutFloat(2,false);
         m_vertexArray.addBuffer(m_textureCoordsBuffer,textureCoordsLayout); 
         
-        
         m_indexCoordsBuffer.init(indices,6);
         
         m_vertexArray.unbind();
         m_indexCoordsBuffer.unbind();
-        
-        
-        
-        
+
     }
     
-    Sprite::~Sprite(){}
+    Sprite::~Sprite(){
+        
+        std::cout<<"sprites delayed "<<std::endl;
+    }
 
     
     void Sprite::render(const glm::vec2 position, const glm::vec2 size, const float rotation) const

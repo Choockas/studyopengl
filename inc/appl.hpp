@@ -23,10 +23,8 @@ public:
     ~MyAppl();
     void init(const std::string& executablePath);
     void go();
-    
-    
-    
-    
+    void render();
+
 private:
     
      GLFWwindow* _pwndw;

@@ -44,6 +44,13 @@ void MyAppl::init(const std::string& executablePath)
 }
 
 
+void MyAppl::render()
+{
+    
+}
+
+
+
 void glfwKeyCallBack(GLFWwindow *pWindow, int key, int scancode, int action, int mode)
 {
     if (key== GLFW_KEY_ESCAPE && action == GLFW_PRESS)

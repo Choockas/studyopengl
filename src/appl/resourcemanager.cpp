@@ -16,7 +16,29 @@ ResourceManager::ResourceManager(){
     
 }
 
+ResourceManager::~ResourceManager()
+{
+    _shaderPrograms.clear();
+    _resourcesMap.clear();
+    _texture2D.clear();
+    _sprites.clear();
+}
 
+
+std::string ResourceManager::getFileString(const std::string& relativePath)
+{
+    std::ifstream f;
+    f.open(_path+"/"+relativePath,std::ios::in | std::ios::binary);
+    if (!f.is_open())
+    {
+        std::cerr<<"Failed to open "<< relativePath<<std::endl;
+        return std::string();
+    }
+    std::stringstream buffer;
+    buffer<<f.rdbuf();
+    std::cout<< "getting string from "<< relativePath<<std::endl;
+    return buffer.str();
+}
 
 
 bool ResourceManager::loadJsonResources(const std::string& resourcePath)
@@ -65,7 +87,7 @@ bool ResourceManager::loadJsonResources(const std::string& resourcePath)
         }
     }
     
-    auto textureAtlas = document.FindMember("textureAtlas");
+    auto textureAtlas = document.FindMember("textureAtlass");
     
     if (textureAtlas!=document.MemberEnd())
     {                
@@ -83,10 +105,10 @@ bool ResourceManager::loadJsonResources(const std::string& resourcePath)
                 subTextures.emplace_back(currentSubtextures.GetString());                
             }
             
-            loadTextureAtlas(std::move(resourcePath),name, filepath,std::move(subTextures), subTextureWidth,subTextureHight);
+            loadTextureAtlas(_path,name, filepath,std::move(subTextures), subTextureWidth,subTextureHight);
             
         }
-    }
+    } else std::cout << "Something with textureAtalass ?" << std::endl;
     
     auto animateSpritesIt = document.FindMember("animatedSprites");
     if (animateSpritesIt!=document.MemberEnd())
@@ -123,9 +145,8 @@ bool ResourceManager::loadJsonResources(const std::string& resourcePath)
         }
     }
     
- //after declaration of animated sprites   
     auto spritesIt = document.FindMember("sprites");
-    if (animateSpritesIt!=document.MemberEnd())
+    if (spritesIt!=document.MemberEnd())
     {
         for (const auto& currentSprite : spritesIt-> value.GetArray())
         {
@@ -141,6 +162,8 @@ bool ResourceManager::loadJsonResources(const std::string& resourcePath)
             }            
         }
     }
+    
+    
     
     return true;
     
@@ -205,6 +228,8 @@ std::shared_ptr< RenderEngine::Texture2D > ResourceManager::loadTextureAtlas(con
     return pTexture; 
 }
 
+
+//***** S P R I T E ************************************
 std::shared_ptr<RenderEngine::Sprite> ResourceManager::loadSprites(const std::string& spriteName,
                                                                    const std::string& textureName,
                                                                    const std::string& shaderName,
@@ -236,7 +261,7 @@ std::shared_ptr<RenderEngine::Sprite> ResourceManager::loadSprites(const std::st
                                                                                                                
 }
 
-
+//***** T E X T U R E ************************************
 std::shared_ptr<RenderEngine::Texture2D> ResourceManager::loadTextures(const std::string& resourcePath, 
                                                                        const std::string& textureName, 
                                                                        const std::string& texturePath)
@@ -268,7 +293,7 @@ std::shared_ptr<RenderEngine::Texture2D> ResourceManager::loadTextures(const std
 
 
 
-
+//***** A N I M A T E D   S P R I T E ************************************
 std::shared_ptr<RenderEngine::AnimateSprite> ResourceManager::loadAnimateSprites(const std::string& spriteName, const std::string& textureName, const std::string& shaderName, const std::string& subtextureName)
 {
         auto pTexture  = getTextures(textureName);
@@ -293,20 +318,7 @@ std::shared_ptr<RenderEngine::AnimateSprite> ResourceManager::loadAnimateSprites
     return newSprite;                                                                                                                                
 }
 
-std::string ResourceManager::getFileString(const std::string& relativePath)
-{
-    std::ifstream f;
-    f.open(relativePath+"/"+relativePath,std::ios::in | std::ios::binary);
-    if (!f.is_open())
-    {
-        std::cerr<<"Failed to open "<< relativePath<<std::endl;
-        return std::string();
-    }
-    std::stringstream buffer;
-    buffer<<f.rdbuf();
-    std::cout<< "getting string from "<< relativePath<<std::endl;
-    return buffer.str();
-}
+
 
 std::shared_ptr<RenderEngine::Texture2D> ResourceManager::getTextures(const std::string& textureName)
 {
@@ -337,7 +349,8 @@ std::shared_ptr<RenderEngine::ShaderProgramm> ResourceManager::getShaderProgram(
 
 void ResourceManager::managerInit(const std::string& exepath)
 {
-    loadJsonResources(exepath);
+    _path=exepath;
+    loadJsonResources("res/startres.json");
 }
 
 
