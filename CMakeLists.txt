@@ -17,7 +17,8 @@ set (SOURCE_EXE src/main.cpp
                 src/appl/menu.cpp 
                 src/appl/resourcemanager.cpp
                 src/render/animatesprite.cpp 
-                src/appl/graphicobject.cpp)
+                src/appl/igraphicobject.cpp 
+                src/appl/menupad.cpp)
                 
 
 add_executable(${PROJECT_NAME} ${SOURCE_EXE}) 
