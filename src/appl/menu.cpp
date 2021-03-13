@@ -1,4 +1,14 @@
 #include "menu.hpp"
+#include "igraphicobject.hpp"
+
+#include "resourcemanager.hpp"
+
+
+const unsigned int BLOCK_SIZE = 16;
+
+
+
+
 
 
 

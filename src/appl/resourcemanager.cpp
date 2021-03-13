@@ -345,6 +345,18 @@ std::shared_ptr<RenderEngine::ShaderProgramm> ResourceManager::getShaderProgram(
     return nullptr;
 }
 
+std::shared_ptr<RenderEngine::Sprite> ResourceManager::getSprites(const std::string& spriteName)
+{
+    SpriteMap::const_iterator it=_sprites.find(spriteName);
+    if(it!=_sprites.end()){
+        return it->second;
+    }
+    std::cerr<<"Can't find sprite"
+    <<spriteName
+    <<std::endl;
+    return nullptr;
+}
+
 
 
 void ResourceManager::managerInit(const std::string& exepath)
