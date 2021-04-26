@@ -18,9 +18,11 @@ set (SOURCE_EXE src/main.cpp
                 src/appl/resourcemanager.cpp
                 src/render/animatesprite.cpp 
                 src/appl/igraphicobject.cpp 
-                src/appl/menupad.cpp)
+                src/appl/menupad.cpp 
+                src/appl/builder.cpp 
+                src/appl/mouse.cpp 
+                src/studyexception.cpp )
                 
-
 add_executable(${PROJECT_NAME} ${SOURCE_EXE}) 
 
 message ("Now composing [${SOURCE_EXE}]")

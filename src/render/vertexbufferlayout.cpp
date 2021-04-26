@@ -20,8 +20,10 @@ namespace RenderEngine{
     {
         m_layoutElements.reserve(count);
     }
-
-
-
+VertexBufferLayout::~VertexBufferLayout()
+{
     
 }
+    
+}
+

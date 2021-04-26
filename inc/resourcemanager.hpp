@@ -22,10 +22,19 @@ struct ResourceBit{
     std::string s_path;
 };
 
+typedef struct {
+    std::string name;
+    uint idAct;
+    bool visible;
+    
+} MenuPoint;
+
+
+
 class ResourceManager{
 public:
     ResourceManager();
-    ~ResourceManager();
+    virtual ~ResourceManager();
     void managerInit(const std::string& exepath);    
     virtual bool loadJsonResources(const std::string& resourcePath );
     std::shared_ptr<RenderEngine::Texture2D> getTextures(const std::string& textureName);
@@ -54,8 +63,8 @@ public:
                                                                          const std::string& shaderName,
                                                                          const std::string& subtextureName = "default");
     std::map<const std::string, std::string> get_resourceMap() const { return _resourcesMap;}
-    
-    
+    std::vector<MenuPoint> get_menu() const {return _menu_start;}
+          
 protected:
     std::string getFileString(const std::string& relativePath);
     std::string get_path()const{return _path;}
@@ -67,6 +76,7 @@ protected:
     SpriteMap _sprites;
     typedef std::map<const std::string, std::shared_ptr<RenderEngine::AnimateSprite>> AniSpriteMap;
     AniSpriteMap _anisprites;
+    std::vector<MenuPoint> _menu_start;
     
 private:
     
@@ -76,6 +86,7 @@ private:
     std::string _path;
     
 };
+
 
 class Accesories:public ResourceManager 
 {

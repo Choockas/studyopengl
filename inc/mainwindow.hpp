@@ -20,6 +20,8 @@ public:
     void setWinSize(int in_x, int in_y){_wsize.x=in_x;_wsize.y=in_y;}
     void init();
     bool get_result() const {return _result;} 
+    int get_xsize(){return _wsize.x;}
+    int get_ysize(){return _wsize.y;}
     
 //     friend void glfwKeyCallBack(GLFWwindow *pWindow, int key, int scancode, int action, int mode);
 private:

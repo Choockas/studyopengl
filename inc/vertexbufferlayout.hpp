@@ -14,7 +14,7 @@ namespace RenderEngine{
         };
         
         VertexBufferLayout();
-//         ~VertexBufferLayout();
+       ~VertexBufferLayout();
         void addElementLayoutFloat(const unsigned  int count,const bool normalized);
         void reserveElements(const size_t count);
         unsigned int getSride() const { return m_stride;}

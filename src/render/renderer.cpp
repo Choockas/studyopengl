@@ -2,11 +2,7 @@
 
 
 namespace RenderEngine{
-    
-    
-    Renderer::Renderer(){
-        
-    }
+
     
     void Renderer::draw(const VertexArray& vertexArray, const IndexBuffer& indexBuffer,const ShaderProgramm& shaderProgramm)
     {

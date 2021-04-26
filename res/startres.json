@@ -9,13 +9,36 @@
   "path":"res/demofree.json"
 }
 ],
-"menu":[ {
-"name":"regular",
-"points":[
-"runSprites",
-"runFree",
-"exit"
-]
+"menupads":[ 
+{
+"name": "exit",
+"idAct":0,
+"visible":true
+},
+{
+"name": "free",
+"idAct":1,
+"visible":true
+},
+{
+"name": "demo",
+"idAct":2,
+"visible":true
+},
+{
+"name": "exit_check",
+"idAct":100,
+"visible":false
+},
+{
+"name": "free_check",
+"idAct":101,
+"visible":false
+},
+{
+"name": "demo_check",
+"idAct":102,
+"visible":false
 }
 ],
 "shaders":[
@@ -26,50 +49,57 @@
     }
   ],
 "textureAtlass":[{    
-      "name":"menuTextureAtlas_3x8",
+      "name":"menuTextureAtlas",
       "filePath":"res/textures/sixwords.png",
-      "subTextureWidth": 8,
-      "subTextureHeight": 8,
+      "subTextureWidth": 43,
+      "subTextureHeight": 16,
       "subTextureArray":[
-        "file",
+        "exit",
         "demo",
         "free",
-        "file",
-        "demo",
-        "free",
-        "file",
-        "demo",
-        "free",
-        "file",
-        "demo",
-        "free",
-        "file",
-        "demo",
-        "free",
-        "file",
-        "demo",
-        "free",
-        "file",
-        "demo",
-        "free",
-        "file",
-        "demo",
-        "free"        
+        "exit_check",
+        "demo_check",
+        "free_check"      
       ]
       }
       ],
 "sprites":[
     {
-      "name": "file",
-      "textureAtlas": "menuTextureAtlas_3x8",
+      "name": "exit",
+      "textureAtlas": "menuTextureAtlas",
       "shader": "spriteShader",
-      "initialSubTexture": "file"
+      "initialSubTexture": "exit"
     },
     {
       "name": "demo",
-      "textureAtlas": "menuTextureAtlas_3x8",
+      "textureAtlas": "menuTextureAtlas",
       "shader": "spriteShader",
       "initialSubTexture": "demo"
+    },
+    {
+      "name": "free",
+      "textureAtlas": "menuTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "free"
+    },
+    {
+      "name": "exit_check",
+      "textureAtlas": "menuTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "exit_check"
+    },
+    {
+      "name": "demo_check",
+      "textureAtlas": "menuTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "demo_check"
+    },
+    {
+      "name": "free_check",
+      "textureAtlas": "menuTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "free_check"
     }
+    
     ]
 }
