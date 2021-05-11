@@ -57,13 +57,40 @@ void Menu::render() const
 
 void Menu::update(const uint64_t delta)
 {
+    bool tempChange=false;
+    std::string  temp_actlabel;
+    glm::vec2 temp_position={0.f,0.f};
     for (const auto& currentMapObject : _vecObjects)
     {
-     if (currentMapObject->get_visible())
+        
+        if (currentMapObject->get_visible())
         {
             currentMapObject->update(delta);
+            if (!currentMapObject->get_visible()){
+                temp_position = currentMapObject->get_position();
+                temp_actlabel = currentMapObject->get_label();
+                tempChange=true;
+                currentMapObject->switch_visible();
+                
+            }
         }
     }
+    if (tempChange)
+    {
+        std::string  temp_label;
+        for (const auto& currentMapObject : _vecObjects)
+        {
+            temp_label= currentMapObject->get_label();
+            
+            if ((temp_label==temp_actlabel) || (temp_label== temp_actlabel+"_check")||(temp_actlabel==temp_label+"_check") ){
+                currentMapObject->switch_visible();
+                currentMapObject->set_position(temp_position);
+                
+            }            
+        } 
+    }
+    tempChange = false;
+    temp_actlabel.erase();
 }
 
 std::shared_ptr<IGraphicObject> Menu::createGOmenuPoint(const std::string label, 

@@ -8,6 +8,7 @@
 std::array<bool,349> qkeys;
 float aspect;
 glm::ivec2 originalWindowSize;
+bool menuchange= false; 
 
 MyAppl::MyAppl(GLFWwindow* pSWindow,glm::ivec2 g_size) :           _pwndw(pSWindow), 
 _windsize(g_size)
@@ -23,14 +24,11 @@ MyAppl::~MyAppl()
 void MyAppl::go()
 
 {
-
-    unsigned int mposx, mposy;
+    unsigned int actualyAct =0;
     std::shared_ptr<ResourceManager> rm = std::make_shared<ResourceManager>();
-    
-
     rm->managerInit(_path);
-        auto pSpriteShaderProgram = rm->getShaderProgram("spriteShader");
-        
+    auto pSpriteShaderProgram = rm->getShaderProgram("spriteShader");
+    
     if (!pSpriteShaderProgram){
         std::cerr<<"Can't find shader programm " << "spriteShader" <<std::endl;
         
@@ -39,18 +37,23 @@ void MyAppl::go()
     pSpriteShaderProgram->use(); 
     pSpriteShaderProgram->setInt("tex",0);
     pSpriteShaderProgram -> setMatrix4("projectionMat", projectionMatrix);
-//     _menu = std::make_shared<Menu>(&resourceManager);
+    //     _menu = std::make_shared<Menu>(&resourceManager);
     Menu _menu(rm);
-        while (!glfwWindowShouldClose(_pwndw))
-        {
-            
-            RenderEngine::Renderer::clear(); 
-            _menu.render(); 
+    while (!glfwWindowShouldClose(_pwndw))
+    {
+        
+        RenderEngine::Renderer::clear(); 
+        _menu.render(); 
+        if(menuchange){
             _menu.update(0);
+            actualyAct=_menu.get_dirty();
+            std::cout<<"actualyAct="<<actualyAct<<std::endl;
+            menuchange= false;}
+            
             glfwSwapBuffers(_pwndw);
             /* Poll for and process events */
             glfwPollEvents();
-        }
+    }
 }
 
 
@@ -144,6 +147,7 @@ void mouse_button_callback(GLFWwindow *pWindow, int button, int action, int mods
         glfwSetWindowTitle(pWindow, titlestring);
         std::cout<<"xpos="<<xpos<<" ypos="<<ypos<<std::endl;
         
+        menuchange = true;
     };
 //     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
 }

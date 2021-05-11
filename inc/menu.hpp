@@ -18,10 +18,13 @@ public:
     ~Menu();
     void render() const;
     void update(const uint64_t);
+    void set_dirty(unsigned int ac_idAct){_dirty=ac_idAct;}
+    unsigned int get_dirty(){return _dirty;}
 private:
     
-     std::shared_ptr<ResourceManager>  _rm; //recieve pointer to resources
+    std::shared_ptr<ResourceManager>  _rm; //recieve pointer to resources
     size_t _width;
     size_t  _hight;
+    unsigned int _dirty;
     std::vector <std::shared_ptr<IGraphicObject>> _vecObjects;
 };

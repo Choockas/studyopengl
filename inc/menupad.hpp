@@ -22,6 +22,8 @@ public:
     void render() const override;
     void update(uint64_t delta) override;
     uint get_idAct()const {return _idAct;}
+    void set_dirty(){_dirty?_dirty=false:_dirty=true;};
+    bool get_dirty(){return _dirty;}
 //     bool mouseCollision(double xposition, double yposition) const;
 private:
     std::shared_ptr<RenderEngine::Sprite> _pCurrentSprite;

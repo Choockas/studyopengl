@@ -44,17 +44,17 @@ void MenuPad::update(uint64_t delta)
     const int xpos = MouseViewPort::get_xpos();
     const int ypos = MouseViewPort::get_ypos();
     const int mbut = MouseViewPort::get_button();
+    unsigned int ac_idAct;
     //
     if((xpos>_position.x) && (xpos<_position.x+_size.x) && (600-ypos>_position.y)&&(600-ypos<_position.y+_size.y))
     {
-//         std::cout<<"x="<<xpos<< "; y="<<ypos<<std::endl;
-//         std::cout << "_position.x ="<<_position.x<<" size.x ="<<_size.x<<std::endl;
-//         std::cout << "_position.y ="<<_position.y<<" size.y ="<<_size.y<<std::endl;
-        
-        std::cout <<"label : "<< get_label()<<"  idAct : "<< get_idAct()<<std::endl;
-        set_visible(false);
-//         MouseStatus::set_used(true);
+
+        ac_idAct = get_idAct();
+        std::cout <<"label : "<< get_label()<<"  idAct : "<< ac_idAct<<std::endl;
+        //just only to finding this point, actualy visibility take change in the menus rule
+        switch_visible();
     }
+    
     
 }
 
