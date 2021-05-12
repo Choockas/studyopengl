@@ -71,7 +71,7 @@ void Menu::update(const uint64_t delta)
                 temp_actlabel = currentMapObject->get_label();
                 tempChange=true;
                 currentMapObject->switch_visible();
-                
+                set_dirty(currentMapObject->get_idAct());
             }
         }
     }
@@ -89,17 +89,12 @@ void Menu::update(const uint64_t delta)
             }            
         } 
     }
+    std::cout<<"menu dirty: "<<get_dirty()<<std::endl;
     tempChange = false;
     temp_actlabel.erase();
 }
 
-std::shared_ptr<IGraphicObject> Menu::createGOmenuPoint(const std::string label, 
-                                                        const glm::vec2 position, 
-                                                        const glm::vec2 size, 
-                                                        const float rotation,
-                                                        const bool visible,
-                                                        const uint idAct
-                                                       )
+std::shared_ptr< MenuPad > Menu::createGOmenuPoint(const std::string label, glm::vec2 position, const glm::vec2 size, const float rotation, const bool visible, uint idAct)
 {
     return std::make_shared<MenuPad>(_rm->getSprites(label),position,size,rotation,label,visible,idAct);  
 }

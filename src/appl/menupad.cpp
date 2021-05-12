@@ -16,10 +16,9 @@ MenuPad::MenuPad(const std::shared_ptr< RenderEngine::Sprite > ptrSprite,
                                                                uint idAct)
                                                                :IGraphicObject(position,
                                                                                size,
-                                                                               rotation,
-                                                                               label,
+                                                                               rotation,                                                        
                                                                                visible), 
-                                                                _pCurrentSprite(ptrSprite),  _idAct(idAct)
+                                                                _pCurrentSprite(ptrSprite),  _idAct(idAct),_label(label)
 {
     std::cout << "emplace pad "<< label<<std::endl;
     
