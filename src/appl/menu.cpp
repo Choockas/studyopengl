@@ -41,57 +41,48 @@ Menu::~Menu()
 
 
 void Menu::render() const 
-{
-    
+{    
     for (const auto& currentMapObject : _vecObjects)
     {
-
         if (currentMapObject->get_visible())
-        {
-            
+        {            
             currentMapObject->render();
         }
-    }
-    
+    }    
 }
 
 void Menu::update(const uint64_t delta)
 {
-    bool tempChange=false;
-    std::string  temp_actlabel;
+    std::string  temp_actlabel, temp_label;
+    
     glm::vec2 temp_position={0.f,0.f};
     for (const auto& currentMapObject : _vecObjects)
     {
-        
+        // checking only visible objects   
         if (currentMapObject->get_visible())
         {
-            currentMapObject->update(delta);
-            if (!currentMapObject->get_visible()){
+            //first getting idAct trough checking position of mouse    
+            currentMapObject->update(delta); //now turn to invisible
+            //if matching up (by status dirty  get position (and label)
+            if(currentMapObject->get_dirty())
+            {  
                 temp_position = currentMapObject->get_position();
-                temp_actlabel = currentMapObject->get_label();
-                tempChange=true;
-                currentMapObject->switch_visible();
-                set_dirty(currentMapObject->get_idAct());
+                temp_actlabel = currentMapObject->get_label();                                
             }
         }
     }
-    if (tempChange)
+    
+    // look up by label  to make change in visibility and pass position
+    for (const auto& currentMapObject : _vecObjects)
     {
-        std::string  temp_label;
-        for (const auto& currentMapObject : _vecObjects)
-        {
-            temp_label= currentMapObject->get_label();
-            
-            if ((temp_label==temp_actlabel) || (temp_label== temp_actlabel+"_check")||(temp_actlabel==temp_label+"_check") ){
-                currentMapObject->switch_visible();
-                currentMapObject->set_position(temp_position);
-                
-            }            
-        } 
-    }
-    std::cout<<"menu dirty: "<<get_dirty()<<std::endl;
-    tempChange = false;
-    temp_actlabel.erase();
+        temp_label= currentMapObject->get_label();        
+        if ((temp_label==temp_actlabel) || (temp_label== temp_actlabel+"_check")||(temp_actlabel==temp_label+"_check") ){
+            currentMapObject->switch_visible();
+            currentMapObject->set_position(temp_position); 
+            //flash status dirty or change actually menu status 
+            currentMapObject->get_dirty()?currentMapObject->set_dirty(): set_dirty(currentMapObject->get_idAct());
+        }            
+    }     
 }
 
 std::shared_ptr< MenuPad > Menu::createGOmenuPoint(const std::string label, glm::vec2 position, const glm::vec2 size, const float rotation, const bool visible, uint idAct)
