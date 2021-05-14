@@ -30,7 +30,7 @@ Menu::Menu(std::shared_ptr<ResourceManager> rm) : _rm(rm)
 
         currentLeftOffset+=PADLENGTH;
     }
-    
+
 }
 
 

@@ -13,7 +13,12 @@ bool menuchange= false;
 MyAppl::MyAppl(GLFWwindow* pSWindow,glm::ivec2 g_size) :           _pwndw(pSWindow), 
 _windsize(g_size)
 {
-
+     float tverticles[]={
+        -0.5f, -0.5f,0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f, 0.5f, 0.0f
+    };
+    for (int ic=0; ic <9;ic++)_verticles[ic]=tverticles[ic];
 }
 
 MyAppl::~MyAppl()
@@ -24,14 +29,13 @@ MyAppl::~MyAppl()
 void MyAppl::go()
 
 {
-    unsigned int actualyAct =0;
+    unsigned int actualyAct = 1000;
     std::shared_ptr<ResourceManager> rm = std::make_shared<ResourceManager>();
     rm->managerInit(_path);
     auto pSpriteShaderProgram = rm->getShaderProgram("spriteShader");
     
     if (!pSpriteShaderProgram){
         std::cerr<<"Can't find shader programm " << "spriteShader" <<std::endl;
-        
     }
     glm::mat4 projectionMatrix = glm::ortho (0.0f, static_cast<float>(_windsize.x),0.0f,static_cast<float>( _windsize.y),-100.0f,100.0f);
     pSpriteShaderProgram->use(); 
@@ -44,15 +48,18 @@ void MyAppl::go()
         
         RenderEngine::Renderer::clear(); 
         _menu.render(); 
-        if(menuchange){
+        if(menuchange)
+        {
             _menu.update(0);
             actualyAct=_menu.get_dirty();
-            std::cout<<"actualyAct="<<actualyAct<<std::endl;
-            menuchange= false;}
-            
-            glfwSwapBuffers(_pwndw);
-            /* Poll for and process events */
-            glfwPollEvents();
+            menuchange= false;
+        }    
+        
+        update(actualyAct);
+        
+        glfwSwapBuffers(_pwndw);
+        /* Poll for and process events */
+        glfwPollEvents();
     }
 }
 
@@ -74,6 +81,33 @@ void MyAppl::init(const std::string& executablePath)
     MouseViewPort::set_verAspect(1.f);
 }
 
+void MyAppl::proc100()
+{
+    for(int ic=0;ic<100;ic++);
+}
+
+
+
+void MyAppl::update(unsigned int menuAct)
+{
+    
+    switch(menuAct)
+    {
+        case 100:
+            proc100();
+            break;
+        case 101:
+//             std::cout<<menuAct<<" ";
+            break;
+        case 102:
+//             std::cout<<menuAct<<" ";
+            break;
+        default:
+//             std::cout<<".";
+            
+            break;
+    }
+}
 
 void MyAppl::render()
 {

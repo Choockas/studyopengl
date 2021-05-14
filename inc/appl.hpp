@@ -25,13 +25,16 @@ public:
     void init(const std::string& executablePath);
     void go();
     void render();
+    void update(unsigned int menuAct);
+    void proc100();
     float get_windsizex(){return _windsize.x;}
     float get_windsizey(){return _windsize.y;}
 private:
-    
+    float _verticles[9];
      GLFWwindow* _pwndw;
      std::string _path;
      glm::ivec2  _windsize;
+     
      
     
 };

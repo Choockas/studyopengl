@@ -29,7 +29,6 @@ namespace RenderEngine{
             1.f,0.f,
             
         };
-        std::cout<<"sprites for "<<initialSubTexture<< " created"<<std::endl;
         auto subTexture2D = m_pTexture -> getSubtexture2D(std::move(initialSubTexture)); 
         
         const GLfloat texCoords[] ={
