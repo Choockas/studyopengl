@@ -29,14 +29,40 @@ typedef struct {
     
 } MenuPoint;
 
+class ResourceAcces
+{
+public:
+    ResourceAcces();
+    virtual ~ResourceAcces();
+    virtual bool loadJsonResources(const std::string& resourcePath)=0;
+    std::string getFileString(const std::string& relativePath);
+    std::string get_path()const{return _path;}
+    void set_path(std::string path){_path=path;};
+    void supportInit(std::string resourceJFileName);
+private:
+    std::string _path;
+    
+    
+};
+
+class ResourceSupport:public ResourceAcces
+{
+public:
+    ResourceSupport(){};
+    virtual ~ResourceSupport(){};
+    bool loadJsonResources(const std::string& resourcePath ) override;
+    
+private:
+};
 
 
-class ResourceManager{
+class ResourceManager:public ResourceAcces
+{
 public:
     ResourceManager();
     virtual ~ResourceManager();
     void managerInit(const std::string& exepath);    
-    virtual bool loadJsonResources(const std::string& resourcePath );
+    bool loadJsonResources(const std::string& resourcePath ) override;
     std::shared_ptr<RenderEngine::Texture2D> getTextures(const std::string& textureName);
     std::shared_ptr<RenderEngine::Sprite> getSprites(const std::string& spriteName);
     std::shared_ptr<RenderEngine::ShaderProgramm> getShaderProgram(const std::string& shaderName);
@@ -66,8 +92,8 @@ public:
     std::vector<MenuPoint> get_menu() const {return _menu_start;}
           
 protected:
-    std::string getFileString(const std::string& relativePath);
-    std::string get_path()const{return _path;}
+    
+    
     typedef std::map<const std::string, std::shared_ptr<RenderEngine::ShaderProgramm>> ShaderProgramsMap;
     ShaderProgramsMap _shaderPrograms;
     typedef std::map<const std::string, std::shared_ptr<RenderEngine::Texture2D>> Texture2DMap;
@@ -83,24 +109,8 @@ private:
     rapidjson::Document _document;
     std::vector<std::vector<std::string>> _vectorResourcesString;
     std::map<const std::string, std::string> _resourcesMap;
-    std::string _path;
+    
     
 };
 
 
-class Accesories:public ResourceManager 
-{
-public:
-    Accesories();
-    bool loadJsonResources(const std::string& resourcePath) override;
-    
-private:
-    
-};
-/*
- 
-      
-    
-  
-  
- */

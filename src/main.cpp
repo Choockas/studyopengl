@@ -19,13 +19,18 @@ int main(int argc, char** argv)
         pStartWindow= startWindow.get_pWindow();        
     } else pStartWindow = nullptr;
     
-    MyAppl myappl(pStartWindow,g_windowsize);
+    
     glfwSetKeyCallback(pStartWindow,glfwKeyCallBack);
     glfwSetWindowSizeCallback(pStartWindow,glfwWindowSizeCallBack);
     startWindow.init();
-// pass directory mame    
+    
+    //brush area for exist
+    {
+    MyAppl myappl(pStartWindow,g_windowsize);
+    // pass directory mame    
     myappl.init(argv[0]);
     myappl.go();
+    }
 
    glfwTerminate();
    

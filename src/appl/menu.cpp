@@ -9,10 +9,11 @@ const unsigned int PADHIGTH = 16;
 
 
 
-Menu::Menu(std::shared_ptr<ResourceManager> rm) : _rm(rm)
+Menu::Menu(std::shared_ptr<ResourceManager>  rm) 
 {
-        const std::vector<MenuPoint> rowMenu =_rm->get_menu();
-    glm::ivec2 m_position{0,0};
+    _rm = rm;
+    const std::vector<MenuPoint> rowMenu =_rm->get_menu();
+    std::vector<MenuPoint> _rowMenu2 =_rm->get_menu();
     
     if (rowMenu.empty()){
         std::cerr<<"Empty menu";
@@ -36,7 +37,6 @@ Menu::Menu(std::shared_ptr<ResourceManager> rm) : _rm(rm)
 
 Menu::~Menu()
 {
-        
 }
 
 
@@ -80,7 +80,7 @@ void Menu::update(const uint64_t delta)
             currentMapObject->switch_visible();
             currentMapObject->set_position(temp_position); 
             //flash status dirty or change actually menu status 
-            currentMapObject->get_dirty()?currentMapObject->set_dirty(): set_dirty(currentMapObject->get_idAct());
+            currentMapObject->get_dirty()?currentMapObject->set_dirty(): set_actualy(currentMapObject->get_idAct());
         }            
     }     
 }

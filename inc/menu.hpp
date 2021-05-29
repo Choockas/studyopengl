@@ -13,18 +13,19 @@ class ResourceManager;
 class Menu
 {
 public:
-    Menu(std::shared_ptr< ResourceManager > rm);
+    Menu(std::shared_ptr<ResourceManager>  rm);
     std::shared_ptr<MenuPad>createGOmenuPoint(const std::string label, glm::vec2 position, const glm::vec2 size, const float rotation, const bool visible, uint idAct); 
     ~Menu();
     void render() const;
     void update(const uint64_t);
-    void set_dirty(unsigned int ac_idAct){_dirty=ac_idAct;}
-    unsigned int get_dirty(){return _dirty;}
+    void set_actualy(unsigned int ac_idAct){_actualy=ac_idAct;}
+    void clear_vecobjects(){_vecObjects.clear();}
+    unsigned int get_actualy(){return _actualy;}
 private:
     
-    std::shared_ptr<ResourceManager>  _rm; //recieve pointer to resources
+    std::shared_ptr<ResourceManager>   _rm; //recieve pointer to resources
     size_t _width;
     size_t  _hight;
-    unsigned int _dirty;
+    unsigned int _actualy;
     std::vector <std::shared_ptr<MenuPad>> _vecObjects;
 };

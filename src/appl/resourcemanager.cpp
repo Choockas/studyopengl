@@ -11,27 +11,32 @@
 #define STBI_ONLY_PNG
 #include "stb_image.h"
 
-ResourceManager::ResourceManager(){
-    
-    
-    
+
+ResourceAcces::~ResourceAcces()
+{
+}
+
+ResourceAcces::ResourceAcces()
+{
+}
+
+
+ResourceManager::ResourceManager():ResourceAcces()
+{
+    std::cout<<"resource m created"<<std::endl;
 }
 
 ResourceManager::~ResourceManager()
 {
-    std::cout << "starting leave resources"<<std::endl;
-//     _shaderPrograms.clear();
-//     _texture2D.clear();
-//         _sprites.clear();
-//     _anisprites.clear();
     
 }
 
 
-std::string ResourceManager::getFileString(const std::string& relativePath)
+
+std::string ResourceAcces::getFileString(const std::string& relativePath)
 {
     std::ifstream f;
-    f.open(_path+"/"+relativePath,std::ios::in | std::ios::binary);
+    f.open(get_path()+"/"+relativePath,std::ios::in | std::ios::binary);
     if (!f.is_open())
     {
         std::cerr<<"Failed to open "<< relativePath<<std::endl;
@@ -43,8 +48,27 @@ std::string ResourceManager::getFileString(const std::string& relativePath)
     return buffer.str();
 }
 
+bool ResourceSupport::loadJsonResources(const std::string& resourcePath)
+{
+    const std::string JSONstring = getFileString(resourcePath);
+    
+    if (JSONstring.empty())
+    {
+        std::cerr << "No JSON resourses file"<< resourcePath<<std::endl;
+        return false;
+    }
+    rapidjson::Document document;
+    rapidjson::ParseResult parsOk = document.Parse(JSONstring.c_str());
+    if(!parsOk){
+        std::cerr << "Parse file error "<< rapidjson::GetParseError_En(parsOk.Code())<<"("<<parsOk.Offset()<<")" <<std::endl;
+        std::cerr << "In JSONfile:" << JSONstring<<std::endl;
+        return false;
+    }
+    return true;
+}
 
-bool ResourceManager::loadJsonResources(const std::string& resourcePath)
+
+bool ResourceManager::loadJsonResources(const std::string& resourcePath) 
 {
     
     const std::string JSONstring = getFileString(resourcePath);
@@ -108,7 +132,7 @@ bool ResourceManager::loadJsonResources(const std::string& resourcePath)
                 subTextures.emplace_back(currentSubtextures.GetString()); 
                 std::cout << "emplace "<< currentSubtextures.GetString() << std::endl;
             }            
-            loadTextureAtlas(_path,name, filepath,std::move(subTextures), subTextureWidth,subTextureHight);            
+            loadTextureAtlas(get_path(),name, filepath,std::move(subTextures), subTextureWidth,subTextureHight);            
         }
     } else std::cout << "Something with textureAtalass ?" << std::endl;
     
@@ -372,22 +396,18 @@ std::shared_ptr<RenderEngine::Sprite> ResourceManager::getSprites(const std::str
 
 void ResourceManager::managerInit(const std::string& exepath)
 {
-    _path=exepath;
+    set_path(exepath);
     loadJsonResources("res/startres.json");
     
 }
 
-
-
-Accesories::Accesories()
+void ResourceAcces::supportInit(std::string resourceJFileName)
 {
+    loadJsonResources(resourceJFileName);
 }
 
 
 
-bool Accesories::loadJsonResources(const std::string& resourcePath)
-{
-    
-    return true;
-}
+
+
 

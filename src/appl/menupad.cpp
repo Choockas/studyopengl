@@ -27,6 +27,7 @@ MenuPad::MenuPad(const std::shared_ptr< RenderEngine::Sprite > ptrSprite,
 MenuPad::~MenuPad()
 {
     std::cout<<"menuPad destructor"<<std::endl;
+    _pCurrentSprite.use_count();
 }
 
 
