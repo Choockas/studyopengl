@@ -1,24 +1,17 @@
 #version 330
 #extension GL_ARB_explicit_uniform_location : require
-// layout(location=0) in vec2 vertex_position;
-// layout(location=1) in vec2 texture_cords;
-// out vec2 textcord;
-// 
-// uniform mat4 modelMat;
-// uniform mat4 projectionMat;
-// 
-// void main()
-// {
-//   textcord = texture_cords;
-//   gl_Position= projectionMat * modelMat * vec4(vertex_position,0.0,1.0);
-// }
-
 
 layout (location = 0) in vec3 aPos;
+layout(location = 0) uniform vec2 offset;
+layout(location = 1) in vec3 matcol;
+
+out vec3 ourcolor;
 
 void main()
 {
     gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+    ourcolor=matcol;
+
 }
 
 

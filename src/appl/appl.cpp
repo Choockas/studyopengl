@@ -1,6 +1,5 @@
 #include "renderer.hpp"
 #include "resourcemanager.hpp"
-// #include "shaderprogramm.hpp"
 #include "menu.hpp"
 #include "mouse.hpp"
 #include "appl.hpp"
@@ -14,8 +13,6 @@ bool menuchange= true;
 MyAppl::MyAppl(GLFWwindow* pSWindow,glm::ivec2 g_size) :           _pwndw(pSWindow), 
 _windsize(g_size)
 {
-
-//     for (int ic=0; ic <9;ic++)_verticles[ic]=tverticles[ic];
   
 }
 
@@ -41,7 +38,10 @@ void MyAppl::init(const std::string& executablePath)
     MouseViewPort::set_verAspect(1.f);
  
     _rm = std::make_shared<ResourceManager>();
+    //set up all for menu
     _rm->managerInit(_path);
+    
+    //section below used to establishe menu
    _menu= std::make_shared<Menu>(_rm);
     
     auto pSpriteShaderProgram = _rm->getShaderProgram("spriteShader");
@@ -70,30 +70,41 @@ void MyAppl::go()
             _menu->update(0);
             actualyAct=_menu->get_actualy();
             update(actualyAct);
-            
+            actualyAct=1000;
             menuchange= false;
         } 
         
         render();
-        if(_applstate==1){
-        _shadep->use();
-        glBindVertexArray(_vao);
-        glDrawArrays(GL_TRIANGLES,0,3);    
+        switch (_applstate)
+        {
+            case 1:
+                freeShaderUse();
+            default:
+                break;
         }
+        
         
         glfwSwapBuffers(_pwndw);
         /* Poll for and process events */
         glfwPollEvents();
     }
+    glBindVertexArray(0);
     _menu->clear_vecobjects();
 }
 
+//simplest using shader
+void MyAppl::freeShaderUse()
+{
+    _shadep->use();
+    glBindVertexArray(_vao);
+    glDrawArrays(GL_TRIANGLES,0,3);    
+}
 
 
 
 void MyAppl::proc100()
 {
-    for(int ic=0;ic<100;ic++);
+   glfwSetWindowShouldClose(_pwndw,GL_TRUE);
 }
 
 void MyAppl::proc101()
@@ -107,11 +118,10 @@ void MyAppl::proc101()
         1.0f,0.0f,0.0f,
         0.0f,1.0f,0.0f,
         0.0f,0.0f,1.0f
-        
     };
     
+    
 //     auto pSimpleShaderProgram = _rm->getShaderProgram("simpleShader"); 
-//     std::shared_ptr<RenderEngine::ShaderProgramm> pSimpleShaderProgram = _rm->getShaderProgram("simpleShader"); 
     _shadep = _rm->getShaderProgram("simpleShader"); 
     _points_vbo = 0;
     glGenBuffers(1,&_points_vbo);
@@ -130,11 +140,16 @@ void MyAppl::proc101()
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER,_points_vbo);
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,nullptr);
+//     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3 * sizeof(float),nullptr);
     
     glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER,_colors_vbo);
     glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,0,nullptr);
-
+    
+//     glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,3 * sizeof(float),(void*)(3 * sizeof(float)));
+    _shadep->use();
+    glBindVertexArray(_vao);
+    glDrawArrays(GL_TRIANGLES,0,3);    
 }
 
 
@@ -144,6 +159,11 @@ void MyAppl::update(unsigned int menuAct)
     
     switch(menuAct)
     {
+        case 0:
+            break;
+        case 1:
+            _applstate = 0;
+            break;
         case 100:
             proc100();
             break;
@@ -227,9 +247,9 @@ void mouse_button_callback(GLFWwindow *pWindow, int button, int action, int mods
         MouseViewPort::set_pos(xpos,ypos); 
         MouseViewPort::set_button(button);
         MouseViewPort::set_used(true);
-        snprintf(titlestring, 50, "Xpos: %lf, Ypos:%lf ", MouseViewPort::get_xpos(),originalWindowSize.y- MouseViewPort::get_ypos());
-        glfwSetWindowTitle(pWindow, titlestring);
-        std::cout<<"xpos="<<xpos<<" ypos="<<ypos<<std::endl;
+//         snprintf(titlestring, 50, "Xpos: %lf, Ypos:%lf ", MouseViewPort::get_xpos(),originalWindowSize.y- MouseViewPort::get_ypos());
+//         glfwSetWindowTitle(pWindow, titlestring);
+//         std::cout<<"xpos="<<xpos<<" ypos="<<ypos<<std::endl;
         
         menuchange = true;
     };

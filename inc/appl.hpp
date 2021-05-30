@@ -34,6 +34,7 @@ public:
     void proc101();
     float get_windsizex(){return _windsize.x;}
     float get_windsizey(){return _windsize.y;}
+    void freeShaderUse();
     std::shared_ptr<ResourceManager> get_rm(){return _rm;}
 private:
     float _verticles[9];
