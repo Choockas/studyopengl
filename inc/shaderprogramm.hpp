@@ -27,6 +27,8 @@ namespace RenderEngine{
         void use() const;
         
         void setInt(const std::string& name,const GLint value);
+        void setFloat(const std::string &name, const float value) const;
+        void setVec2(const std::string &name,const glm::vec2 value) const; 
         void setMatrix4(const std::string& name,const glm::mat4& matrix);
     private:
        bool CreateShader(const std::string& source,const GLenum shaderType, GLuint& shaderID);
