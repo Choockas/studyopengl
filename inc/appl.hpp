@@ -31,26 +31,26 @@ public:
     void render();
     void update(unsigned int menuAct);
     void proc100();
-    void proc101();
+    void createPrimitive();
     float get_windsizex(){return _windsize.x;}
     float get_windsizey(){return _windsize.y;}
-    void freeShaderUse();
+    void primitiveShaderUse(glm::vec2 offset);
     std::shared_ptr<ResourceManager> get_rm(){return _rm;}
 private:
     float _verticles[9];
+    bool _primitiveInitialized=false;
      GLFWwindow* _pwndw;
      std::string _path;
      glm::ivec2  _windsize;
      typedef std::shared_ptr<ResourceManager>  pResourcesManager;
-     GLuint _points_vbo;
-     GLuint _colors_vbo;
-     GLuint _vao;
+     GLuint _points_vbo=0;
+     GLuint _colors_vbo=0;
+     GLuint _vao=0;
      pResourcesManager _rm ;
      std::shared_ptr<Menu> _menu;
 //      std::shared_ptr<ShaderProgramm> _shadep;
      std::shared_ptr<RenderEngine::ShaderProgramm> _shadep;
      unsigned int _applstate =0;
-    
 };
 
 

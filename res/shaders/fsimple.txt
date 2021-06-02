@@ -6,6 +6,17 @@ in vec3 ourcolor;
 
 void main()
 {
-    FragColor = vec4(ourcolor,1.0f);
+//     FragColor = vec4(ourcolor.z,ourcolor.y,ourcolor.x,1.0f);
+if(ourcolor.x > 0.5){
+FragColor.x= ourcolor.z;
+FragColor.y= ourcolor.y;
+FragColor.z= ourcolor.x;
+}
+else{
+FragColor.x= ourcolor.x;
+FragColor.y= ourcolor.z;
+FragColor.z= ourcolor.y;
+}
+    
 } 
 

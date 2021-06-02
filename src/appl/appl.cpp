@@ -4,7 +4,7 @@
 #include "mouse.hpp"
 #include "appl.hpp"
 #include <stdio.h>
-
+#define PRIMITIVEOFFSET {0.6f,0.4f}
 std::array<bool,349> qkeys;
 float aspect;
 glm::ivec2 originalWindowSize;
@@ -49,7 +49,7 @@ void MyAppl::init(const std::string& executablePath)
     if (!pSpriteShaderProgram){
         std::cerr<<"Can't find shader programm " << "spriteShader" <<std::endl;
     }
-    glm::mat4 projectionMatrix = glm::ortho (0.0f, static_cast<float>(_windsize.x),0.0f,static_cast<float>( _windsize.y),-100.0f,100.0f);
+    glm::mat4 projectionMatrix = glm::ortho (0.0f, static_cast<float>(_windsize.x),0.0f,static_cast<float>( _windsize.y),-0.1f,100.0f);
     pSpriteShaderProgram->use(); 
     pSpriteShaderProgram->setInt("tex",0);
     pSpriteShaderProgram -> setMatrix4("projectionMat", projectionMatrix);
@@ -61,6 +61,7 @@ void MyAppl::go()
     unsigned int actualyAct = 1000;
 
     _menu->update(0);
+    
     while (!glfwWindowShouldClose(_pwndw))
     {
         
@@ -78,7 +79,7 @@ void MyAppl::go()
         switch (_applstate)
         {
             case 1:
-                freeShaderUse();
+                primitiveShaderUse(PRIMITIVEOFFSET);
             default:
                 break;
         }
@@ -92,12 +93,16 @@ void MyAppl::go()
     _menu->clear_vecobjects();
 }
 
-//simplest using shader
-void MyAppl::freeShaderUse()
+//simplest using shader, drawing
+void MyAppl::primitiveShaderUse(glm::vec2 offset)
 {
+    //using pointer to shader
+    if(_primitiveInitialized){
     _shadep->use();
+    
     glBindVertexArray(_vao);
-    glDrawArrays(GL_TRIANGLES,0,3);    
+    glDrawArrays(GL_TRIANGLES,0,6);
+    }
 }
 
 
@@ -107,50 +112,58 @@ void MyAppl::proc100()
    glfwSetWindowShouldClose(_pwndw,GL_TRUE);
 }
 
-void MyAppl::proc101()
+void MyAppl::createPrimitive()
 {
     float tverticles[]={
-        -0.5f, -0.5f,0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f, 0.5f, 0.0f
+        -0.33f, -0.33f, 0.0f,
+         0.33f, -0.33f, 0.0f,
+         -0.33f,  0.33f, 0.0f,
+        -0.33f,  0.33f, 0.0f,
+         0.33f,  0.33f, 0.0f,
+        0.33f,  -0.33f, 0.0f
+        
     };
     GLfloat colors[]={
         1.0f,0.0f,0.0f,
         0.0f,1.0f,0.0f,
-        0.0f,0.0f,1.0f
+        0.0f,0.0f,1.0f,
+        0.0f,0.0f,1.0f,
+        0.0f,1.0f,0.0f,
+        1.0f,0.0f,0.0f
     };
-    
     
 //     auto pSimpleShaderProgram = _rm->getShaderProgram("simpleShader"); 
     _shadep = _rm->getShaderProgram("simpleShader"); 
-    _points_vbo = 0;
+    
+    //set up 1-st array, (for vertex)
     glGenBuffers(1,&_points_vbo);
     glBindBuffer(GL_ARRAY_BUFFER,_points_vbo);
+    //get data
     glBufferData(GL_ARRAY_BUFFER,sizeof(tverticles),tverticles,GL_STATIC_DRAW);
     
-    _colors_vbo = 0;
+    //set up for 2-d array  (for fragments)
     glGenBuffers(1,&_colors_vbo);
     glBindBuffer(GL_ARRAY_BUFFER,_colors_vbo);
+    //get data
     glBufferData(GL_ARRAY_BUFFER,sizeof(colors),colors,GL_STATIC_DRAW);
     
-    _vao = 0;
+    //gen array for shader (vao)
     glGenVertexArrays(1, &_vao);
     glBindVertexArray(_vao);
     
+    // forming vao from both previous
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER,_points_vbo);
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,nullptr);
-//     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3 * sizeof(float),nullptr);
     
     glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER,_colors_vbo);
     glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,0,nullptr);
-    
-//     glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,3 * sizeof(float),(void*)(3 * sizeof(float)));
     _shadep->use();
-    glBindVertexArray(_vao);
-    glDrawArrays(GL_TRIANGLES,0,3);    
+    _shadep->setVec2("offsete",PRIMITIVEOFFSET);
+    _primitiveInitialized = true;
 }
+
 
 
 
@@ -168,7 +181,7 @@ void MyAppl::update(unsigned int menuAct)
             proc100();
             break;
         case 101:
-            proc101();
+            createPrimitive();
             _applstate=1;
             break;
         case 102:
@@ -176,7 +189,6 @@ void MyAppl::update(unsigned int menuAct)
             break;
         default:
 //             std::cout<<".";
-            
             break;
     }
 }
@@ -204,7 +216,6 @@ void glfwWindowSizeCallBack(GLFWwindow *pWindow, int width, int hight)
             MouseViewPort::set_viewportLeftOffset(viewPortLeftOffset);
         }
         else { std::cout<<"viewPortWidth ="<<viewPortWidth<< "viewPortLeftOffset ="<<viewPortLeftOffset<< std::endl;}
-        
     }        
     if (woh < aspect_ratio){
         viewPortHight =   width/aspect_ratio;
@@ -217,9 +228,7 @@ void glfwWindowSizeCallBack(GLFWwindow *pWindow, int width, int hight)
    
      MouseViewPort::set_horAspect(1.f*originalWindowSize.x/viewPortWidth);
      MouseViewPort::set_verAspect(1.f*originalWindowSize.y/viewPortHight);     
-    
 }
-
 
 
 void glfwKeyCallBack(GLFWwindow *pWindow, int key, int scancode, int action, int mode)
@@ -250,7 +259,6 @@ void mouse_button_callback(GLFWwindow *pWindow, int button, int action, int mods
 //         snprintf(titlestring, 50, "Xpos: %lf, Ypos:%lf ", MouseViewPort::get_xpos(),originalWindowSize.y- MouseViewPort::get_ypos());
 //         glfwSetWindowTitle(pWindow, titlestring);
 //         std::cout<<"xpos="<<xpos<<" ypos="<<ypos<<std::endl;
-        
         menuchange = true;
     };
 //     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
