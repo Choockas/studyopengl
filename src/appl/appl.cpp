@@ -53,6 +53,49 @@ void MyAppl::init(const std::string& executablePath)
     pSpriteShaderProgram->use(); 
     pSpriteShaderProgram->setInt("tex",0);
     pSpriteShaderProgram -> setMatrix4("projectionMat", projectionMatrix);
+    /*****************************/
+    float tverticles[]={
+        -0.33f, -0.33f, 0.0f,
+         0.33f, -0.33f, 0.0f,
+         -0.33f,  0.33f, 0.0f,
+        -0.33f,  0.33f, 0.0f,
+         0.33f,  0.33f, 0.0f,
+        0.33f,  -0.33f, 0.0f
+        
+    };
+    GLfloat colors[]={
+        1.0f,0.0f,0.0f,
+        0.0f,1.0f,0.0f,
+        0.0f,0.0f,1.0f,
+        0.0f,0.0f,1.0f,
+        0.0f,1.0f,0.0f,
+        1.0f,0.0f,0.0f
+    };
+
+    //set up 1-st array, (for vertex)
+    glGenBuffers(1,&_points_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER,_points_vbo);
+    //get data
+    glBufferData(GL_ARRAY_BUFFER,sizeof(tverticles),tverticles,GL_STATIC_DRAW);
+    
+    //set up for 2-d array  (for fragments)
+    glGenBuffers(1,&_colors_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER,_colors_vbo);
+    //get data
+    glBufferData(GL_ARRAY_BUFFER,sizeof(colors),colors,GL_STATIC_DRAW);
+    
+    //gen array for shader (vao)
+    glGenVertexArrays(1, &_vao_primitive_6vf);
+    glBindVertexArray(_vao_primitive_6vf);
+    
+    // forming vao from both previous
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER,_points_vbo);
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,nullptr);
+    
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER,_colors_vbo);
+    glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,0,nullptr);
 }
 
 void MyAppl::go()
@@ -79,12 +122,14 @@ void MyAppl::go()
         switch (_applstate)
         {
             case 1:
-                primitiveShaderUse(PRIMITIVEOFFSET);
+                primitive1ShaderUse();
+                break;
+            case 2:
+                primitiveTransformShaderUse();
+                break;
             default:
                 break;
         }
-        
-        
         glfwSwapBuffers(_pwndw);
         /* Poll for and process events */
         glfwPollEvents();
@@ -94,15 +139,23 @@ void MyAppl::go()
 }
 
 //simplest using shader, drawing
-void MyAppl::primitiveShaderUse(glm::vec2 offset)
+void MyAppl::primitive1ShaderUse()
 {
     //using pointer to shader
     if(_primitiveInitialized){
     _shadep->use();
     
-    glBindVertexArray(_vao);
+    glBindVertexArray(_vao_primitive_6vf);
     glDrawArrays(GL_TRIANGLES,0,6);
     }
+}
+
+void MyAppl::primitiveTransformShaderUse()
+{
+    _shadet->use();
+    glBindVertexArray(_vao_primitive_6vf);
+    glDrawArrays(GL_TRIANGLES,0,6);
+    
 }
 
 
@@ -112,56 +165,20 @@ void MyAppl::proc100()
    glfwSetWindowShouldClose(_pwndw,GL_TRUE);
 }
 
-void MyAppl::createPrimitive()
+void MyAppl::createPrimitive_6vf()
 {
-    float tverticles[]={
-        -0.33f, -0.33f, 0.0f,
-         0.33f, -0.33f, 0.0f,
-         -0.33f,  0.33f, 0.0f,
-        -0.33f,  0.33f, 0.0f,
-         0.33f,  0.33f, 0.0f,
-        0.33f,  -0.33f, 0.0f
-        
-    };
-    GLfloat colors[]={
-        1.0f,0.0f,0.0f,
-        0.0f,1.0f,0.0f,
-        0.0f,0.0f,1.0f,
-        0.0f,0.0f,1.0f,
-        0.0f,1.0f,0.0f,
-        1.0f,0.0f,0.0f
-    };
-    
 //     auto pSimpleShaderProgram = _rm->getShaderProgram("simpleShader"); 
     _shadep = _rm->getShaderProgram("simpleShader"); 
-    
-    //set up 1-st array, (for vertex)
-    glGenBuffers(1,&_points_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER,_points_vbo);
-    //get data
-    glBufferData(GL_ARRAY_BUFFER,sizeof(tverticles),tverticles,GL_STATIC_DRAW);
-    
-    //set up for 2-d array  (for fragments)
-    glGenBuffers(1,&_colors_vbo);
-    glBindBuffer(GL_ARRAY_BUFFER,_colors_vbo);
-    //get data
-    glBufferData(GL_ARRAY_BUFFER,sizeof(colors),colors,GL_STATIC_DRAW);
-    
-    //gen array for shader (vao)
-    glGenVertexArrays(1, &_vao);
-    glBindVertexArray(_vao);
-    
-    // forming vao from both previous
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER,_points_vbo);
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,nullptr);
-    
-    glEnableVertexAttribArray(1);
-    glBindBuffer(GL_ARRAY_BUFFER,_colors_vbo);
-    glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,0,nullptr);
     _shadep->use();
     _shadep->setVec2("offsete",PRIMITIVEOFFSET);
     _primitiveInitialized = true;
+}
+
+void MyAppl::createPrimitiveTransform()
+{
+    _shadet = _rm->getShaderProgram("transShader"); 
+    _shadet->use();
+    _shadet->setVec2("offsete",{.0f,.0f});
 }
 
 
@@ -177,15 +194,19 @@ void MyAppl::update(unsigned int menuAct)
         case 1:
             _applstate = 0;
             break;
+        case 2: 
+            _applstate = 0;
+            break;
         case 100:
             proc100();
             break;
         case 101:
-            createPrimitive();
+            createPrimitive_6vf();
             _applstate=1;
             break;
         case 102:
-//             std::cout<<menuAct<<" ";
+            createPrimitiveTransform();
+            _applstate=2;
             break;
         default:
 //             std::cout<<".";

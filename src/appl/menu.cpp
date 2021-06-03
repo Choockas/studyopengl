@@ -19,8 +19,6 @@ Menu::Menu(std::shared_ptr<ResourceManager>  rm)
         std::cerr<<"Empty menu";
     }
     
-    
-//     glGetIntegerv(GL_MAX_VIEWPORT_DIMS,&m_position);
     _vecObjects.reserve ( PADHIGTH * PADLENGTH*2);
     unsigned int  currentLeftOffset =0;
     
@@ -51,6 +49,8 @@ void Menu::render() const
     }    
 }
 
+
+// manipulation with menupads
 void Menu::update(const uint64_t delta)
 {
     std::string  temp_actlabel, temp_label;
@@ -85,6 +85,7 @@ void Menu::update(const uint64_t delta)
     }     
 }
 
+//getting a sprite for menues point
 std::shared_ptr< MenuPad > Menu::createGOmenuPoint(const std::string label, glm::vec2 position, const glm::vec2 size, const float rotation, const bool visible, uint idAct)
 {
     return std::make_shared<MenuPad>(_rm->getSprites(label),position,size,rotation,label,visible,idAct);  

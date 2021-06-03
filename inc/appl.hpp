@@ -31,10 +31,12 @@ public:
     void render();
     void update(unsigned int menuAct);
     void proc100();
-    void createPrimitive();
+    void createPrimitive_6vf(); // create _vao_primitive_6vf
+    void createPrimitiveTransform();
     float get_windsizex(){return _windsize.x;}
     float get_windsizey(){return _windsize.y;}
-    void primitiveShaderUse(glm::vec2 offset);
+    void primitive1ShaderUse();
+    void primitiveTransformShaderUse();
     std::shared_ptr<ResourceManager> get_rm(){return _rm;}
 private:
     float _verticles[9];
@@ -45,11 +47,14 @@ private:
      typedef std::shared_ptr<ResourceManager>  pResourcesManager;
      GLuint _points_vbo=0;
      GLuint _colors_vbo=0;
-     GLuint _vao=0;
+     GLuint _vao_primitive_6vf=0;// array for 6 verticles & colorrs layer
+
      pResourcesManager _rm ;
      std::shared_ptr<Menu> _menu;
-//      std::shared_ptr<ShaderProgramm> _shadep;
+//   very simple shader
      std::shared_ptr<RenderEngine::ShaderProgramm> _shadep;
+//  shader that using matrix uniform    
+     std::shared_ptr<RenderEngine::ShaderProgramm> _shadet;
      unsigned int _applstate =0;
 };
 
