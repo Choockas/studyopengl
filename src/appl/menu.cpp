@@ -86,9 +86,9 @@ void Menu::update(const uint64_t delta)
 }
 
 //getting a sprite for menues point
-std::shared_ptr< MenuPad > Menu::createGOmenuPoint(const std::string label, glm::vec2 position, const glm::vec2 size, const float rotation, const bool visible, uint idAct)
+std::shared_ptr< ItemPad > Menu::createGOmenuPoint(const std::string label, glm::vec2 position, const glm::vec2 size, const float rotation, const bool visible, uint idAct)
 {
-    return std::make_shared<MenuPad>(_rm->getSprites(label),position,size,rotation,label,visible,idAct);  
+    return std::make_shared<ItemPad>(_rm->getSprites(label),position,size,rotation,label,visible,idAct);  
 }
 
  

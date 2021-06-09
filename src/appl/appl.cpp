@@ -56,12 +56,11 @@ void MyAppl::init(const std::string& executablePath)
     /*****************************/
     float tverticles[]={
         -0.33f, -0.33f, 0.0f,
-         0.33f, -0.33f, 0.0f,
-         -0.33f,  0.33f, 0.0f,
+        0.33f,  -0.33f, 0.0f,
         -0.33f,  0.33f, 0.0f,
-         0.33f,  0.33f, 0.0f,
-        0.33f,  -0.33f, 0.0f
-        
+        -0.33f,  0.33f, 0.0f,
+        0.33f,   0.33f, 0.0f,
+        0.33f,  -0.33f, 0.0f        
     };
     GLfloat colors[]={
         1.0f,0.0f,0.0f,
@@ -71,7 +70,7 @@ void MyAppl::init(const std::string& executablePath)
         0.0f,1.0f,0.0f,
         1.0f,0.0f,0.0f
     };
-
+    
     //set up 1-st array, (for vertex)
     glGenBuffers(1,&_points_vbo);
     glBindBuffer(GL_ARRAY_BUFFER,_points_vbo);
@@ -125,7 +124,7 @@ void MyAppl::go()
                 primitive1ShaderUse();
                 break;
             case 2:
-                primitiveTransformShaderUse();
+                primitiveTransformShaderUse(90.0f,0.0f);
                 break;
             default:
                 break;
@@ -149,12 +148,48 @@ void MyAppl::primitive1ShaderUse()
     glDrawArrays(GL_TRIANGLES,0,6);
     }
 }
-
-void MyAppl::primitiveTransformShaderUse()
+ 
+void MyAppl::primitiveTransformShaderUse( float grades, float trmod)
 {
+    const glm::vec2 size= {0.33f*get_windsizex(),0.33f*get_windsizey()};
     _shadet->use();
     glBindVertexArray(_vao_primitive_6vf);
-    glDrawArrays(GL_TRIANGLES,0,6);
+    glm::mat4 modelMatrix_t00  = glm::mat4(1.0f);
+    modelMatrix_t00   = glm::translate(modelMatrix_t00  ,glm::vec3(0.5f*_windsize.x,0.5f*_windsize.y,0.f));
+    
+
+    modelMatrix_t00  = glm::translate(modelMatrix_t00 ,glm::vec3(100.0f,100.0f,0.0f));  
+    modelMatrix_t00  = glm::scale(modelMatrix_t00  ,glm::vec3(size,.5f));
+    _shadet->setMatrix4("modelMat",modelMatrix_t00 );
+    
+    glLineWidth(3); 
+    glDrawArrays( GL_TRIANGLES,0,6);
+    modelMatrix_t00  = glm::rotate(modelMatrix_t00 ,glm::radians(grades/2),glm::vec3(0.f,0.f,1.f)); 
+    modelMatrix_t00   = glm::translate(modelMatrix_t00  ,glm::vec3(.5f,.5f,0.f));
+    modelMatrix_t00  = glm::scale(modelMatrix_t00  ,glm::vec3(0.5f,0.5f,.5f));
+    _shadet->setMatrix4("modelMat",modelMatrix_t00 );
+    glLineWidth(3); 
+    glDrawArrays( GL_TRIANGLES,0,6);
+    
+    glm::mat4 modelMatrix_t01  = glm::mat4(1.0f);
+
+    modelMatrix_t01   = glm::translate(modelMatrix_t01 ,glm::vec3(0.5f*_windsize.x,0.5f*_windsize.y,0.f));
+    modelMatrix_t01   = glm::rotate(modelMatrix_t01  ,glm::radians(grades),glm::vec3(0.f,0.f,1.f));
+    modelMatrix_t01   = glm::translate(modelMatrix_t01 ,glm::vec3(0.5f*size.x,0.5f*size.y,0.f));
+    
+    modelMatrix_t01  = glm::scale(modelMatrix_t01  ,glm::vec3(100.f,100.f,.05f));
+    modelMatrix_t01   = glm::translate(modelMatrix_t01 ,glm::vec3(.3,1.0f,0.f));
+    _shadet->setMatrix4("modelMat",modelMatrix_t01 );
+    glDrawArrays( GL_LINE_LOOP,0,3);
+    glDrawArrays( GL_TRIANGLES,3,3);
+    modelMatrix_t01   = glm::rotate(modelMatrix_t01  ,-1.0f*glm::radians(grades*2),glm::vec3(0.f,0.f,1.f));
+    
+    _shadet->setMatrix4("modelMat",modelMatrix_t01 );
+//     glBindVertexArray(_vao_primitive_6vf);
+    
+    glDrawArrays( GL_LINE_LOOP,0,3);
+    glDrawArrays( GL_TRIANGLES,3,3);
+//     glDrawArrays(GL_LINE,0,6);
     
 }
 
@@ -176,9 +211,13 @@ void MyAppl::createPrimitive_6vf()
 
 void MyAppl::createPrimitiveTransform()
 {
+    
+    
+    glm::mat4 projectionMatrix = glm::ortho (0.0f, get_windsizex(),0.0f,get_windsizey(),-10.0f,100.0f);
     _shadet = _rm->getShaderProgram("transShader"); 
     _shadet->use();
-    _shadet->setVec2("offsete",{.0f,.0f});
+    _shadet->setMatrix4("projectionMat", projectionMatrix);
+
 }
 
 
@@ -186,7 +225,7 @@ void MyAppl::createPrimitiveTransform()
 
 void MyAppl::update(unsigned int menuAct)
 {
-    
+       
     switch(menuAct)
     {
         case 0:
@@ -206,6 +245,7 @@ void MyAppl::update(unsigned int menuAct)
             break;
         case 102:
             createPrimitiveTransform();
+            
             _applstate=2;
             break;
         default:

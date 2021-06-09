@@ -1,22 +1,17 @@
 #version 330 core
 
-//in vec3 ourcolor
 out vec4 FragColor;
 in vec3 ourcolor;
 
 void main()
 {
-//     FragColor = vec4(ourcolor.z,ourcolor.y,ourcolor.x,1.0f);
-if(ourcolor.x > 0.5){
-FragColor.x= ourcolor.z;
-FragColor.y= ourcolor.y;
-FragColor.z= ourcolor.x;
-}
-else{
-FragColor.x= ourcolor.x;
-FragColor.y= ourcolor.z;
-FragColor.z= ourcolor.y;
-}
-    
+
+    if(ourcolor.x > 0.5){
+        FragColor = vec4(ourcolor.z,ourcolor.y,ourcolor.x,1.0f);
+    }
+    else{
+        FragColor = vec4(ourcolor.x,ourcolor.z,ourcolor.y,1.0f);
+    }
+//        FragColor = vec4(0.1f,0.2f,3.0f,1.0f);
 } 
 

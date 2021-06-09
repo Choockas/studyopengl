@@ -33,11 +33,12 @@ public:
     void proc100();
     void createPrimitive_6vf(); // create _vao_primitive_6vf
     void createPrimitiveTransform();
-    float get_windsizex(){return _windsize.x;}
-    float get_windsizey(){return _windsize.y;}
+    float get_windsizex(){return 0.0f+_windsize.x;}
+    float get_windsizey(){return 0.0f+_windsize.y;}
     void primitive1ShaderUse();
-    void primitiveTransformShaderUse();
+    void primitiveTransformShaderUse( float grades, float trmod);
     std::shared_ptr<ResourceManager> get_rm(){return _rm;}
+     
 private:
     float _verticles[9];
     bool _primitiveInitialized=false;

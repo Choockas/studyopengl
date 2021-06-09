@@ -5,41 +5,72 @@
   "path":"res/demospr.json"
 },
 {
-  "name":"demofree",
+  "name":"demotransform",
   "path":"res/demofree.json"
 }
 ],
-"menupads":[ 
+"itempads":[ 
 {
-"name": "exit",
+"name": "file",
 "idAct":0,
 "visible":true
 },
 {
-"name": "free",
+"name": "primitive",
 "idAct":1,
 "visible":true
 },
 {
-"name": "demo",
+"name": "transform",
 "idAct":2,
 "visible":true
 },
 {
-"name": "exit_check",
+"name": "sprite",
+"idAct":3,
+"visible":true
+},
+{
+"name": "animatedsprite",
+"idAct":4,
+"visible":true
+},
+{
+"name": "3d",
+"idAct":5,
+"visible":true
+},
+{
+"name": "file_check",
 "idAct":100,
 "visible":false
 },
 {
-"name": "free_check",
+"name": "primitive_check",
 "idAct":101,
 "visible":false
 },
 {
-"name": "demo_check",
+"name": "transform_check",
 "idAct":102,
 "visible":false
+},
+{
+"name": "sprite_check",
+"idAct":103,
+"visible":false
+},
+{
+"name": "animatedsprite_check",
+"idAct":104,
+"visible":false
+},
+{
+"name": "3d_check",
+"idAct":105,
+"visible":false
 }
+
 ],
 "shaders":[
     {
@@ -60,55 +91,97 @@
   ],
 "textureAtlass":[{    
       "name":"menuTextureAtlas",
-      "filePath":"res/textures/sixwords.png",
+      "filePath":"res/textures/menu_m1.png",
       "subTextureWidth": 43,
       "subTextureHeight": 16,
       "subTextureArray":[
-        "exit",
-        "demo",
-        "free",
-        "exit_check",
-        "demo_check",
-        "free_check"      
+        "file",
+        "primitive",
+        "transform",
+        "file_check",
+        "primitive_check",
+        "transform_check",
+        "sprite",
+        "animatedsprite",
+        "3d",
+        "sprite_check",
+        "animatedsprite_check",
+        "3d_check"
       ]
       }
       ],
 "sprites":[
     {
-      "name": "exit",
+      "name": "file",
       "textureAtlas": "menuTextureAtlas",
       "shader": "spriteShader",
-      "initialSubTexture": "exit"
+      "initialSubTexture": "file"
     },
     {
-      "name": "demo",
+      "name": "primitive",
       "textureAtlas": "menuTextureAtlas",
       "shader": "spriteShader",
-      "initialSubTexture": "demo"
+      "initialSubTexture": "primitive"
     },
     {
-      "name": "free",
+      "name": "transform",
       "textureAtlas": "menuTextureAtlas",
       "shader": "spriteShader",
-      "initialSubTexture": "free"
+      "initialSubTexture": "transform"
     },
     {
-      "name": "exit_check",
+      "name": "file_check",
       "textureAtlas": "menuTextureAtlas",
       "shader": "spriteShader",
-      "initialSubTexture": "exit_check"
+      "initialSubTexture": "file_check"
     },
     {
-      "name": "demo_check",
+      "name": "primitive_check",
       "textureAtlas": "menuTextureAtlas",
       "shader": "spriteShader",
-      "initialSubTexture": "demo_check"
+      "initialSubTexture": "primitive_check"
     },
     {
-      "name": "free_check",
+      "name": "transform_check",
       "textureAtlas": "menuTextureAtlas",
       "shader": "spriteShader",
-      "initialSubTexture": "free_check"
+      "initialSubTexture": "transform_check"
+    },
+    {
+      "name": "sprite",
+      "textureAtlas": "menuTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "sprite"
+    },
+    {
+      "name": "animatedsprite",
+      "textureAtlas": "menuTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "animatedsprite"
+    },
+    {
+      "name": "3d",
+      "textureAtlas": "menuTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "3d"
+    },
+    {
+      "name": "sprite_check",
+      "textureAtlas": "menuTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "sprite_check"
+    },
+    {
+      "name": "animatedsprite_check",
+      "textureAtlas": "menuTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "animatedsprite_check"
+    },
+    {
+      "name": "3d_check",
+      "textureAtlas": "menuTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "3d_check"
     }
     
     ]

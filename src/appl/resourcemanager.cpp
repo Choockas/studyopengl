@@ -2,7 +2,7 @@
 #include "renderer.hpp"
 #include "texture2D.hpp"
 #include "sprite.hpp"
-#include "menupad.hpp"
+#include "itempad.hpp"
 #include "animatesprite.hpp"
 #include <fstream>
 #include <sstream>
@@ -184,7 +184,7 @@ bool ResourceManager::loadJsonResources(const std::string& resourcePath)
         }
     }
     
-    auto menuPads = document.FindMember("menupads");
+    auto menuPads = document.FindMember("itempads");
     if (menuPads!=document.MemberEnd())
     {
         for(const auto& curentPad : menuPads->value.GetArray())

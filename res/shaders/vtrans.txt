@@ -6,17 +6,18 @@ layout(location = 1) in vec3 matcol;
 
 out vec3 ourcolor;
 
-uniform vec2 offsete;
-uniform mat4 transform;
+
+uniform mat4 modelMat;
+uniform mat4 projectionMat;
 
 
 void main()
 {
-    gl_Position = vec4( aPos.x-offsete.x, aPos.y+offsete.y, aPos.z, 1.0);
-    
-//     ourcolor=vec3(matcol.z,matcol.y,matcol.x);
-ourcolor = matcol;
 
+ourcolor = matcol;
+gl_Position = projectionMat * modelMat * vec4( aPos, 1.0);
+// gl_Position = vec4( aPos, 1.0);
+ 
 }
 
 

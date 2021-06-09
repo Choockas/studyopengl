@@ -1,4 +1,4 @@
-#include "menupad.hpp"
+#include "itempad.hpp"
 
 #include "glm/vec2.hpp"
 #include "sprite.hpp"
@@ -7,7 +7,7 @@
 
 
 
-MenuPad::MenuPad(const std::shared_ptr< RenderEngine::Sprite > ptrSprite, 
+ItemPad::ItemPad(const std::shared_ptr< RenderEngine::Sprite > ptrSprite, 
                                                                const glm::vec2 position, 
                                                                const glm::vec2 size, 
                                                                const float rotation,
@@ -24,14 +24,14 @@ MenuPad::MenuPad(const std::shared_ptr< RenderEngine::Sprite > ptrSprite,
     
 }
 
-MenuPad::~MenuPad()
+ItemPad::~ItemPad()
 {
     std::cout<<"menuPad destructor"<<std::endl;
     _pCurrentSprite.use_count();
 }
 
 
-void MenuPad::render() const
+void ItemPad::render() const
 {
     
     
@@ -39,7 +39,7 @@ void MenuPad::render() const
      
 }
 
-void MenuPad::update(uint64_t delta)
+void ItemPad::update(uint64_t delta)
 {
     const int xpos = MouseViewPort::get_xpos();
     const int ypos = MouseViewPort::get_ypos();

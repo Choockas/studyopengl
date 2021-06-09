@@ -7,10 +7,10 @@ namespace RenderEngine
     class Sprite;
 }
 
-class MenuPad : public IGraphicObject
+class ItemPad : public IGraphicObject
 {
 public:
-    MenuPad(const std::shared_ptr< RenderEngine::Sprite > ptrSprite, 
+    ItemPad(const std::shared_ptr< RenderEngine::Sprite > ptrSprite, 
                                           const glm::vec2 position, 
                                           const glm::vec2 size, 
                                           const float rotation,
@@ -18,7 +18,7 @@ public:
                                           const bool visible,
                                           uint idAct
            ); 
-    ~MenuPad() override;
+    ~ItemPad() override;
     void render() const override;
     void update(uint64_t delta) override;
     uint get_idAct()const {return _idAct;}
