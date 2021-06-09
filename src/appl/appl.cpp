@@ -195,7 +195,7 @@ void MyAppl::primitiveTransformShaderUse( float grades, float trmod)
 
 
 
-void MyAppl::proc100()
+void MyAppl::filePad()
 {
    glfwSetWindowShouldClose(_pwndw,GL_TRUE);
 }
@@ -237,7 +237,7 @@ void MyAppl::update(unsigned int menuAct)
             _applstate = 0;
             break;
         case 100:
-            proc100();
+            filePad();
             break;
         case 101:
             createPrimitive_6vf();

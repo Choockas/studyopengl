@@ -30,7 +30,7 @@ public:
     void go();
     void render();
     void update(unsigned int menuAct);
-    void proc100();
+    void filePad();
     void createPrimitive_6vf(); // create _vao_primitive_6vf
     void createPrimitiveTransform();
     float get_windsizex(){return 0.0f+_windsize.x;}
