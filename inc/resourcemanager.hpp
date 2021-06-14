@@ -51,8 +51,10 @@ public:
     ResourceSupport(){};
     virtual ~ResourceSupport(){};
     bool loadJsonResources(const std::string& resourcePath ) override;
-    
+  
 private:
+   
+   rapidjson::Document _document; 
 };
 
 

@@ -64,7 +64,34 @@ bool ResourceSupport::loadJsonResources(const std::string& resourcePath)
         std::cerr << "In JSONfile:" << JSONstring<<std::endl;
         return false;
     }
+        
+
+    
+    auto textureAtlas = document.FindMember("textureAtlass");
+    
+    if (textureAtlas!=document.MemberEnd())
+    {      
+        size_t arrs;
+        for (const auto& currentTextureAtlas : textureAtlas-> value.GetArray())
+        {
+            const std::string name = currentTextureAtlas["name"].GetString() ;
+            const std::string filepath = currentTextureAtlas["filePath"].GetString() ;
+            const unsigned int subTextureWidth = currentTextureAtlas["subTextureWidth"].GetUint() ;
+            const unsigned int subTextureHight = currentTextureAtlas["subTextureHeight"].GetUint() ;
+            const auto subTexturesArray = currentTextureAtlas["subTextureArray"].GetArray();
+            std::vector<std::string> subTextures;
+            arrs=subTexturesArray.Size();
+            std::cout << "Gona to be reserved " << arrs << " for subtextures"<<std::endl;
+            subTextures.reserve(subTexturesArray.Size());
+            for(const auto& currentSubtextures : subTexturesArray){
+                subTextures.emplace_back(currentSubtextures.GetString()); 
+                std::cout << "emplace "<< currentSubtextures.GetString() << std::endl;
+            }            
+//             loadTextureAtlas(get_path(),name, filepath,std::move(subTextures), subTextureWidth,subTextureHight);            
+        }
+    } else std::cout << "Something with textureAtalass ?" << std::endl;
     return true;
+    
 }
 
 
@@ -163,7 +190,6 @@ bool ResourceManager::loadJsonResources(const std::string& resourcePath)
                 }
                 pAnimatedSprite->insertState(stateName, std::move(frames));
             }
-            
         }
     }
     

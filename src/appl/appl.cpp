@@ -197,7 +197,8 @@ void MyAppl::primitiveTransformShaderUse( float grades, float trmod)
 
 void MyAppl::filePad()
 {
-   glfwSetWindowShouldClose(_pwndw,GL_TRUE);
+   std::string secondRes;
+   
 }
 
 void MyAppl::createPrimitive_6vf()

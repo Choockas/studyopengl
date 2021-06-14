@@ -4,7 +4,7 @@
 
 namespace RenderEngine{
 
- AnimateSprite::AnimateSprite( std::shared_ptr<Texture2D>  pTexture
+ AnimateSprite::AnimateSprite ( std::shared_ptr<Texture2D>  pTexture
                 ,std::string initialSubTexture
                 ,std::shared_ptr<ShaderProgramm> pShaderProgramm)
                  : Sprite(std::move(pTexture)
@@ -17,7 +17,7 @@ namespace RenderEngine{
      std::cout<< "animated sprite created "<<std::endl;
  }
 
- AnimateSprite::~AnimateSprite()
+ AnimateSprite ::~AnimateSprite()
  {
      std::cout << "animate sprite releazed"<< std::endl;
 }

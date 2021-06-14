@@ -17,6 +17,7 @@ set (SOURCE_EXE src/main.cpp
                 src/appl/menu.cpp 
                 src/appl/resourcemanager.cpp
                 src/render/animatesprite.cpp 
+                src/render/framedsprite.cpp 
                 src/appl/igraphicobject.cpp 
                 src/appl/itempad.cpp 
                 src/appl/builder.cpp 
@@ -38,7 +39,7 @@ target_link_libraries(${PROJECT_NAME} glfw)
 add_subdirectory(external/glad)
 target_link_libraries(${PROJECT_NAME} glad)
 
-include_directories(inc external/glm external/rapidjson/include/)
+include_directories(inc external/glm external/rapidjson/include)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
