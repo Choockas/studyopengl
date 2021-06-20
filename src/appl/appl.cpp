@@ -1,14 +1,19 @@
 #include "renderer.hpp"
 #include "resourcemanager.hpp"
+#include "resourcefinder.hpp"
 #include "menu.hpp"
 #include "mouse.hpp"
 #include "appl.hpp"
 #include <stdio.h>
 #define PRIMITIVEOFFSET {0.6f,0.4f}
+
+const std::string LOCALPATH = "res/resourcestore.json";
 std::array<bool,349> qkeys;
 float aspect;
 glm::ivec2 originalWindowSize;
 bool menuchange= true; 
+
+
 
 MyAppl::MyAppl(GLFWwindow* pSWindow,glm::ivec2 g_size) :           _pwndw(pSWindow), 
 _windsize(g_size)
@@ -36,24 +41,23 @@ void MyAppl::init(const std::string& executablePath)
     originalWindowSize=_windsize;
     MouseViewPort::set_horAspect(1.f);
     MouseViewPort::set_verAspect(1.f);
- 
-    _rm = std::make_shared<ResourceManager>();
+    std::unique_ptr<ResourceFinder> _rmfinder =std::make_unique<ResourceFinder>(_path,LOCALPATH);
+    _rmfinder->loadJsonResources();
+    std::string trp = _rmfinder->get_resultPath("startmenu");
     //set up all for menu
-    _rm->managerInit(_path);
-    
     //section below used to establishe menu
-   _menu= std::make_shared<Menu>(_rm);
+   _menu= std::make_shared<Menu>(_rmfinder->get_resultPath("startmenu"),_path);
+/**********************Begin section of menu establishment **********************/    
+//     auto pSpriteShaderProgram = _rm->getShaderProgram("spriteShader");
     
-    auto pSpriteShaderProgram = _rm->getShaderProgram("spriteShader");
-    
-    if (!pSpriteShaderProgram){
-        std::cerr<<"Can't find shader programm " << "spriteShader" <<std::endl;
-    }
-    glm::mat4 projectionMatrix = glm::ortho (0.0f, static_cast<float>(_windsize.x),0.0f,static_cast<float>( _windsize.y),-0.1f,100.0f);
-    pSpriteShaderProgram->use(); 
-    pSpriteShaderProgram->setInt("tex",0);
-    pSpriteShaderProgram -> setMatrix4("projectionMat", projectionMatrix);
-    /*****************************/
+//     if (!pSpriteShaderProgram){
+//         std::cerr<<"Can't find shader programm " << "spriteShader" <<std::endl;
+//     }
+//     glm::mat4 projectionMatrix = glm::ortho (0.0f, static_cast<float>(_windsize.x),0.0f,static_cast<float>( _windsize.y),-0.1f,100.0f);
+//     pSpriteShaderProgram->use(); 
+//     pSpriteShaderProgram->setInt("tex",0);
+//     pSpriteShaderProgram -> setMatrix4("projectionMat", projectionMatrix);
+/**********End of section of menu establishment ********************************/
     float tverticles[]={
         -0.33f, -0.33f, 0.0f,
         0.33f,  -0.33f, 0.0f,
@@ -204,20 +208,20 @@ void MyAppl::filePad()
 void MyAppl::createPrimitive_6vf()
 {
 //     auto pSimpleShaderProgram = _rm->getShaderProgram("simpleShader"); 
-    _shadep = _rm->getShaderProgram("simpleShader"); 
-    _shadep->use();
-    _shadep->setVec2("offsete",PRIMITIVEOFFSET);
-    _primitiveInitialized = true;
+//     _shadep = _rm->getShaderProgram("simpleShader"); 
+//     _shadep->use();
+//     _shadep->setVec2("offsete",PRIMITIVEOFFSET);
+//     _primitiveInitialized = true;
 }
 
 void MyAppl::createPrimitiveTransform()
 {
     
-    
+/*    
     glm::mat4 projectionMatrix = glm::ortho (0.0f, get_windsizex(),0.0f,get_windsizey(),-10.0f,100.0f);
     _shadet = _rm->getShaderProgram("transShader"); 
     _shadet->use();
-    _shadet->setMatrix4("projectionMat", projectionMatrix);
+    _shadet->setMatrix4("projectionMat", projectionMatrix);*/
 
 }
 

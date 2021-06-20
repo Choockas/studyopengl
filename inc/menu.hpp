@@ -13,7 +13,7 @@ class ResourceManager;
 class Menu
 {
 public:
-    Menu(std::shared_ptr<ResourceManager>  rm);
+    Menu(const std::string relativepath, const std::string workpath);
     std::shared_ptr<ItemPad>createGOmenuPoint(const std::string label, glm::vec2 position, const glm::vec2 size, const float rotation, const bool visible, uint idAct); 
     ~Menu();
     void render() const;

@@ -1,11 +1,10 @@
 #pragma once
-#include <iostream>
-#include "rapidjson/document.h"
-#include "rapidjson/error/en.h"
-#include "memory"
+#include "resourceaccess.hpp"
+#include "document.h"
+#include "error/en.h"
+#include <memory>
 #include <vector>
 #include <map>
-
 
 namespace RenderEngine
 {
@@ -15,6 +14,7 @@ namespace RenderEngine
     class AnimateSprite;
 }
 class Menu;
+class ResourceManager;
 
 //this structure is container for json's file attribute
 struct ResourceBit{
@@ -29,50 +29,20 @@ typedef struct {
     
 } MenuPoint;
 
-class ResourceAcces
-{
-public:
-    ResourceAcces();
-    virtual ~ResourceAcces();
-    virtual bool loadJsonResources(const std::string& resourcePath)=0;
-    std::string getFileString(const std::string& relativePath);
-    std::string get_path()const{return _path;}
-    void set_path(std::string path){_path=path;};
-    void supportInit(std::string resourceJFileName);
-private:
-    std::string _path;
-    
-    
-};
-
-class ResourceSupport:public ResourceAcces
-{
-public:
-    ResourceSupport(){};
-    virtual ~ResourceSupport(){};
-    bool loadJsonResources(const std::string& resourcePath ) override;
-  
-private:
-   
-   rapidjson::Document _document; 
-};
-
 
 class ResourceManager:public ResourceAcces
 {
 public:
-    ResourceManager();
+    ResourceManager(std::string path,std::string resource_path );
     virtual ~ResourceManager();
-    void managerInit(const std::string& exepath);    
-    bool loadJsonResources(const std::string& resourcePath ) override;
+//     void managerInit(const std::string& exepath){};    
+    bool loadJsonResources() override;
     std::shared_ptr<RenderEngine::Texture2D> getTextures(const std::string& textureName);
     std::shared_ptr<RenderEngine::Sprite> getSprites(const std::string& spriteName);
     std::shared_ptr<RenderEngine::ShaderProgramm> getShaderProgram(const std::string& shaderName);
     std::shared_ptr<RenderEngine::AnimateSprite> getAnimateSprites(const std::string& spriteName);
     
-    std::shared_ptr<RenderEngine::ShaderProgramm> loadShaders(const std::string& shaderName,
-                                                              const std::string& vertexPath,
-                                                              const std::string& fragmentPath );
+    bool loadShaders(const std::string& shaderName,const std::string& vertexPath,const std::string& fragmentPath );
     std::shared_ptr<RenderEngine::Texture2D> loadTextures(const std::string& resourcePath,
                                                           const std::string& textureName,
                                                           const std::string& texturePath );
@@ -90,7 +60,7 @@ public:
                                                                          const std::string& textureName,
                                                                          const std::string& shaderName,
                                                                          const std::string& subtextureName = "default");
-    std::map<const std::string, std::string> get_resourceMap() const { return _resourcesMap;}
+    
     std::vector<MenuPoint> get_menu() const {return _menu_start;}
           
 protected:
@@ -109,10 +79,26 @@ protected:
 private:
     
     rapidjson::Document _document;
-    std::vector<std::vector<std::string>> _vectorResourcesString;
-    std::map<const std::string, std::string> _resourcesMap;
-    
+    std::string _resourcePath;
     
 };
 
-
+/*
+class ResourceBuilder
+{
+public:
+    ResourceBuilder();
+    virtual ~ResourceBuilder();
+    virtual bool loadShaders(const std::string& shaderName,const std::string& vertexPath,const std::string& fragmentPath )=0;
+    virtual std::string getFileString(const std::string& relativePath)=0;
+    virtual std::string get_path()const =0;
+    virtual void set_path(std::string path)=0;
+    virtual std::shared_ptr<RenderEngine::Texture2D> loadTextures(const std::string& resourcePath,
+                                                          const std::string& textureName,
+                                                          const std::string& texturePath )=0;
+    virtual std::shared_ptr<RenderEngine::ShaderProgramm> getShaderProgram(const std::string& shaderName)=0;
+    virtual std::shared_ptr<RenderEngine::Texture2D> getTextures(const std::string& textureName)=0;
+    
+    
+};
+*/

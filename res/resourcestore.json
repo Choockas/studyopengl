@@ -1,0 +1,16 @@
+{
+"inits":[
+            {
+            "name":"startmenu",
+            "path":"res/startres.json"
+            },
+            {
+            "name":"demosprites",
+            "path":"res/demospr.json"
+            },
+            {
+            "name":"demotransform",
+            "path":"res/demofree.json"
+            }
+        ]
+}

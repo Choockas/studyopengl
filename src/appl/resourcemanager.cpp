@@ -4,25 +4,19 @@
 #include "sprite.hpp"
 #include "itempad.hpp"
 #include "animatesprite.hpp"
-#include <fstream>
-#include <sstream>
+// #include <fstream>
+// #include <sstream>
 #include <memory>
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_ONLY_PNG
 #include "stb_image.h"
 
 
-ResourceAcces::~ResourceAcces()
-{
-}
-
-ResourceAcces::ResourceAcces()
-{
-}
 
 
-ResourceManager::ResourceManager():ResourceAcces()
+ResourceManager::ResourceManager(std::string path,std::string resourcePath):_resourcePath(resourcePath)
 {
+    set_path(path);
     std::cout<<"resource m created"<<std::endl;
 }
 
@@ -32,77 +26,14 @@ ResourceManager::~ResourceManager()
 }
 
 
-
-std::string ResourceAcces::getFileString(const std::string& relativePath)
+bool ResourceManager::loadJsonResources() 
 {
-    std::ifstream f;
-    f.open(get_path()+"/"+relativePath,std::ios::in | std::ios::binary);
-    if (!f.is_open())
-    {
-        std::cerr<<"Failed to open "<< relativePath<<std::endl;
-        return std::string();
-    }
-    std::stringstream buffer;
-    buffer<<f.rdbuf();
-    std::cout<< "getting string from "<< relativePath<<std::endl;
-    return buffer.str();
-}
-
-bool ResourceSupport::loadJsonResources(const std::string& resourcePath)
-{
-    const std::string JSONstring = getFileString(resourcePath);
+    
+    const std::string JSONstring = getFileString(_resourcePath);
     
     if (JSONstring.empty())
     {
-        std::cerr << "No JSON resourses file"<< resourcePath<<std::endl;
-        return false;
-    }
-    rapidjson::Document document;
-    rapidjson::ParseResult parsOk = document.Parse(JSONstring.c_str());
-    if(!parsOk){
-        std::cerr << "Parse file error "<< rapidjson::GetParseError_En(parsOk.Code())<<"("<<parsOk.Offset()<<")" <<std::endl;
-        std::cerr << "In JSONfile:" << JSONstring<<std::endl;
-        return false;
-    }
-        
-
-    
-    auto textureAtlas = document.FindMember("textureAtlass");
-    
-    if (textureAtlas!=document.MemberEnd())
-    {      
-        size_t arrs;
-        for (const auto& currentTextureAtlas : textureAtlas-> value.GetArray())
-        {
-            const std::string name = currentTextureAtlas["name"].GetString() ;
-            const std::string filepath = currentTextureAtlas["filePath"].GetString() ;
-            const unsigned int subTextureWidth = currentTextureAtlas["subTextureWidth"].GetUint() ;
-            const unsigned int subTextureHight = currentTextureAtlas["subTextureHeight"].GetUint() ;
-            const auto subTexturesArray = currentTextureAtlas["subTextureArray"].GetArray();
-            std::vector<std::string> subTextures;
-            arrs=subTexturesArray.Size();
-            std::cout << "Gona to be reserved " << arrs << " for subtextures"<<std::endl;
-            subTextures.reserve(subTexturesArray.Size());
-            for(const auto& currentSubtextures : subTexturesArray){
-                subTextures.emplace_back(currentSubtextures.GetString()); 
-                std::cout << "emplace "<< currentSubtextures.GetString() << std::endl;
-            }            
-//             loadTextureAtlas(get_path(),name, filepath,std::move(subTextures), subTextureWidth,subTextureHight);            
-        }
-    } else std::cout << "Something with textureAtalass ?" << std::endl;
-    return true;
-    
-}
-
-
-bool ResourceManager::loadJsonResources(const std::string& resourcePath) 
-{
-    
-    const std::string JSONstring = getFileString(resourcePath);
-    
-    if (JSONstring.empty())
-    {
-        std::cerr << "No JSON resourses file"<< resourcePath<<std::endl;
+        std::cerr << "No JSON resourses file"<< _resourcePath<<std::endl;
         return false;
     }
     
@@ -115,17 +46,7 @@ bool ResourceManager::loadJsonResources(const std::string& resourcePath)
         return false;
     }
     
-     auto resourceIt = document.FindMember("inits");
-    
-    if (resourceIt!=document.MemberEnd())
-    {
-        for (const auto& currentShader : resourceIt-> value.GetArray())
-        {
-            const std::string name = currentShader["name"].GetString() ;
-            const std::string filepath_j = currentShader["path"].GetString() ;            
-            _resourcesMap.emplace(name,filepath_j);
-        }
-    }
+
     
        auto shadersIt = document.FindMember("shaders");
     if (shadersIt!=document.MemberEnd())
@@ -229,7 +150,8 @@ bool ResourceManager::loadJsonResources(const std::string& resourcePath)
 }
 
 //***** S H A D E R  L O A D************************************
-std::shared_ptr<RenderEngine::ShaderProgramm> ResourceManager::loadShaders(const std::string& shaderName, const std::string& vertexPath, const std::string& fragmentPath)
+
+bool ResourceManager::loadShaders(const std::string& shaderName, const std::string& vertexPath, const std::string& fragmentPath)
 {
     std::string vertexString = getFileString(vertexPath);
     if (vertexString.empty()){
@@ -246,10 +168,10 @@ std::shared_ptr<RenderEngine::ShaderProgramm> ResourceManager::loadShaders(const
         <<"Vertex: " << vertexPath<< "\n" 
         <<"Fragment: " <<fragmentPath
         <<std::endl;
-        return nullptr;
+        return false;
     }
     std::cout<<"shader programm " <<shaderName << " loaded right"<<std::endl;
-    return newShader;
+    return true;
 }
 
 //***** A T L A S  L O A D************************************
@@ -420,17 +342,18 @@ std::shared_ptr<RenderEngine::Sprite> ResourceManager::getSprites(const std::str
 
 
 
-void ResourceManager::managerInit(const std::string& exepath)
-{
-    set_path(exepath);
-    loadJsonResources("res/startres.json");
-    
-}
+// void ResourceManager::managerInit(const std::string& exepath)
+// {
+//     set_path(exepath);
+//     loadJsonResources("res/startres.json");
+//     
+// }
 
-void ResourceAcces::supportInit(std::string resourceJFileName)
-{
-    loadJsonResources(resourceJFileName);
-}
+// void ResourceDirector::jsonInvolver(std::string resourceJFileName)
+// {
+// 
+//     loadJsonResources(resourceJFileName);
+// }
 
 
 

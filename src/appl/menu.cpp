@@ -9,9 +9,10 @@ const unsigned int PADHIGTH = 16;
 
 
 
-Menu::Menu(std::shared_ptr<ResourceManager>  rm) 
+Menu::Menu(const std::string relativepath, const std::string workpath) 
 {
-    _rm = rm;
+    _rm = std::make_shared<ResourceManager>(workpath,relativepath);
+    _rm->loadJsonResources();
     const std::vector<MenuPoint> rowMenu =_rm->get_menu();
     std::vector<MenuPoint> _rowMenu2 =_rm->get_menu();
     
