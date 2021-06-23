@@ -2,7 +2,7 @@
 "shaders":[
 {
 "name" : "freeshader1",
-"filepathvertex":"res/shader/vertfree.txt",
+"filepathvertex":"res/shaders/vertfree.txt",
 "filepathfrag" : "res/shaders/fragfree.txt"
 }
 ]

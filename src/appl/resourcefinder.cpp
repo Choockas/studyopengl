@@ -44,8 +44,6 @@ std::string ResourceFinder::get_resultPath(const std::string resourceName)
     if(it!=_resourcesMap.end()){
         return it->second;
     }
-    std::cerr<<"Can't find texture "
-    <<resourceName
-    <<std::endl;
+    std::cerr<<"Can't find resource " <<resourceName <<std::endl;
     return "";
 }

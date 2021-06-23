@@ -1,15 +1,16 @@
 #include "menu.hpp"
 #include "igraphicobject.hpp"
-
+#include <memory>
 #include "resourcemanager.hpp"
-
+#include "glm/mat4x4.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include "shaderprogramm.hpp"
 
 const unsigned int PADLENGTH =43;
 const unsigned int PADHIGTH = 16;
 
 
-
-Menu::Menu(const std::string relativepath, const std::string workpath) 
+Menu::Menu(const std::string relativepath, const std::string workpath, const float swidth, const float shight):_width(swidth),_hight(shight) 
 {
     _rm = std::make_shared<ResourceManager>(workpath,relativepath);
     _rm->loadJsonResources();
@@ -31,11 +32,27 @@ Menu::Menu(const std::string relativepath, const std::string workpath)
         currentLeftOffset+=PADLENGTH;
     }
 
+    
 }
 
 
 Menu::~Menu()
 {
+}
+
+void Menu::initMenu()
+{
+    //     auto pSpriteShaderProgram = _rm->getShaderProgram("spriteShader");
+   auto pSpriteShaderProgram = _rm->getShaderProgram("spriteShader");
+    
+    if (!pSpriteShaderProgram){
+        std::cerr<<"Can't find shader programm " << "spriteShader" <<std::endl;
+    }
+    
+    glm::mat4 projectionMatrix = glm::ortho (0.0f, static_cast<float>(_width),0.0f,static_cast<float>(_hight),-0.1f,100.0f);
+    pSpriteShaderProgram->use(); 
+    pSpriteShaderProgram->setInt("tex",0);
+    pSpriteShaderProgram -> setMatrix4("projectionMat", projectionMatrix);
 }
 
 

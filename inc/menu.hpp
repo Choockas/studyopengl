@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
 #include <vector>
-// #include <memory>
 #include "itempad.hpp"
-#include "GLFW/glfw3.h"
+// #include "GLFW/glfw3.h"
+// #include "shaderprogramm.hpp"
 
 
 // class IGraphicObject;
@@ -13,7 +13,7 @@ class ResourceManager;
 class Menu
 {
 public:
-    Menu(const std::string relativepath, const std::string workpath);
+    Menu(const std::string relativepath, const std::string workpath,const float swidth,const float shight);
     std::shared_ptr<ItemPad>createGOmenuPoint(const std::string label, glm::vec2 position, const glm::vec2 size, const float rotation, const bool visible, uint idAct); 
     ~Menu();
     void render() const;
@@ -21,6 +21,7 @@ public:
     void set_actualy(unsigned int ac_idAct){_actualy=ac_idAct;}
     void clear_vecobjects(){_vecObjects.clear();}
     unsigned int get_actualy(){return _actualy;}
+    void initMenu();
 private:
     
     std::shared_ptr<ResourceManager>   _rm; //recieve pointer to resources

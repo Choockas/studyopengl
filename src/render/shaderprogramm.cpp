@@ -54,7 +54,7 @@ bool ShaderProgramm::CreateShader(const std::string& source, const GLenum shader
     
   ShaderProgramm::~ShaderProgramm()
 {
-    //glDeleteProgram(m_ID);
+    glDeleteProgram(m_ID);
     std::cout << "destructor of shaderprogramm "<<m_ID<<std::endl;
 }
 

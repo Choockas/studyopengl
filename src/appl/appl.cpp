@@ -5,7 +5,7 @@
 #include "mouse.hpp"
 #include "appl.hpp"
 #include <stdio.h>
-#define PRIMITIVEOFFSET {0.6f,0.4f}
+
 
 const std::string LOCALPATH = "res/resourcestore.json";
 std::array<bool,349> qkeys;
@@ -41,24 +41,16 @@ void MyAppl::init(const std::string& executablePath)
     originalWindowSize=_windsize;
     MouseViewPort::set_horAspect(1.f);
     MouseViewPort::set_verAspect(1.f);
-    std::unique_ptr<ResourceFinder> _rmfinder =std::make_unique<ResourceFinder>(_path,LOCALPATH);
+    _rmfinder =std::make_unique<ResourceFinder>(_path,LOCALPATH);
     _rmfinder->loadJsonResources();
     std::string trp = _rmfinder->get_resultPath("startmenu");
     //set up all for menu
     //section below used to establishe menu
-   _menu= std::make_shared<Menu>(_rmfinder->get_resultPath("startmenu"),_path);
-/**********************Begin section of menu establishment **********************/    
-//     auto pSpriteShaderProgram = _rm->getShaderProgram("spriteShader");
-    
-//     if (!pSpriteShaderProgram){
-//         std::cerr<<"Can't find shader programm " << "spriteShader" <<std::endl;
-//     }
-//     glm::mat4 projectionMatrix = glm::ortho (0.0f, static_cast<float>(_windsize.x),0.0f,static_cast<float>( _windsize.y),-0.1f,100.0f);
-//     pSpriteShaderProgram->use(); 
-//     pSpriteShaderProgram->setInt("tex",0);
-//     pSpriteShaderProgram -> setMatrix4("projectionMat", projectionMatrix);
-/**********End of section of menu establishment ********************************/
-    float tverticles[]={
+   _menu= std::make_shared<Menu>(_rmfinder->get_resultPath("startmenu"),_path,get_windsizex(),get_windsizey());
+
+   _menu->initMenu();
+/*
+   float tverticles[]={
         -0.33f, -0.33f, 0.0f,
         0.33f,  -0.33f, 0.0f,
         -0.33f,  0.33f, 0.0f,
@@ -75,23 +67,23 @@ void MyAppl::init(const std::string& executablePath)
         1.0f,0.0f,0.0f
     };
     
-    //set up 1-st array, (for vertex)
+    set up 1-st array, (for vertex)
     glGenBuffers(1,&_points_vbo);
     glBindBuffer(GL_ARRAY_BUFFER,_points_vbo);
-    //get data
+    get data
     glBufferData(GL_ARRAY_BUFFER,sizeof(tverticles),tverticles,GL_STATIC_DRAW);
     
-    //set up for 2-d array  (for fragments)
+    set up for 2-d array  (for fragments)
     glGenBuffers(1,&_colors_vbo);
     glBindBuffer(GL_ARRAY_BUFFER,_colors_vbo);
-    //get data
+    get data
     glBufferData(GL_ARRAY_BUFFER,sizeof(colors),colors,GL_STATIC_DRAW);
     
-    //gen array for shader (vao)
+    gen array for shader (vao)
     glGenVertexArrays(1, &_vao_primitive_6vf);
     glBindVertexArray(_vao_primitive_6vf);
     
-    // forming vao from both previous
+    forming vao from both previous
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER,_points_vbo);
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,0,nullptr);
@@ -99,6 +91,8 @@ void MyAppl::init(const std::string& executablePath)
     glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER,_colors_vbo);
     glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,0,nullptr);
+    */
+    
 }
 
 void MyAppl::go()
@@ -144,55 +138,49 @@ void MyAppl::go()
 //simplest using shader, drawing
 void MyAppl::primitive1ShaderUse()
 {
-    //using pointer to shader
-    if(_primitiveInitialized){
-    _shadep->use();
-    
-    glBindVertexArray(_vao_primitive_6vf);
-    glDrawArrays(GL_TRIANGLES,0,6);
-    }
+    _demoShader->useShader();
 }
  
 void MyAppl::primitiveTransformShaderUse( float grades, float trmod)
 {
-    const glm::vec2 size= {0.33f*get_windsizex(),0.33f*get_windsizey()};
-    _shadet->use();
-    glBindVertexArray(_vao_primitive_6vf);
-    glm::mat4 modelMatrix_t00  = glm::mat4(1.0f);
-    modelMatrix_t00   = glm::translate(modelMatrix_t00  ,glm::vec3(0.5f*_windsize.x,0.5f*_windsize.y,0.f));
-    
-
-    modelMatrix_t00  = glm::translate(modelMatrix_t00 ,glm::vec3(100.0f,100.0f,0.0f));  
-    modelMatrix_t00  = glm::scale(modelMatrix_t00  ,glm::vec3(size,.5f));
-    _shadet->setMatrix4("modelMat",modelMatrix_t00 );
-    
-    glLineWidth(3); 
-    glDrawArrays( GL_TRIANGLES,0,6);
-    modelMatrix_t00  = glm::rotate(modelMatrix_t00 ,glm::radians(grades/2),glm::vec3(0.f,0.f,1.f)); 
-    modelMatrix_t00   = glm::translate(modelMatrix_t00  ,glm::vec3(.5f,.5f,0.f));
-    modelMatrix_t00  = glm::scale(modelMatrix_t00  ,glm::vec3(0.5f,0.5f,.5f));
-    _shadet->setMatrix4("modelMat",modelMatrix_t00 );
-    glLineWidth(3); 
-    glDrawArrays( GL_TRIANGLES,0,6);
-    
-    glm::mat4 modelMatrix_t01  = glm::mat4(1.0f);
-
-    modelMatrix_t01   = glm::translate(modelMatrix_t01 ,glm::vec3(0.5f*_windsize.x,0.5f*_windsize.y,0.f));
-    modelMatrix_t01   = glm::rotate(modelMatrix_t01  ,glm::radians(grades),glm::vec3(0.f,0.f,1.f));
-    modelMatrix_t01   = glm::translate(modelMatrix_t01 ,glm::vec3(0.5f*size.x,0.5f*size.y,0.f));
-    
-    modelMatrix_t01  = glm::scale(modelMatrix_t01  ,glm::vec3(100.f,100.f,.05f));
-    modelMatrix_t01   = glm::translate(modelMatrix_t01 ,glm::vec3(.3,1.0f,0.f));
-    _shadet->setMatrix4("modelMat",modelMatrix_t01 );
-    glDrawArrays( GL_LINE_LOOP,0,3);
-    glDrawArrays( GL_TRIANGLES,3,3);
-    modelMatrix_t01   = glm::rotate(modelMatrix_t01  ,-1.0f*glm::radians(grades*2),glm::vec3(0.f,0.f,1.f));
-    
-    _shadet->setMatrix4("modelMat",modelMatrix_t01 );
+//     const glm::vec2 size= {0.33f*get_windsizex(),0.33f*get_windsizey()};
+//     _shadet->use();
 //     glBindVertexArray(_vao_primitive_6vf);
-    
-    glDrawArrays( GL_LINE_LOOP,0,3);
-    glDrawArrays( GL_TRIANGLES,3,3);
+//     glm::mat4 modelMatrix_t00  = glm::mat4(1.0f);
+//     modelMatrix_t00   = glm::translate(modelMatrix_t00  ,glm::vec3(0.5f*_windsize.x,0.5f*_windsize.y,0.f));
+//     
+// 
+//     modelMatrix_t00  = glm::translate(modelMatrix_t00 ,glm::vec3(100.0f,100.0f,0.0f));  
+//     modelMatrix_t00  = glm::scale(modelMatrix_t00  ,glm::vec3(size,.5f));
+//     _shadet->setMatrix4("modelMat",modelMatrix_t00 );
+//     
+//     glLineWidth(3); 
+//     glDrawArrays( GL_TRIANGLES,0,6);
+//     modelMatrix_t00  = glm::rotate(modelMatrix_t00 ,glm::radians(grades/2),glm::vec3(0.f,0.f,1.f)); 
+//     modelMatrix_t00   = glm::translate(modelMatrix_t00  ,glm::vec3(.5f,.5f,0.f));
+//     modelMatrix_t00  = glm::scale(modelMatrix_t00  ,glm::vec3(0.5f,0.5f,.5f));
+//     _shadet->setMatrix4("modelMat",modelMatrix_t00 );
+//     glLineWidth(3); 
+//     glDrawArrays( GL_TRIANGLES,0,6);
+//     
+//     glm::mat4 modelMatrix_t01  = glm::mat4(1.0f);
+// 
+//     modelMatrix_t01   = glm::translate(modelMatrix_t01 ,glm::vec3(0.5f*_windsize.x,0.5f*_windsize.y,0.f));
+//     modelMatrix_t01   = glm::rotate(modelMatrix_t01  ,glm::radians(grades),glm::vec3(0.f,0.f,1.f));
+//     modelMatrix_t01   = glm::translate(modelMatrix_t01 ,glm::vec3(0.5f*size.x,0.5f*size.y,0.f));
+//     
+//     modelMatrix_t01  = glm::scale(modelMatrix_t01  ,glm::vec3(100.f,100.f,.05f));
+//     modelMatrix_t01   = glm::translate(modelMatrix_t01 ,glm::vec3(.3,1.0f,0.f));
+//     _shadet->setMatrix4("modelMat",modelMatrix_t01 );
+//     glDrawArrays( GL_LINE_LOOP,0,3);
+//     glDrawArrays( GL_TRIANGLES,3,3);
+//     modelMatrix_t01   = glm::rotate(modelMatrix_t01  ,-1.0f*glm::radians(grades*2),glm::vec3(0.f,0.f,1.f));
+//     
+//     _shadet->setMatrix4("modelMat",modelMatrix_t01 );
+//     glBindVertexArray(_vao_primitive_6vf);
+//     
+//     glDrawArrays( GL_LINE_LOOP,0,3);
+//     glDrawArrays( GL_TRIANGLES,3,3);
 //     glDrawArrays(GL_LINE,0,6);
     
 }
@@ -205,14 +193,19 @@ void MyAppl::filePad()
    
 }
 
-void MyAppl::createPrimitive_6vf()
+void MyAppl::on_offPrimitive_6vf(const std::string path, const std::string relativePath,const bool on_off)
 {
-//     auto pSimpleShaderProgram = _rm->getShaderProgram("simpleShader"); 
-//     _shadep = _rm->getShaderProgram("simpleShader"); 
-//     _shadep->use();
-//     _shadep->setVec2("offsete",PRIMITIVEOFFSET);
-//     _primitiveInitialized = true;
+    if(on_off){   
+    _demoShader = std::make_unique<DemoShader>(path,relativePath);
+         _demoShader->crteateShader();
+    } else
+    {
+        _demoShader=0;
+    }
 }
+
+
+
 
 void MyAppl::createPrimitiveTransform()
 {
@@ -230,12 +223,13 @@ void MyAppl::createPrimitiveTransform()
 
 void MyAppl::update(unsigned int menuAct)
 {
-       
+    
     switch(menuAct)
     {
         case 0:
             break;
         case 1:
+            on_offPrimitive_6vf("","", false);
             _applstate = 0;
             break;
         case 2: 
@@ -245,8 +239,13 @@ void MyAppl::update(unsigned int menuAct)
             filePad();
             break;
         case 101:
-            createPrimitive_6vf();
+            {
+            std::string resPath = _rmfinder->get_resultPath("demofree");
+            if(!resPath.empty())
+            {
+            on_offPrimitive_6vf(_path,resPath, true);
             _applstate=1;
+            }}
             break;
         case 102:
             createPrimitiveTransform();

@@ -21,10 +21,3 @@ private:
 };
 
 
-class ResourcePrimitive : public ResourceAcces
-{
-    ResourcePrimitive();
-    virtual ~ResourcePrimitive();
-    
-    
-};

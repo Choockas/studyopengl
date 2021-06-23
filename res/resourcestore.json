@@ -11,6 +11,10 @@
             {
             "name":"demotransform",
             "path":"res/demofree.json"
+            },
+            {
+            "name":"demofree",
+            "path":"res/demofree.json"
             }
         ]
 }

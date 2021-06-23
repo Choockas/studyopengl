@@ -14,7 +14,7 @@
 
 
 
-ResourceManager::ResourceManager(std::string path,std::string resourcePath):_resourcePath(resourcePath)
+ResourceManager::ResourceManager(const std::string path,const std::string resourcePath):_resourcePath(resourcePath)
 {
     set_path(path);
     std::cout<<"resource m created"<<std::endl;

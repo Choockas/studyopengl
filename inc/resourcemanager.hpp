@@ -14,7 +14,7 @@ namespace RenderEngine
     class AnimateSprite;
 }
 class Menu;
-class ResourceManager;
+// class ResourceManager;
 
 //this structure is container for json's file attribute
 struct ResourceBit{
@@ -33,7 +33,7 @@ typedef struct {
 class ResourceManager:public ResourceAcces
 {
 public:
-    ResourceManager(std::string path,std::string resource_path );
+    ResourceManager(const std::string path,const std::string resource_path );
     virtual ~ResourceManager();
 //     void managerInit(const std::string& exepath){};    
     bool loadJsonResources() override;
@@ -83,6 +83,11 @@ private:
     
 };
 
+class PrimitiveManager:public ResourceAcces
+{
+public:
+private:
+};
 /*
 class ResourceBuilder
 {

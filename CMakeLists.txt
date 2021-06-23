@@ -24,7 +24,9 @@ set (SOURCE_EXE src/main.cpp
                 src/appl/mouse.cpp 
                 src/studyexception.cpp 
                 src/appl/resourcefinder.cpp 
-                src/appl/resourceacces.cpp)
+                src/appl/resourceacces.cpp 
+                src/appl/demoshader.cpp 
+                src/appl/resourceprimitive.cpp )
                 
 add_executable(${PROJECT_NAME} ${SOURCE_EXE}) 
 
