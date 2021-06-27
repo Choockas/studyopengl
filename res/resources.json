@@ -1,0 +1,556 @@
+{
+  "shaders": [
+    {
+      "name": "spriteShader",
+      "filePath_v": "res/shaders/vsprite.txt",
+      "filePath_f": "res/shaders/fsprite.txt"
+    }
+  ],
+  "textureAtlas": [
+    {
+      "name": "mapTextureAtlas_8x8",
+      "filePath": "res/textures/map_8x8.png",
+      "subTextureWidth": 8,
+      "subTextureHeight": 8,
+      "subTextureArray": [
+        "brickWall_All",
+        "brickWall_TopLeft",
+        "brickWall_TopRight",
+        "brickWall_Top",
+        "brickWall_BottomLeft",
+        "brickWall_Left",
+        "brickWall_TopRight_BottomLeft",
+        "brickWall_Top_BottomLeft",
+        "brickWall_BottomRight",
+        "brickWall_TopLeft_BottomRight",
+        "brickWall_Right",
+        "brickWall_Top_BottomRight",
+        "brickWall_Bottom",
+        "brickWall_TopLeft_Bottom",
+        "brickWall_TopRight_Bottom",
+        "water1",
+        "water2",
+        "water3",
+        "betonWall",
+        "trees",
+        "ice",
+        "border",
+        "bullet_Top",
+        "bullet_Bottom",
+        "bullet_Left",
+        "bullet_Right",
+        "nothing"
+      ]
+    },
+    {
+      "name": "tanksTextureAtlas",
+      "filePath": "res/textures/tanks.png",
+      "subTextureWidth": 16,
+      "subTextureHeight": 16,
+      "subTextureArray": [
+        "yellowTyp1_Top1",
+        "yellowTyp1_Top2",
+        "yellowTyp1_Left1",
+        "yellowTyp1_Left2",
+        "yellowTyp1_Bottom1",
+        "yellowTyp1_Bottom2",
+        "yellowTyp1_Right1",
+        "yellowTyp1_Right2",
+        "whiteTyp1_Top1",
+        "whiteTyp1_Top2",
+        "whiteTyp1_Left1",
+        "whiteTyp1_Left2",
+        "whiteTyp1_Bottom1",
+        "whiteTyp1_Bottom2",
+        "whiteTyp1_Right1",
+        "whiteTyp1_Right2",
+        "yellowTyp2_Top1",
+        "yellowTyp2_Top2",
+        "yellowTyp2_Left1",
+        "yellowTyp2_Left2",
+        "yellowTyp2_Bottom1",
+        "yellowTyp2_Bottom2",
+        "yellowTyp2_Right1",
+        "yellowTyp2_Right2",
+        "whiteTyp2_Top1",
+        "whiteTyp2_Top2",
+        "whiteTyp2_Left1",
+        "whiteTyp2_Left2",
+        "whiteTyp2_Bottom1",
+        "whiteTyp2_Bottom2",
+        "whiteTyp2_Right1",
+        "whiteTyp2_Right2",
+        "yellowTyp3_Top1",
+        "yellowTyp3_Top2",
+        "yellowTyp3_Left1",
+        "yellowTyp3_Left2",
+        "yellowTyp3_Bottom1",
+        "yellowTyp3_Bottom2",
+        "yellowTyp3_Right1",
+        "yellowTyp3_Right2",
+        "whiteTyp3_Top1",
+        "whiteTyp3_Top2",
+        "whiteTyp3_Left1",
+        "whiteTyp3_Left2",
+        "whiteTyp3_Bottom1",
+        "whiteTyp3_Bottom2",
+        "whiteTyp3_Right1",
+        "whiteTyp3_Right2",
+        "yellowTyp4_Top1",
+        "yellowTyp4_Top2",
+        "yellowTyp4_Left1",
+        "yellowTyp4_Left2",
+        "yellowTyp4_Bottom1",
+        "yellowTyp4_Bottom2",
+        "yellowTyp4_Right1",
+        "yellowTyp4_Right2",
+        "whiteTyp4_Top1",
+        "whiteTyp4_Top2",
+        "whiteTyp4_Left1",
+        "whiteTyp4_Left2",
+        "whiteTyp4_Bottom1",
+        "whiteTyp4_Bottom2",
+        "whiteTyp4_Right1",
+        "whiteTyp4_Right2",
+        "yellowTyp5_Top1",
+        "yellowTyp5_Top2",
+        "yellowTyp5_Left1",
+        "yellowTyp5_Left2",
+        "yellowTyp5_Bottom1",
+        "yellowTyp5_Bottom2",
+        "yellowTyp5_Right1",
+        "yellowTyp5_Right2",
+        "whiteTyp5_Top1",
+        "whiteTyp5_Top2",
+        "whiteTyp5_Left1",
+        "whiteTyp5_Left2",
+        "whiteTyp5_Bottom1",
+        "whiteTyp5_Bottom2",
+        "whiteTyp5_Right1",
+        "whiteTyp5_Right2",
+        "yellowTyp6_Top1",
+        "yellowTyp6_Top2",
+        "yellowTyp6_Left1",
+        "yellowTyp6_Left2",
+        "yellowTyp6_Bottom1",
+        "yellowTyp6_Bottom2",
+        "yellowTyp6_Right1",
+        "yellowTyp6_Right2",
+        "whiteTyp6_Top1",
+        "whiteTyp6_Top2",
+        "whiteTyp6_Left1",
+        "whiteTyp6_Left2",
+        "whiteTyp6_Bottom1",
+        "whiteTyp6_Bottom2",
+        "whiteTyp6_Right1",
+        "whiteTyp6_Right2",
+        "yellowTyp7_Top1",
+        "yellowTyp7_Top2",
+        "yellowTyp7_Left1",
+        "yellowTyp7_Left2",
+        "yellowTyp7_Bottom1",
+        "yellowTyp7_Bottom2",
+        "yellowTyp7_Right1",
+        "yellowTyp7_Right2",
+        "whiteTyp7_Top1",
+        "whiteTyp7_Top2",
+        "whiteTyp7_Left1",
+        "whiteTyp7_Left2",
+        "whiteTyp7_Bottom1",
+        "whiteTyp7_Bottom2",
+        "whiteTyp7_Right1",
+        "whiteTyp7_Right2",
+        "yellowTyp8_Top1",
+        "yellowTyp8_Top2",
+        "yellowTyp8_Left1",
+        "yellowTyp8_Left2",
+        "yellowTyp8_Bottom1",
+        "yellowTyp8_Bottom2",
+        "yellowTyp8_Right1",
+        "yellowTyp8_Right2",
+        "whiteTyp8_Top1",
+        "whiteTyp8_Top2",
+        "whiteTyp8_Left1",
+        "whiteTyp8_Left2",
+        "whiteTyp8_Bottom1",
+        "whiteTyp8_Bottom2",
+        "whiteTyp8_Right1",
+        "whiteTyp8_Right2",
+        "greenTyp1_Top1",
+        "greenTyp1_Top2",
+        "greenTyp1_Left1",
+        "greenTyp1_Left2",
+        "greenTyp1_Bottom1",
+        "greenTyp1_Bottom2",
+        "greenTyp1_Right1",
+        "greenTyp1_Right2",
+        "violetTyp1_Top1",
+        "violetTyp1_Top2",
+        "violetTyp1_Left1",
+        "violetTyp1_Left2",
+        "violetTyp1_Bottom1",
+        "violetTyp1_Bottom2",
+        "violetTyp1_Right1",
+        "violetTyp1_Right2",
+        "greenTyp2_Top1",
+        "greenTyp2_Top2",
+        "greenTyp2_Left1",
+        "greenTyp2_Left2",
+        "greenTyp2_Bottom1",
+        "greenTyp2_Bottom2",
+        "greenTyp2_Right1",
+        "greenTyp2_Right2",
+        "violetTyp2_Top1",
+        "violetTyp2_Top2",
+        "violetTyp2_Left1",
+        "violetTyp2_Left2",
+        "violetTyp2_Bottom1",
+        "violetTyp2_Bottom2",
+        "violetTyp2_Right1",
+        "violetTyp2_Right2",
+        "greenTyp3_Top1",
+        "greenTyp3_Top2",
+        "greenTyp3_Left1",
+        "greenTyp3_Left2",
+        "greenTyp3_Bottom1",
+        "greenTyp3_Bottom2",
+        "greenTyp3_Right1",
+        "greenTyp3_Right2",
+        "violetTyp3_Top1",
+        "violetTyp3_Top2",
+        "violetTyp3_Left1",
+        "violetTyp3_Left2",
+        "violetTyp3_Bottom1",
+        "violetTyp3_Bottom2",
+        "violetTyp3_Right1",
+        "violetTyp3_Right2",
+        "greenTyp4_Top1",
+        "greenTyp4_Top2",
+        "greenTyp4_Left1",
+        "greenTyp4_Left2",
+        "greenTyp4_Bottom1",
+        "greenTyp4_Bottom2",
+        "greenTyp4_Right1",
+        "greenTyp4_Right2",
+        "violetTyp4_Top1",
+        "violetTyp4_Top2",
+        "violetTyp4_Left1",
+        "violetTyp4_Left2",
+        "violetTyp4_Bottom1",
+        "violetTyp4_Bottom2",
+        "violetTyp4_Right1",
+        "violetTyp4_Right2",
+        "greenTyp5_Top1",
+        "greenTyp5_Top2",
+        "greenTyp5_Left1",
+        "greenTyp5_Left2",
+        "greenTyp5_Bottom1",
+        "greenTyp5_Bottom2",
+        "greenTyp5_Right1",
+        "greenTyp5_Right2",
+        "violetTyp5_Top1",
+        "violetTyp5_Top2",
+        "violetTyp5_Left1",
+        "violetTyp5_Left2",
+        "violetTyp5_Bottom1",
+        "violetTyp5_Bottom2",
+        "violetTyp5_Right1",
+        "violetTyp5_Right2",
+        "greenTyp6_Top1",
+        "greenTyp6_Top2",
+        "greenTyp6_Left1",
+        "greenTyp6_Left2",
+        "greenTyp6_Bottom1",
+        "greenTyp6_Bottom2",
+        "greenTyp6_Right1",
+        "greenTyp6_Right2",
+        "violetTyp6_Top1",
+        "violetTyp6_Top2",
+        "violetTyp6_Left1",
+        "violetTyp6_Left2",
+        "violetTyp6_Bottom1",
+        "violetTyp6_Bottom2",
+        "violetTyp6_Right1",
+        "violetTyp6_Right2",
+        "greenTyp7_Top1",
+        "greenTyp7_Top2",
+        "greenTyp7_Left1",
+        "greenTyp7_Left2",
+        "greenTyp7_Bottom1",
+        "greenTyp7_Bottom2",
+        "greenTyp7_Right1",
+        "greenTyp7_Right2",
+        "violetTyp7_Top1",
+        "violetTyp7_Top2",
+        "violetTyp7_Left1",
+        "violetTyp7_Left2",
+        "violetTyp7_Bottom1",
+        "violetTyp7_Bottom2",
+        "violetTyp7_Right1",
+        "violetTyp7_Right2",
+        "greenTyp8_Top1",
+        "greenTyp8_Top2",
+        "greenTyp8_Left1",
+        "greenTyp8_Left2",
+        "greenTyp8_Bottom1",
+        "greenTyp8_Bottom2",
+        "greenTyp8_Right1",
+        "greenTyp8_Right2",
+        "violetTyp8_Top1",
+        "violetTyp8_Top2",
+        "violetTyp8_Left1",
+        "violetTyp8_Left2",
+        "violetTyp8_Bottom1",
+        "violetTyp8_Bottom2",
+        "violetTyp8_Right1",
+        "violetTyp8_Right2"
+      ]
+    }
+  ],
+  "sprites": [
+    {
+      "name": "brickWall_All",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "brickWall_All"
+    },
+    {
+      "name": "brickWall_TopLeft",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "brickWall_TopLeft"
+    },
+    {
+      "name": "brickWall_TopRight",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "brickWall_TopRight"
+    },
+    {
+      "name": "brickWall_Top",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "brickWall_Top"
+    },
+    {
+      "name": "brickWall_BottomLeft",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "brickWall_BottomLeft"
+    },
+    {
+      "name": "brickWall_Left",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "brickWall_Left"
+    },
+    {
+      "name": "brickWall_TopRight_BottomLeft",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "brickWall_TopRight_BottomLeft"
+    },
+    {
+      "name": "brickWall_Top_BottomLeft",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "brickWall_Top_BottomLeft"
+    },
+    {
+      "name": "brickWall_BottomRight",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "brickWall_BottomRight"
+    },
+    {
+      "name": "brickWall_TopLeft_BottomRight",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "brickWall_TopLeft_BottomRight"
+    },
+    {
+      "name": "brickWall_Right",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "brickWall_Right"
+    },
+    {
+      "name": "brickWall_Top_BottomRight",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "brickWall_Top_BottomRight"
+    },
+    {
+      "name": "brickWall_Bottom",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "brickWall_Bottom"
+    },
+    {
+      "name": "brickWall_TopLeft_Bottom",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "brickWall_TopLeft_Bottom"
+    },
+    {
+      "name": "brickWall_TopRight_Bottom",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "brickWall_TopRight_Bottom"
+    },
+    {
+      "name": "betonWall",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "betonWall"
+    },
+    {
+      "name": "trees",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "trees"
+    },
+    {
+      "name": "ice",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "ice"
+    },
+    {
+      "name": "border",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "border"
+    },
+    {
+      "name": "bullet_Top",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "bullet_Top"
+    },
+    {
+      "name": "bullet_Bottom",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "bullet_Bottom"
+    },
+    {
+      "name": "nothing",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "nothing"
+    },
+    {
+      "name": "bullet_Left",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "bullet_Left"
+    },
+    {
+      "name": "bullet_Right",
+      "textureAtlas": "mapTextureAtlas_8x8",
+      "shader": "spriteShader",
+      "initialSubTexture": "bullet_Right"
+    }
+  ],
+  "animatedSprites": [
+    {
+      "name": "tankAnimateSprite",
+      "textureAtlas": "tanksTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "violetTyp8_Top1",
+      "states": [
+        {
+          "statesName": "tankTopState",
+          "frames": [
+            {
+              "subTexture": "violetTyp8_Top1",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "violetTyp8_Top2",
+              "duration": 330000000
+            }
+          ]
+        },
+        {
+          "statesName": "tankLeftState",
+          "frames": [
+            {
+              "subTexture": "violetTyp8_Left1",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "violetTyp8_Left2",
+              "duration": 330000000
+            }
+          ]
+        },
+        {
+          "statesName": "tankBottomState",
+          "frames": [
+            {
+              "subTexture": "violetTyp8_Bottom1",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "violetTyp8_Bottom2",
+              "duration": 330000000
+            }
+          ]
+        },
+        {
+          "statesName": "tankRightState",
+          "frames": [
+            {
+              "subTexture": "violetTyp8_Right1",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "violetTyp8_Right2",
+              "duration": 330000000
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "levels": [
+    {
+      "description": [
+        "DDDDDDDDDDDDD",
+        "D1D1D1D1D1D1D",
+        "D4D4D4D4D4D4D",
+        "D4D4D4D4D4D4D",
+        "D4D4D494D4D4D",
+        "D4D4D3D3D4D4D",
+        "D3D3D1D1D3D3D",
+        "1D11D3D3D11D1",
+        "8D33D1D1D33D8",
+        "D1D1D444D1D1D",
+        "D4D4D4D4D4D4D",
+        "D4D4D3D3D4D4D",
+        "D4D4DH1GD4D4D",
+        "DDDDD0E2DDDDD"
+      ]
+    },
+    {
+      "description": [
+        "MDDDDDNDDDDDO",
+        "D00D11D22D33D",
+        "D0DD1DD2DD3DD",
+        "DDDDDDDDDDDDD",
+        "D44D55D66D77D",
+        "D4DD5DD6DD7DD",
+        "DDDDDDDDDDDDD",
+        "D88D99DAADBBD",
+        "D8DD9DDADDBDD",
+        "DDDDDDDDDDDDD",
+        "DCCDGGDHHDIID",
+        "DCDDGDDHDDDDD",
+        "DDDDDH1GDDJJD",
+        "DDDDK0E2LDDDD"
+      ]
+    }
+  ]
+}

@@ -14,40 +14,44 @@ namespace RenderEngine{
                 
  {
      
-     std::cout<< "framed sprite created "<<std::endl;
+     std::cout<< "framed sprite  created "<<std::endl;
  }
+        
 
  FramedSprite::~FramedSprite()
  {
      std::cout << "framed sprite releazed"<< std::endl;
 }
 
-void FramedSprite::insertState(std::string state, std::vector<std::pair<std::string, uint64_t > > subTexturesDuration)
+void FramedSprite::insertState(std::string statesName, std::string   subTexturesState)
 {
-        m_statesMap.emplace(std::move(state),std::move(subTexturesDuration));
-        
+        m_states.emplace(statesName, subTexturesState);
 }
 
 
 void FramedSprite::setState(std::string& newState)
 {
-    auto it = m_statesMap.find(newState);
-    if (it==m_statesMap.end()){
-        std::cout << "cant find state "<<newState<<std::endl;
-        return;
-    }
-    
+    auto it = m_states[newState];
+//     if (it==m_states.end()){
+//         std::cout << "cant find state "<<newState<<std::endl;
+//         return;
+//     }
+    m_currentFrame = it.c_str();
+    m_dirty = true;
     
 }
 
-
+void FramedSprite::update(){
+    
+    
+}
 
 
 void FramedSprite::render(const glm::vec2 position, const glm::vec2 size, const float rotation) const 
 {
     if (m_dirty){
         
-        auto subTexture2D = m_pTexture -> getSubtexture2D(""); 
+        auto subTexture2D = m_pTexture -> getSubtexture2D(m_currentFrame); 
         
         const GLfloat texCoords[] ={
             //U-V

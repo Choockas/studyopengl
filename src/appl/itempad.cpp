@@ -39,13 +39,13 @@ void ItemPad::render() const
      
 }
 
-void ItemPad::update(uint64_t delta)
+void ItemPad::update(uint64_t factor)
 {
     const int xpos = MouseViewPort::get_xpos();
     const int ypos = MouseViewPort::get_ypos();
     const int mbut = MouseViewPort::get_button();
-    //
-    if((xpos>_position.x) && (xpos<_position.x+_size.x) && (600-ypos>_position.y)&&(600-ypos<_position.y+_size.y))
+    //there is just mirroring of ordinate 
+    if((xpos>_position.x) && (xpos<_position.x+_size.x) && (factor-ypos>_position.y)&&(factor-ypos<_position.y+_size.y))
     {
         set_dirty();
     }

@@ -184,5 +184,104 @@
       "initialSubTexture": "3d_check"
     }
     
-    ]
+    ],
+     "framedSprites": [
+    {
+      "name": "fileFrameSprite",
+      "textureAtlas": "menuTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "file",
+      "states": [
+        {
+          "statesName": "uncheck",
+          "subTexture": "file"
+        },
+        {
+          "statesName": "check",          
+          "subTexture": "file_chek"
+        }
+        ]  
+    },
+    {
+      "name": "primitiveFrameSprite",
+      "textureAtlas": "menuTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "primitive",
+      "states": [
+        {
+          "statesName": "uncheck",
+          "subTexture": "primitive"           
+        },
+        {
+          "statesName": "check",
+          "subTexture": "primitive_check"
+        }
+      ]      
+    },
+    {
+      "name": "transformFrameSprite",
+      "textureAtlas": "menuTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "transform",
+      "states": [
+        {
+          "statesName": "uncheck",
+          "subTexture": "transform"
+        },
+        {
+          "statesName": "check",
+          "subTexture": "transform_check"
+        }
+      ]      
+    },
+    {
+      "name": "spriteFrameSprite",
+      "textureAtlas": "menuTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "sprite",
+      "states": [
+        {
+          "statesName": "uncheck",
+          "subTexture": "sprite"
+        },
+        {
+          "statesName": "check",
+          "subTexture": "sprite_check"
+        }
+      ]      
+    },
+    {
+      "name": "animatedspriteFrameSprite",
+      "textureAtlas": "menuTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "animatedsprite",
+      "states": [
+        {
+          "statesName": "uncheck",
+          "subTexture": "animatedsprite"
+        },
+        {
+          "statesName": "check",
+          "subTexture": "animatedsprite_check"
+        }
+      ]      
+    },
+    {
+      "name": "3dFrameSprite",
+      "textureAtlas": "menuTextureAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "3d",
+      "states": [
+        {
+          "statesName": "uncheck",
+          "subTexture": "3d"
+        },
+        {
+          "statesName": "check",
+          "subTexture": "3d_check"
+        }
+      ]      
+    }
+    
+  ]
 }

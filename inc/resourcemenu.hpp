@@ -11,36 +11,36 @@ namespace RenderEngine
     class ShaderProgramm;
     class Texture2D;
     class Sprite;
-    class AnimateSprite;
+    class FramedSprite;
 }
 class Menu;
 // class ResourceManager;
 
 //this structure is container for json's file attribute
-struct ResourceBit{
-    std::string s_name;
-    std::string s_path;
-};
+// struct ResourceBit{
+//     std::string s_name;
+//     std::string s_path;
+// };
+// 
+// typedef struct {
+//     std::string name;
+//     uint idAct;
+//     bool visible;
+//     
+// } MenuPoint;
 
-typedef struct {
-    std::string name;
-    uint idAct;
-    bool visible;
-    
-} MenuPoint;
 
-
-class ResourceManager:public ResourceAcces
+class ResourceMenu:public ResourceAcces
 {
 public:
-    ResourceManager(const std::string path,const std::string resource_path );
-    virtual ~ResourceManager();
+    ResourceMenu(const std::string path,const std::string resource_path );
+    virtual ~ResourceMenu();
 //     void managerInit(const std::string& exepath){};    
     bool loadJsonResources() override;
     std::shared_ptr<RenderEngine::Texture2D> getTextures(const std::string& textureName);
     std::shared_ptr<RenderEngine::Sprite> getSprites(const std::string& spriteName);
     std::shared_ptr<RenderEngine::ShaderProgramm> getShaderProgram(const std::string& shaderName);
-    std::shared_ptr<RenderEngine::AnimateSprite> getAnimateSprites(const std::string& spriteName);
+    std::shared_ptr<RenderEngine::FramedSprite> getFramedSprites(const std::string& framespriteName);
     
     bool loadShaders(const std::string& shaderName,const std::string& vertexPath,const std::string& fragmentPath );
     std::shared_ptr<RenderEngine::Texture2D> loadTextures(const std::string& resourcePath,
@@ -56,12 +56,12 @@ public:
                                                            const std::string& textureName,
                                                            const std::string& shaderName,
                                                            const std::string& subtextureName = "default");
-    std::shared_ptr<RenderEngine::AnimateSprite> loadAnimateSprites(const std::string& spriteName,
+    std::shared_ptr<RenderEngine::FramedSprite> loadFramedSprites(const std::string& spriteName,
                                                                          const std::string& textureName,
                                                                          const std::string& shaderName,
                                                                          const std::string& subtextureName = "default");
     
-    std::vector<MenuPoint> get_menu() const {return _menu_start;}
+//     std::vector<MenuPoint> get_menu() const {return _menu_start;}
           
 protected:
     
@@ -72,9 +72,9 @@ protected:
     Texture2DMap _texture2D;    
     typedef std::map<const std::string, std::shared_ptr<RenderEngine::Sprite>> SpriteMap;
     SpriteMap _sprites;
-    typedef std::map<const std::string, std::shared_ptr<RenderEngine::AnimateSprite>> AniSpriteMap;
-    AniSpriteMap _anisprites;
-    std::vector<MenuPoint> _menu_start;
+    typedef std::map<const std::string, std::shared_ptr<RenderEngine::FramedSprite>> FrameSpriteMap;
+    FrameSpriteMap _framesprites;
+//     std::vector<MenuPoint> _menu_start;
     
 private:
     
@@ -88,7 +88,7 @@ private:
 // public:
 // private:
 // };
-/*
+ /*
 class ResourceBuilder
 {
 public:

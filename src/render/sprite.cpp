@@ -64,7 +64,7 @@ namespace RenderEngine{
     
     Sprite::~Sprite(){
         
-        std::cout<<"sprites "  <<" delayed "<<std::endl;
+        std::cout<<"sprites delayed "<<std::endl;
         m_pShaderProgramm.use_count();
         m_pTexture.use_count();
     }

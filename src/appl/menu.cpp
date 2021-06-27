@@ -69,7 +69,7 @@ void Menu::render() const
 
 
 // manipulation with menupads
-void Menu::update(const uint64_t delta)
+void Menu::update(const uint64_t factor)
 {
     std::string  temp_actlabel, temp_label;
     
@@ -80,7 +80,7 @@ void Menu::update(const uint64_t delta)
         if (currentMapObject->get_visible())
         {
             //first getting idAct trough checking position of mouse    
-            currentMapObject->update(delta); //now turn to invisible
+            currentMapObject->update(factor); //now turn to invisible
             //if matching up (by status dirty  get position (and label)
             if(currentMapObject->get_dirty())
             {  
@@ -90,7 +90,7 @@ void Menu::update(const uint64_t delta)
         }
     }
     
-    // look up by label  to make change in visibility and pass position
+    // look up  label  to make change in visibility and to pass position
     for (const auto& currentMapObject : _vecObjects)
     {
         temp_label= currentMapObject->get_label();        

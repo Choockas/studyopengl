@@ -1,6 +1,8 @@
 #include "renderer.hpp"
 #include "resourcemanager.hpp"
 #include "resourcefinder.hpp"
+#include "resourcemenu.hpp"
+#include "framedsprite.hpp"
 #include "menu.hpp"
 #include "mouse.hpp"
 #include "appl.hpp"
@@ -49,6 +51,11 @@ void MyAppl::init(const std::string& executablePath)
    _menu= std::make_shared<Menu>(_rmfinder->get_resultPath("startmenu"),_path,get_windsizex(),get_windsizey());
 
    _menu->initMenu();
+   ResourceMenu *resomen= new ResourceMenu(_path,trp);
+   std::string chekstr = "check";
+   resomen->loadJsonResources();
+   resomen->getFramedSprites("fileFrameSprite")->setState(chekstr);
+   
 /*
    float tverticles[]={
         -0.33f, -0.33f, 0.0f,
@@ -99,8 +106,8 @@ void MyAppl::go()
 
 {
     unsigned int actualyAct = 1000;
-
-    _menu->update(0);
+// it's needed to mirroring ordinate
+    _menu->update(_windsize.y);
     
     while (!glfwWindowShouldClose(_pwndw))
     {
@@ -108,9 +115,11 @@ void MyAppl::go()
         RenderEngine::Renderer::clear(); 
         if(menuchange)
         {
-            _menu->update(0);
+//There is make change 
+            _menu->update(_windsize.y);
             actualyAct=_menu->get_actualy();
             update(actualyAct);
+  // on that point make reset          
             actualyAct=1000;
             menuchange= false;
         } 

@@ -1,6 +1,7 @@
 #pragma once
 #include "igraphicobject.hpp"
 #include <memory>
+#include <vector>
 
 namespace RenderEngine
 {
@@ -20,7 +21,7 @@ public:
            ); 
     ~ItemPad() override;
     void render() const override;
-    void update(uint64_t delta) override;
+    void update(uint64_t factor) override;
     uint get_idAct()const {return _idAct;}
     void set_dirty(){_dirty?_dirty=false:_dirty=true;};
     bool get_dirty(){return _dirty;}
@@ -30,5 +31,6 @@ private:
     std::shared_ptr<RenderEngine::Sprite> _pCurrentSprite;
     bool _dirty = false;
     uint _idAct;
+    std::vector<std::string>  _states;
     std::string _label;
 };
