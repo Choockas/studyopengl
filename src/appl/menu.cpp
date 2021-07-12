@@ -1,21 +1,22 @@
 #include "menu.hpp"
 #include "igraphicobject.hpp"
 #include <memory>
-#include "resourcemanager.hpp"
+#include <map>
+#include "resourcemenu.hpp"
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "shaderprogramm.hpp"
+#include "framedsprite.hpp"
 
 const unsigned int PADLENGTH =43;
 const unsigned int PADHIGTH = 16;
 
 
-Menu::Menu(const std::string relativepath, const std::string workpath, const float swidth, const float shight):_width(swidth),_hight(shight) 
+Menu::Menu(const std::string relativepath, const std::string workpath, const int swidth, const int shight):_width(swidth),_hight(shight) 
 {
-    _rm = std::make_shared<ResourceManager>(workpath,relativepath);
-    _rm->loadJsonResources();
-    const std::vector<MenuPoint> rowMenu =_rm->get_menu();
-    std::vector<MenuPoint> _rowMenu2 =_rm->get_menu();
+    _resourseMenu = std::make_shared<ResourceMenu>(workpath,relativepath);
+    _resourseMenu->loadJsonResources();
+    const std::vector<MenuPoint> rowMenu =_resourseMenu->get_menupoint();
     
     if (rowMenu.empty()){
         std::cerr<<"Empty menu";
@@ -24,15 +25,18 @@ Menu::Menu(const std::string relativepath, const std::string workpath, const flo
     _vecObjects.reserve ( PADHIGTH * PADLENGTH*2);
     unsigned int  currentLeftOffset =0;
     
-    for (MenuPoint currentPoint : rowMenu  )
+    for (auto& currentPoint : rowMenu  )
     {
         
-        _vecObjects.emplace_back( createGOmenuPoint(currentPoint.name, {currentLeftOffset,584},{PADLENGTH,PADHIGTH},0.f,currentPoint.visible,currentPoint.idAct));
+        _vecObjects.emplace_back( createGOmenuPoint(currentPoint.tsprite, 
+                                                    {currentLeftOffset,584},
+                                                    {PADLENGTH,PADHIGTH},0.f,
+                                                    currentPoint.bvisible, 
+                                                     std::make_shared<std::map<const int, const std::string>>(currentPoint.acts)));
 
         currentLeftOffset+=PADLENGTH;
     }
 
-    
 }
 
 
@@ -43,7 +47,7 @@ Menu::~Menu()
 void Menu::initMenu()
 {
     //     auto pSpriteShaderProgram = _rm->getShaderProgram("spriteShader");
-   auto pSpriteShaderProgram = _rm->getShaderProgram("spriteShader");
+   auto pSpriteShaderProgram = _resourseMenu->getShaderProgram("spriteShader");
     
     if (!pSpriteShaderProgram){
         std::cerr<<"Can't find shader programm " << "spriteShader" <<std::endl;
@@ -69,19 +73,45 @@ void Menu::render() const
 
 
 // manipulation with menupads
-void Menu::update(const uint64_t factor)
+
+void Menu::update(const uint factorSize)
 {
+    for(const auto& currentMapObject : _vecObjects)
+    {
+        if(currentMapObject->get_visible())
+        {
+            currentMapObject->set_dirty(factorSize); //check point of touch and set dirty
+            
+        } 
+        //now turn to dirty 
+        if(currentMapObject->get_dirty())
+        {
+            _actbyMenu = currentMapObject->get_curentact();
+            currentMapObject->update(0);
+//             _actbyMenu = currentMapObject->get_acts();
+        }
+    }
+    
+}
+
+void Menu::set_actbyMenu(unsigned int ac_idAct)
+{
+    _actbyMenu=ac_idAct;
+}
+
+    
+/*    
     std::string  temp_actlabel, temp_label;
     
     glm::vec2 temp_position={0.f,0.f};
     for (const auto& currentMapObject : _vecObjects)
     {
-        // checking only visible objects   
+       // checking only visible objects   
         if (currentMapObject->get_visible())
         {
-            //first getting idAct trough checking position of mouse    
+           // first getting idAct trough checking position of mouse    
             currentMapObject->update(factor); //now turn to invisible
-            //if matching up (by status dirty  get position (and label)
+            if matching up (by status dirty  get position (and label)
             if(currentMapObject->get_dirty())
             {  
                 temp_position = currentMapObject->get_position();
@@ -90,23 +120,32 @@ void Menu::update(const uint64_t factor)
         }
     }
     
-    // look up  label  to make change in visibility and to pass position
+   // look up  label  to make change in visibility and to pass position
     for (const auto& currentMapObject : _vecObjects)
     {
         temp_label= currentMapObject->get_label();        
         if ((temp_label==temp_actlabel) || (temp_label== temp_actlabel+"_check")||(temp_actlabel==temp_label+"_check") ){
             currentMapObject->switch_visible();
             currentMapObject->set_position(temp_position); 
-            //flash status dirty or change actually menu status 
-            currentMapObject->get_dirty()?currentMapObject->set_dirty(): set_actualy(currentMapObject->get_idAct());
+            flash status dirty or change actually menu status 
+            currentMapObject->get_dirty()?currentMapObject->set_dirty(): set_actualy(currentMapObject->get_acts());
         }            
-    }     
-}
+    }    
+    */
+ 
+
 
 //getting a sprite for menues point
-std::shared_ptr< ItemPad > Menu::createGOmenuPoint(const std::string label, glm::vec2 position, const glm::vec2 size, const float rotation, const bool visible, uint idAct)
+std::shared_ptr< ItemPad > Menu::createGOmenuPoint(const std::string label, 
+                                                   glm::vec2 position, 
+                                                   const glm::vec2 size, 
+                                                   const float rotation ,
+                                                   const bool visible, 
+                                                   std::shared_ptr<std::map<const int, const std::string>> vacts )
 {
-    return std::make_shared<ItemPad>(_rm->getSprites(label),position,size,rotation,label,visible,idAct);  
+    std::shared_ptr<ItemPad> newItemPad = std::make_shared<ItemPad>(_resourseMenu->getFramedSprites(label),position,size,rotation,label,visible, vacts);  
+    
+    return newItemPad;
 }
 
  

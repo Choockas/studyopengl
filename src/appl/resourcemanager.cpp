@@ -131,21 +131,6 @@ bool ResourceManager::loadJsonResources()
         }
     }
     
-    auto menuPads = document.FindMember("itempads");
-    if (menuPads!=document.MemberEnd())
-    {
-        for(const auto& curentPad : menuPads->value.GetArray())
-        {
-            const MenuPoint menupoint {curentPad["name"].GetString(),
-                                       curentPad["idAct"].GetUint(),
-                                       curentPad["visible"].GetBool()};          
-                _menu_start.emplace_back(menupoint);                
-                        
-        }        
-    }  
-    
-
-    
     return true;    
 }
 

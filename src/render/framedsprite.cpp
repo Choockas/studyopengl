@@ -23,29 +23,36 @@ namespace RenderEngine{
      std::cout << "framed sprite releazed"<< std::endl;
 }
 
-void FramedSprite::insertState(std::string statesName, std::string   subTexturesState)
+void FramedSprite::insertState(const std::string& statesName,const std::string&   subTexturesState)
 {
         m_states.emplace(statesName, subTexturesState);
 }
 
 
-void FramedSprite::setState(std::string& newState)
+
+
+void FramedSprite::update(const std::string state){
+  m_currentFrame= m_states.find(state)->second;
+  m_dirty = true;  
+}
+
+/*
+void AnimateSprite::update(const uint64_t delta) 
 {
-    auto it = m_states[newState];
-//     if (it==m_states.end()){
-//         std::cout << "cant find state "<<newState<<std::endl;
-//         return;
-//     }
-    m_currentFrame = it.c_str();
-    m_dirty = true;
-    
+    if(m_pCurrentAnimationDuration != m_statesMap.end()){
+        m_currentAnimationTime+= delta;
+        while(m_currentAnimationTime>= m_pCurrentAnimationDuration->second[m_currentFrame].second){
+            m_currentAnimationTime -=m_pCurrentAnimationDuration->second[m_currentFrame].second;
+            ++m_currentFrame;
+            m_dirty = true;
+        
+        if(m_currentFrame == m_pCurrentAnimationDuration->second.size()){
+            m_currentFrame =0;
+        }
+        }
+    }
 }
-
-void FramedSprite::update(){
-    
-    
-}
-
+*/
 
 void FramedSprite::render(const glm::vec2 position, const glm::vec2 size, const float rotation) const 
 {

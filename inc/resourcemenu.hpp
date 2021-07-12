@@ -13,6 +13,7 @@ namespace RenderEngine
     class Sprite;
     class FramedSprite;
 }
+
 class Menu;
 // class ResourceManager;
 
@@ -21,14 +22,14 @@ class Menu;
 //     std::string s_name;
 //     std::string s_path;
 // };
-// 
-// typedef struct {
-//     std::string name;
-//     uint idAct;
-//     bool visible;
-//     
-// } MenuPoint;
 
+struct MenuPoint {
+    const std::string tsprite;
+    std::map<const int,const std::string> acts;
+    const bool bvisible;
+} ;
+
+class ItemPad;
 
 class ResourceMenu:public ResourceAcces
 {
@@ -61,7 +62,7 @@ public:
                                                                          const std::string& shaderName,
                                                                          const std::string& subtextureName = "default");
     
-//     std::vector<MenuPoint> get_menu() const {return _menu_start;}
+    std::vector<MenuPoint> get_menupoint() const {return _menuPoint;}
           
 protected:
     
@@ -74,7 +75,8 @@ protected:
     SpriteMap _sprites;
     typedef std::map<const std::string, std::shared_ptr<RenderEngine::FramedSprite>> FrameSpriteMap;
     FrameSpriteMap _framesprites;
-//     std::vector<MenuPoint> _menu_start;
+    
+    std::vector<MenuPoint> _menuPoint;
     
 private:
     

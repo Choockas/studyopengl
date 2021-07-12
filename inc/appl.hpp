@@ -29,15 +29,16 @@ public:
     void init(const std::string& executablePath);
     void go();
     void render();
-    void update(unsigned int menuAct);
+    void update();
+    void contentChanger(unsigned int menuAct); //implement menu command
     void filePad();
     void on_offPrimitive_6vf(const std::string path, const std::string relativePath,const bool on_off); // create _vao_primitive_6vf
     void createPrimitiveTransform();
-    float get_windsizex() const {return 0.0f+_windsize.x;}
-    float get_windsizey() const {return 0.0f+_windsize.y;}
+//     float get_windsizex() const {return 0.0f+_windsize.x;}
+//     float get_windsizey() const {return 0.0f+_windsize.y;}
     void primitive1ShaderUse();
     void primitiveTransformShaderUse( float grades, float trmod);
-//     std::shared_ptr<ResourceManager> get_rm();
+
      
 private:
     float _verticles[9];

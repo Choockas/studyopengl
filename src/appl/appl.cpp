@@ -48,13 +48,13 @@ void MyAppl::init(const std::string& executablePath)
     std::string trp = _rmfinder->get_resultPath("startmenu");
     //set up all for menu
     //section below used to establishe menu
-   _menu= std::make_shared<Menu>(_rmfinder->get_resultPath("startmenu"),_path,get_windsizex(),get_windsizey());
+   _menu= std::make_shared<Menu>(_rmfinder->get_resultPath("startmenu"),_path,_windsize.x,_windsize.y);
 
    _menu->initMenu();
-   ResourceMenu *resomen= new ResourceMenu(_path,trp);
-   std::string chekstr = "check";
-   resomen->loadJsonResources();
-   resomen->getFramedSprites("fileFrameSprite")->setState(chekstr);
+//    ResourceMenu *resomen= new ResourceMenu(_path,trp);
+//    std::string chekstr = "check";
+//    resomen->loadJsonResources();
+//    resomen->getFramedSprites("fileFrameSprite")->setState(chekstr);
    
 /*
    float tverticles[]={
@@ -105,37 +105,16 @@ void MyAppl::init(const std::string& executablePath)
 void MyAppl::go()
 
 {
-    unsigned int actualyAct = 1000;
+    
 // it's needed to mirroring ordinate
     _menu->update(_windsize.y);
     
     while (!glfwWindowShouldClose(_pwndw))
     {
-        
+        update();
         RenderEngine::Renderer::clear(); 
-        if(menuchange)
-        {
-//There is make change 
-            _menu->update(_windsize.y);
-            actualyAct=_menu->get_actualy();
-            update(actualyAct);
-  // on that point make reset          
-            actualyAct=1000;
-            menuchange= false;
-        } 
-        
         render();
-        switch (_applstate)
-        {
-            case 1:
-                primitive1ShaderUse();
-                break;
-            case 2:
-                primitiveTransformShaderUse(90.0f,0.0f);
-                break;
-            default:
-                break;
-        }
+ 
         glfwSwapBuffers(_pwndw);
         /* Poll for and process events */
         glfwPollEvents();
@@ -229,8 +208,7 @@ void MyAppl::createPrimitiveTransform()
 
 
 
-
-void MyAppl::update(unsigned int menuAct)
+void MyAppl::contentChanger(unsigned int menuAct)
 {
     
     switch(menuAct)
@@ -239,6 +217,7 @@ void MyAppl::update(unsigned int menuAct)
             break;
         case 1:
             on_offPrimitive_6vf("","", false);
+//             _menu->set_actbyMenu(101);
             _applstate = 0;
             break;
         case 2: 
@@ -267,10 +246,41 @@ void MyAppl::update(unsigned int menuAct)
     }
 }
 
+void MyAppl::update( )
+{
+    int actMenu;
+        if(menuchange)
+        {
+//There is it makes change 
+            _menu->update(_windsize.y); //check point of tuch 
+            actMenu=_menu->get_actbyMenu();
+            contentChanger(actMenu);
+  // on that point make reset                      
+            menuchange= false;
+        } 
+    
+}
+
+
+
+
 void MyAppl::render()
 {
       _menu->render(); 
+        switch (_applstate)
+        {
+            case 1:
+                primitive1ShaderUse();
+                break;
+            case 2:
+                primitiveTransformShaderUse(90.0f,0.0f);
+                break;
+            default:
+                break;
+        }
 }
+
+
 
 void glfwWindowSizeCallBack(GLFWwindow *pWindow, int width, int hight)
 {

@@ -22,12 +22,6 @@ struct ResourceBit{
     std::string s_path;
 };
 
-typedef struct {
-    std::string name;
-    uint idAct;
-    bool visible;
-    
-} MenuPoint;
 
 
 class ResourceManager:public ResourceAcces
@@ -61,7 +55,7 @@ public:
                                                                          const std::string& shaderName,
                                                                          const std::string& subtextureName = "default");
     
-    std::vector<MenuPoint> get_menu() const {return _menu_start;}
+    
           
 protected:
     
@@ -74,7 +68,7 @@ protected:
     SpriteMap _sprites;
     typedef std::map<const std::string, std::shared_ptr<RenderEngine::AnimateSprite>> AniSpriteMap;
     AniSpriteMap _anisprites;
-    std::vector<MenuPoint> _menu_start;
+    
     
 private:
     

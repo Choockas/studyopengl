@@ -7,7 +7,7 @@ public:
 IGraphicObject(const glm::vec2 position, const glm::vec2 size, const float rotation, const bool visible);
 
     virtual void render() const = 0;
-    virtual void update(const uint64_t delta) = 0;
+    virtual void update(const uint delta) = 0;
     void switch_visible(){_visible = _visible ? false:true;}
     bool get_visible()const{return _visible;}
     glm::vec2 get_position()const {return _position;}

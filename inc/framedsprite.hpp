@@ -16,14 +16,14 @@ namespace RenderEngine {
                 
                );
         ~FramedSprite();
-        void insertState( std::string statesName, std::string  subTexturesState);
+        void insertState( const std::string& statesName, const std::string&  subTexturesState);
         void render(const glm::vec2 position, const glm::vec2 size, const float rotation) const override ;
-        void setState(std::string& newState);
-        void update();
+        void update(const std::string state);
         
     private:
         std::map<std::string,std::string> m_states;
         std::string m_currentFrame ;
+        
         mutable bool m_dirty=false;
     };
  

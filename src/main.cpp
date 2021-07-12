@@ -4,7 +4,7 @@
 
 
 GLFWwindow* pStartWindow;
-glm::ivec2 g_windowsize(960,600);
+const glm::ivec2 g_windowsize(960,600);
 
 
 

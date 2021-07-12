@@ -74,7 +74,7 @@ bool ResourceMenu::loadJsonResources()
             std::vector<std::string> subTextures;
             arrs=subTexturesArray.Size();
             std::cout << "Gona to be reserved " << arrs << " for subtextures"<<std::endl;
-            subTextures.reserve(subTexturesArray.Size());
+            subTextures.reserve(arrs);
             for(const auto& currentSubtextures : subTexturesArray){
                 subTextures.emplace_back(currentSubtextures.GetString()); 
                 std::cout << "emplace "<< currentSubtextures.GetString() << std::endl;
@@ -100,8 +100,9 @@ bool ResourceMenu::loadJsonResources()
             const auto statesArray = currentFramedSprite["states"].GetArray();
             for(const auto& currentStateArray : statesArray){
                 const std::string stateName = currentStateArray["statesName"].GetString();
-                const std::string subTexture = currentStateArray["subTexture"].GetString();                
-                pFramedSprite->insertState(std::move(stateName),std::move(subTexture));
+                const std::string subTexture = currentStateArray["subTexture"].GetString();
+                pFramedSprite->insertState(std::move(stateName), std::move(subTexture));                
+//                 pFramedSprite->insertState(std::move(stateName),std::move(subTexture));
             }
         }
     }
@@ -115,29 +116,36 @@ bool ResourceMenu::loadJsonResources()
             const std::string atlas = currentSprite["textureAtlas"].GetString() ;
             const std::string shader = currentSprite["shader"].GetString() ;
             const std::string  initialSubTexture = currentSprite["initialSubTexture"].GetString();                                           
-            auto pAnimatedSprite = loadSprites(name,atlas,shader,initialSubTexture);
-            if(! pAnimatedSprite ){
+            auto pSprite = loadSprites(name,atlas,shader,initialSubTexture);
+            if(! pSprite ){
                 std::cerr << "Can't load sprite (initial) "<< initialSubTexture << std::endl;
                 continue;
             }            
         }
     }
     
-//     auto menuPads = document.FindMember("itempads");
-//     if (menuPads!=document.MemberEnd())
-//     {
-//         for(const auto& curentPad : menuPads->value.GetArray())
-//         {
-//             const MenuPoint menupoint {curentPad["name"].GetString(),
-//                                        curentPad["idAct"].GetUint(),
-//                                        curentPad["visible"].GetBool()};          
-//                 _menu_start.emplace_back(menupoint);                
-//                         
-//         }        
-//     }  
-//     
-
-    
+    auto menuPoints = document.FindMember("menuPoint");
+    if (menuPoints!=document.MemberEnd())
+    {
+        
+        for(const auto& curentPoint : menuPoints->value.GetArray())
+        {
+            
+            const std::string namePad = curentPoint["sprite"].GetString();
+            const bool visible = curentPoint["visible"].GetBool();
+        
+            const auto& idstates = curentPoint["states"].GetArray(); 
+            std::map <const int,const std::string> idActs; 
+            for(const auto& cacts : idstates){
+                const int ia = cacts["index"].GetInt();
+                const std::string  sa = cacts["statesName"].GetString(); 
+               idActs.insert(std::pair<const int,const std::string>(ia,sa)); 
+            }
+            MenuPoint mp ={namePad,idActs,visible};
+            
+            _menuPoint.emplace_back(mp);
+        }    
+    }  
     return true;    
 }
 
@@ -326,7 +334,7 @@ std::shared_ptr<RenderEngine::Sprite> ResourceMenu::getSprites(const std::string
     if(it!=_sprites.end()){
         return it->second;
     }
-    std::cerr<<"Can't find sprite"
+    std::cerr<<"Can't find sprite "
     <<spriteName
     <<std::endl;
     return nullptr;
@@ -339,7 +347,7 @@ std::shared_ptr<RenderEngine::FramedSprite> ResourceMenu::getFramedSprites(const
     if(it!=_framesprites.end()){
         return it->second;
     }
-    std::cerr<<"Can't find sprite"
+    std::cerr<<"Can't find framesprite "
     <<framespriteName
     <<std::endl;
     return nullptr;

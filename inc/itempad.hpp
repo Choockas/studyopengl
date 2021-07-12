@@ -2,35 +2,45 @@
 #include "igraphicobject.hpp"
 #include <memory>
 #include <vector>
+#include <map>
 
 namespace RenderEngine
 {
-    class Sprite;
+    class FramedSprite;
 }
 
 class ItemPad : public IGraphicObject
 {
 public:
-    ItemPad(const std::shared_ptr< RenderEngine::Sprite > ptrSprite, 
+    ItemPad(const std::shared_ptr< RenderEngine::FramedSprite > ptrSprite, 
                                           const glm::vec2 position, 
                                           const glm::vec2 size, 
                                           const float rotation,
                                           const std::string label, 
-                                          const bool visible,
-                                          uint idAct
-           ); 
+                                          const bool visible, 
+                                          std::shared_ptr<std::map<const int,const std::string>> vacts); 
     ~ItemPad() override;
     void render() const override;
-    void update(uint64_t factor) override;
-    uint get_idAct()const {return _idAct;}
-    void set_dirty(){_dirty?_dirty=false:_dirty=true;};
-    bool get_dirty(){return _dirty;}
+    void update(const uint delta) override;
+    void set_dirty(uint fsize);
+//     std::shared_ptr<std::map<const int,const std::string>> get_acts() const { return _acts;}
+    int get_act();
+    
+    bool get_dirty() const {return _dirty;}
+    bool get_visible() const {return _visible;}
+    int get_curentact() const {return _curentact;}
     std::string get_label()const {return _label;}
+
+    
+  
 //     bool mouseCollision(double xposition, double yposition) const;
 private:
-    std::shared_ptr<RenderEngine::Sprite> _pCurrentSprite;
+    std::shared_ptr<RenderEngine::FramedSprite> _pEmbededSprite;
     bool _dirty = false;
-    uint _idAct;
-    std::vector<std::string>  _states;
+    bool _visible;
+    std::shared_ptr<std::map<const int,const std::string>>  _acts;
+    int _nextact;
+    int _curentact; 
+    int _actSize;
     std::string _label;
 };
