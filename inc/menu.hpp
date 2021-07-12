@@ -1,15 +1,16 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "itempad.hpp"
 #include <map>
+#include <memory>
+#include "glm/vec2.hpp"
 // #include "GLFW/glfw3.h"
 // #include "shaderprogramm.hpp"
 
 
 // class IGraphicObject;
 class ResourceMenu;
-
+class ItemPad;
 
 class Menu
 {
@@ -20,7 +21,7 @@ public:
                                               const glm::vec2 size, 
                                               const float rotation, 
                                               const bool visible, 
-                                              std::shared_ptr< std::map<const int, const std::string>> vacts); 
+                                              std::shared_ptr< std::array<std::pair<int,std::string>,2>> vacts); 
     ~Menu();
     void render() const;
     void update(const uint factorSize);

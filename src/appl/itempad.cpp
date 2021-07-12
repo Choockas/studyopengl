@@ -13,7 +13,7 @@ ItemPad::ItemPad(const std::shared_ptr< RenderEngine::FramedSprite > ptrSprite,
                                                                const float rotation,
                                                                const std::string label,
                                                                const bool visible,
-                                                               std::shared_ptr<std::map<const int,const std::string>> vacts
+                                                               std::shared_ptr<std::array<std::pair<int,std::string>,2>>  vacts
                                                                )
                                                                :IGraphicObject(position,
                                                                                size,
@@ -23,24 +23,7 @@ ItemPad::ItemPad(const std::shared_ptr< RenderEngine::FramedSprite > ptrSprite,
 {
     std::cout << "emplace pad "<< label<<std::endl;
     _acts = vacts;
-    _actSize= _acts->size();    
-    size_t icount=0;
-    for(auto& iact :*_acts){
-       switch(icount)
-       {
-           case 0:
-               _nextact = iact.first;
-               break;
-           case 1:
-               _curentact = iact.first;
-               break;
-           default:
-               break;
-       }    
-       icount++;
-    }
-     
-  
+
 }
 
 ItemPad::~ItemPad()
@@ -58,12 +41,10 @@ void ItemPad::render() const
 
 void ItemPad::update(const uint delta)
 {
-  int temp;
-  temp = _curentact;
-  _curentact= _nextact;
-  _nextact = temp;
-  _pEmbededSprite->update(_acts->find(_nextact)->second);
-  _dirty=false;
+    _act_Off = !_act_Off; 
+    _act_Off? _pEmbededSprite->update(_acts->at(1).second) :
+              _pEmbededSprite->update(_acts->at(0).second) ;
+   _dirty=false;
 }
 
 
@@ -82,11 +63,9 @@ void ItemPad::set_dirty(uint fsize)
     
 }
 
-
-
-int ItemPad::get_act()
+int ItemPad::get_curentact()
 {
-    return 1;
+    return  _act_Off? _acts->at(0).first : _acts->at(1).first;
 }
 
 

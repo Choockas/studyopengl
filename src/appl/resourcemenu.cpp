@@ -135,11 +135,15 @@ bool ResourceMenu::loadJsonResources()
             const bool visible = curentPoint["visible"].GetBool();
         
             const auto& idstates = curentPoint["states"].GetArray(); 
-            std::map <const int,const std::string> idActs; 
+            std::array <std::pair<int,std::string>,2> idActs; 
+            size_t ico = 0;
             for(const auto& cacts : idstates){
                 const int ia = cacts["index"].GetInt();
-                const std::string  sa = cacts["statesName"].GetString(); 
-               idActs.insert(std::pair<const int,const std::string>(ia,sa)); 
+                const std::string  sa = cacts["statesName"].GetString();
+                const auto pisa = std::make_pair(ia,sa);
+//                idActs.insert(std::pair<const int,const std::string>(ia,sa)); 
+                idActs[ico]=pisa;
+                ico++;
             }
             MenuPoint mp ={namePad,idActs,visible};
             

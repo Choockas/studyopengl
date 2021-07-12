@@ -25,7 +25,8 @@ class Menu;
 
 struct MenuPoint {
     const std::string tsprite;
-    std::map<const int,const std::string> acts;
+//     std::map<const int,const std::string> acts;
+    std::array<std::pair<int,std::string>,2> acts;
     const bool bvisible;
 } ;
 

@@ -1,5 +1,6 @@
 #include "menu.hpp"
 #include "igraphicobject.hpp"
+#include "itempad.hpp"
 #include <memory>
 #include <map>
 #include "resourcemenu.hpp"
@@ -32,7 +33,8 @@ Menu::Menu(const std::string relativepath, const std::string workpath, const int
                                                     {currentLeftOffset,584},
                                                     {PADLENGTH,PADHIGTH},0.f,
                                                     currentPoint.bvisible, 
-                                                     std::make_shared<std::map<const int, const std::string>>(currentPoint.acts)));
+                                                     std::make_shared<std::array<std::pair< int, std::string>,2>>
+                                                     (currentPoint.acts)));
 
         currentLeftOffset+=PADLENGTH;
     }
@@ -141,9 +143,9 @@ std::shared_ptr< ItemPad > Menu::createGOmenuPoint(const std::string label,
                                                    const glm::vec2 size, 
                                                    const float rotation ,
                                                    const bool visible, 
-                                                   std::shared_ptr<std::map<const int, const std::string>> vacts )
+                                                   std::shared_ptr<std::array<std::pair<int,std::string>,2>> vacts )
 {
-    std::shared_ptr<ItemPad> newItemPad = std::make_shared<ItemPad>(_resourseMenu->getFramedSprites(label),position,size,rotation,label,visible, vacts);  
+    std::shared_ptr<ItemPad> newItemPad = std::make_shared<ItemPad>(_resourseMenu->getFramedSprites(label),position,size,rotation,label,visible, std::move(vacts));  
     
     return newItemPad;
 }
