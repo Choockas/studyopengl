@@ -4,6 +4,12 @@
 "name" : "freeshader1",
 "filepathvertex":"res/shaders/vertfree.txt",
 "filepathfrag" : "res/shaders/fragfree.txt"
+},
+{
+"name" : "transshader1",
+"filepathvertex":"res/shaders/vtrans.txt",
+"filepathfrag" : "res/shaders/ftrans.txt"
 }
+
 ]
 }

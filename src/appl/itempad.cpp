@@ -48,7 +48,7 @@ void ItemPad::update(const uint delta)
 }
 
 
-void ItemPad::set_dirty(uint fsize)
+void ItemPad::check_dirty(uint fsize)
 {
     const int xpos = MouseViewPort::get_xpos();
     const int ypos = MouseViewPort::get_ypos();

@@ -87,17 +87,7 @@
       "name":"spriteShader",
       "filePath_v":"res/shaders/vsprite.txt",
       "filePath_f":"res/shaders/fsprite.txt"
-    },
-    {
-      "name":"simpleShader",
-      "filePath_v":"res/shaders/vsimple.txt",
-      "filePath_f":"res/shaders/fsimple.txt"
-    },
-    {
-      "name":"transShader",
-      "filePath_v":"res/shaders/vtrans.txt",
-      "filePath_f":"res/shaders/ftrans.txt"
-    }    
+    }   
   ],
 "textureAtlass":[{    
       "name":"menuTextureAtlas",

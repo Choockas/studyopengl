@@ -12,6 +12,7 @@
 class ResourceMenu;
 class ItemPad;
 
+// class Menu  container for menupad as graphic object and menupoint as  
 class Menu
 {
 public:
@@ -24,10 +25,9 @@ public:
                                               std::shared_ptr< std::array<std::pair<int,std::string>,2>> vacts); 
     ~Menu();
     void render() const;
-    void update(const uint factorSize);
-    void set_actbyMenu(unsigned int ac_idAct);
-    void clear_vecobjects(){_vecObjects.clear();}
-    unsigned int get_actbyMenu(){return _actbyMenu;}
+    void update(const uint factorSize); //factorSize for actually positioning
+    void clear_vecobjects(){_vecObjects.clear();} 
+    unsigned int get_actbyMenu() const {return _actbyMenu;} //define the act that must be done
     void initMenu();
 private:
     
@@ -35,5 +35,5 @@ private:
     const int _width;
     const int  _hight;
     unsigned int _actbyMenu;
-    std::vector <std::shared_ptr<ItemPad>> _vecObjects;
+    std::vector <std::shared_ptr<ItemPad>> _vecObjects; 
 };

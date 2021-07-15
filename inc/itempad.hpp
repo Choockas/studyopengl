@@ -24,9 +24,7 @@ public:
     ~ItemPad() override;
     void render() const override;
     void update(const uint delta) override;
-    void set_dirty(uint fsize);
-    int get_act();
-    
+    void check_dirty(uint fsize);
     bool get_dirty() const {return _dirty;}
     bool get_visible() const {return _visible;}
     int get_curentact();
@@ -37,11 +35,7 @@ private:
     std::shared_ptr<RenderEngine::FramedSprite> _pEmbededSprite;
     bool _dirty = false;
     bool _visible;
-//     std::shared_ptr<std::map<const int,const std::string>>  _acts;
     std::shared_ptr<std::array<std::pair<int,std::string>,2>>  _acts;
-    int _nextact;
-    int _curentact; 
     bool _act_Off = false;
-    int _actSize;
     std::string _label;
 };

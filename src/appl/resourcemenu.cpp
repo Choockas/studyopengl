@@ -60,7 +60,6 @@ bool ResourceMenu::loadJsonResources()
     }
     
     auto textureAtlas = document.FindMember("textureAtlass");
-    
     if (textureAtlas!=document.MemberEnd())
     {      
         size_t arrs;

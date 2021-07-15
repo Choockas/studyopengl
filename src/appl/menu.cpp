@@ -82,24 +82,21 @@ void Menu::update(const uint factorSize)
     {
         if(currentMapObject->get_visible())
         {
-            currentMapObject->set_dirty(factorSize); //check point of touch and set dirty
+            //now marc object (ItemPad) to dirty 
+            currentMapObject->check_dirty(factorSize); //check point of touch and set dirty
             
         } 
-        //now turn to dirty 
+        //  dirty issue some act and must be updated 
         if(currentMapObject->get_dirty())
         {
             _actbyMenu = currentMapObject->get_curentact();
             currentMapObject->update(0);
-//             _actbyMenu = currentMapObject->get_acts();
         }
     }
     
 }
 
-void Menu::set_actbyMenu(unsigned int ac_idAct)
-{
-    _actbyMenu=ac_idAct;
-}
+
 
     
 /*    

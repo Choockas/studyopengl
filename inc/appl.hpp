@@ -5,7 +5,6 @@
 #include "mainwindow.hpp"
 #include "document.h"
 #include "error/en.h"
-#include "demoshader.hpp"
 #include <memory>
 #include <vector>
 #include <map>
@@ -17,6 +16,7 @@ void glfwWindowSizeCallBack(GLFWwindow *pWindow, int width, int hight);
 class ResourceManager;
 class ResourceFinder;
 class Menu;
+class DemoShader;
 namespace RenderEngine{
 class ShaderProgramm;}
 
@@ -30,12 +30,10 @@ public:
     void go();
     void render();
     void update();
-    void contentChanger(unsigned int menuAct); //implement menu command
+    void contentChanger(const unsigned int menuAct); //implement menu command
     void filePad();
-    void on_offPrimitive_6vf(const std::string path, const std::string relativePath,const bool on_off); // create _vao_primitive_6vf
-    void createPrimitiveTransform();
-//     float get_windsizex() const {return 0.0f+_windsize.x;}
-//     float get_windsizey() const {return 0.0f+_windsize.y;}
+    void on_offPrimitive_6vf(const std::string path, const std::string relativePath,const bool on_off, const glm::ivec2 windsize); // create _vao_primitive_6vf
+    void createPrimitiveTransform(const std::string path, const std::string relativePath,const bool on_off, const glm::ivec2 windsize);
     void primitive1ShaderUse();
     void primitiveTransformShaderUse( float grades, float trmod);
 
@@ -45,19 +43,15 @@ private:
     bool _primitiveInitialized=false;
      GLFWwindow* _pwndw;
      std::string _path;
-     glm::ivec2  _windsize;
+     const glm::ivec2  _windsize;
      std::unique_ptr<ResourceFinder> _rmfinder;
-     std::unique_ptr<DemoShader> _demoShader;
-//      GLuint _points_vbo=0;
-//      GLuint _colors_vbo=0;
-//      GLuint _vao_primitive_6vf=0;// array for 6 verticles & colorrs layer
-    
-     
+     std::unique_ptr<DemoShader> _primitiveShader;
+     std::unique_ptr<DemoShader> _transformShader;
      std::shared_ptr<Menu> _menu;
 //   very simple shader
 //      std::shared_ptr<RenderEngine::ShaderProgramm> _shadep;
 //  shader that using matrix uniform    
-     std::shared_ptr<RenderEngine::ShaderProgramm> _shadet;
+     
      unsigned int _applstate =0;
 };
 
