@@ -3,8 +3,14 @@
 #include "document.h"
 #include "error/en.h"
 #include <stdio.h>
-#include <memory>
-#include <map>
+
+
+struct ShaderbyStrings{
+    std::string  nameShaderProgramm;
+    std::string vertexName;
+    std::string fragmentName;    
+};
+
 
 namespace RenderEngine{
     class ShaderProgramm;
@@ -17,11 +23,16 @@ public:
     ~ResourcePrimitive();
     bool loadJsonResources() override;
     std::shared_ptr<RenderEngine::ShaderProgramm> getShaderProgram(const std::string& shaderName);
-    bool loadShaders(const std::string& shaderName,const std::string& vertexPath,const std::string& fragmentPath );
-    
+    void loadShaderString(const std::string& shaderName,const std::string& vertexPath,const std::string& fragmentPath);
+    std::string  getNameSPstring(const int) const;
+    std::string getNameVertexstring(const int ind) const ;
+    std::string getNameFragmentstring(const int ind) const ;
 private:
-    typedef std::map<const std::string, std::shared_ptr<RenderEngine::ShaderProgramm>> ShaderProgramsMap;
-    ShaderProgramsMap _shaderPrograms;
+    std::vector<ShaderbyStrings> _demoShaders;
+    
+    
+//     typedef std::map<const std::string, std::shared_ptr<RenderEngine::ShaderProgramm>> ShaderProgramsMap;
+//     ShaderProgramsMap _shaderPrograms;
     rapidjson::Document _document;
     std::string _resultPath;
     

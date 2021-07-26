@@ -2,6 +2,7 @@
 #include "resourcemanager.hpp"
 #include "resourcefinder.hpp"
 #include "resourcemenu.hpp"
+#include "resourceprimitive.hpp"
 #include "demoshader.hpp"
 #include "framedsprite.hpp"
 #include "menu.hpp"
@@ -49,11 +50,15 @@ void MyAppl::init(const std::string& executablePath)
     std::string trp = _rmfinder->get_resultPath("startmenu");
     //set up all for menu
    _menu= std::make_shared<Menu>(_rmfinder->get_resultPath("startmenu"),_path,_windsize.x,_windsize.y);
-
+   
    _menu->initMenu();
-
+_resourcePrimitive = std::make_shared<ResourcePrimitive>(_path, _rmfinder->get_resultPath("demofree")); 
+_resourcePrimitive->loadJsonResources();
     
 }
+
+
+
 
 void MyAppl::go()
 
@@ -79,13 +84,13 @@ void MyAppl::go()
 //simplest using shader, drawing
 void MyAppl::primitive1ShaderUse()
 {
-    _primitiveShader->usePrimitiveShader();
+     _primitiveShader->useDemoShader();
 }
  
 void MyAppl::primitiveTransformShaderUse( float grades, float trmod)
 {
 
-    _transformShader->useTransformerShahader(grades);
+    _transformShader->useDemoShader();
 }
 
 
@@ -99,12 +104,16 @@ void MyAppl::filePad()
 void MyAppl::on_offPrimitive_6vf(const std::string path, const std::string relativePath,const bool on_off, const glm::ivec2 windsize)
 {
     if(on_off){   
-    _primitiveShader = std::make_unique<DemoShader>(path,relativePath,windsize);
-         _primitiveShader->createPrimitiveShader();
+    _primitiveShader = std::make_unique<PrimitiveShader>(path,relativePath,windsize);//create buffers
+     const std::string  namePS = _resourcePrimitive->getNameSPstring(0);
+     const std::string  nameVertex = path+_resourcePrimitive->getNameVertexstring(0);
+     const std::string nameFragment = path+_resourcePrimitive->getNameFragmentstring(0);
+    _primitiveShader->createDemoShader(namePS,nameVertex,nameFragment); //create shadersprogramm
     } else
     {
         _primitiveShader=0;
     }
+    
 }
 
 
@@ -113,13 +122,20 @@ void MyAppl::on_offPrimitive_6vf(const std::string path, const std::string relat
 void MyAppl::createPrimitiveTransform(const std::string path, const std::string relativePath,const bool on_off, const glm::ivec2 windsize)
 {
         if(on_off){   
-    _transformShader = std::make_unique<DemoShader>(path,relativePath,windsize);
-         _transformShader->createTransformerShader();
+    _transformShader = std::make_unique<TransformShader>(path,relativePath,windsize);
+    const std::string  namePS = _resourcePrimitive->getNameSPstring(1);
+     const std::string  nameVertex = path+_resourcePrimitive->getNameVertexstring(1);
+     const std::string nameFragment = path+_resourcePrimitive->getNameFragmentstring(1);
+    _transformShader->createDemoShader(namePS,nameVertex,nameFragment); //create shadersprogramm
+    
+    
+    
+//          _transformShader->createTransformerShader();
     } else
     {
         _transformShader=0;
     }
-
+   
 }
 
 

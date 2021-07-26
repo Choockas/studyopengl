@@ -8,43 +8,52 @@ ResourcePrimitive::ResourcePrimitive(const std::string path,const std::string re
 
 ResourcePrimitive::~ResourcePrimitive()
 {
-}
-
-
-std::shared_ptr<RenderEngine::ShaderProgramm> ResourcePrimitive::getShaderProgram(const std::string& shaderName)
-{
-        ShaderProgramsMap::const_iterator it=_shaderPrograms.find(shaderName);
-    if(it!=_shaderPrograms.end()){
-        return it->second;
-    }
-    std::cerr<<"Can't find the shader program "
-    <<shaderName
-    <<std::endl;
-    return nullptr;
-}
-
-bool ResourcePrimitive::loadShaders(const std::string& shaderName, const std::string& vertexPath, const std::string& fragmentPath)
-{
-       std::string vertexString = getFileString(vertexPath);
-    if (vertexString.empty()){
-        std::cerr<<"No vertex shader!"<< std::endl;
-    }
-    std::string fragmentString = getFileString(fragmentPath);
-    if (fragmentString.empty()){
-        std::cerr<<"No fragment shader!"<< std::endl;
-    }
     
-    std::shared_ptr<RenderEngine::ShaderProgramm>& newShader = _shaderPrograms.emplace(shaderName, std::make_shared<RenderEngine::ShaderProgramm>(vertexString,fragmentString)).first->second;
-    if (!newShader->isCompiled()){
-        std::cerr<< "Can't load shader program:"<<"\n"
-        <<"Vertex: " << vertexPath<< "\n" 
-        <<"Fragment: " <<fragmentPath
-        <<std::endl;
-        return false;
-    }
-    std::cout<<"shader programm " <<shaderName << " loaded right"<<std::endl;
-    return true;
 }
+
+
+// std::shared_ptr<RenderEngine::ShaderProgramm> ResourcePrimitive::getShaderProgram(const std::string& shaderName)
+// {
+//         ShaderProgramsMap::const_iterator it=_shaderPrograms.find(shaderName);
+//     if(it!=_shaderPrograms.end()){
+//         return it->second;
+//     }
+//     std::cerr<<"Can't find the shader program "
+//     <<shaderName
+//     <<std::endl;
+//     return nullptr;
+// }
+
+
+void ResourcePrimitive::loadShaderString(const std::string& shaderName, const std::string& vertexPath, const std::string& fragmentPath)
+{
+    ShaderbyStrings shbs;
+    shbs.nameShaderProgramm = shaderName;
+    shbs.vertexName = vertexPath;
+    shbs.fragmentName = fragmentPath;
+    _demoShaders.emplace_back(shbs); 
+}
+
+
+std::string ResourcePrimitive::getNameSPstring(const int ind ) const
+{
+    const std::string namePS = _demoShaders.at(ind).nameShaderProgramm;
+    return namePS;
+}
+
+
+
+std::string ResourcePrimitive::getNameVertexstring(const int ind) const
+{
+    return _demoShaders.at(ind).vertexName;
+}
+
+
+std::string ResourcePrimitive::getNameFragmentstring(const int ind) const
+{
+    return _demoShaders.at(ind).fragmentName;
+}
+
 
 bool ResourcePrimitive::loadJsonResources()
 {
@@ -71,7 +80,7 @@ bool ResourcePrimitive::loadJsonResources()
             const std::string name = currentShader["name"].GetString() ;
             const std::string filepath_v = currentShader["filepathvertex"].GetString() ;
             const std::string filepath_f = currentShader["filepathfrag"].GetString() ;
-            loadShaders(name, filepath_v,filepath_f);            
+            loadShaderString(name, filepath_v,filepath_f);            
         }
     }
     return true;

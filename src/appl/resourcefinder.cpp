@@ -1,7 +1,7 @@
 #include "resourcefinder.hpp"
 
 
-ResourceFinder::ResourceFinder(std::string path, std::string resource_path) :_resultPath(resource_path)
+ResourceFinder::ResourceFinder(const std::string path, std::string resource_path) :_resultPath(resource_path)
 {
     set_path(path);
 }

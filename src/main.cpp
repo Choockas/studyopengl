@@ -1,6 +1,7 @@
 
+#include "mainwindow.hpp"
 #include "appl.hpp"
-#include "../inc/mainwindow.hpp"
+
 
 
 GLFWwindow* pStartWindow;

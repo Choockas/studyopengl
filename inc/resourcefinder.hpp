@@ -9,7 +9,7 @@
 class ResourceFinder:public ResourceAcces
 {
 public:
-    ResourceFinder(std::string path,std::string resource_path );
+    ResourceFinder(const std::string path,std::string resource_path );
 //     ~ResourceFinder();
     bool loadJsonResources() override;
     std::string getJson(const std::string localPath); 
