@@ -15,7 +15,7 @@ set (SOURCE_EXE src/main.cpp
                 src/render/texture2D.cpp 
                 src/render/sprite.cpp 
                 src/appl/menu.cpp 
-                src/appl/resourcemanager.cpp 
+                src/appl/resourcesprite.cpp 
                 src/appl/resourcemenu.cpp 
                 src/render/animatesprite.cpp 
                 src/render/framedsprite.cpp 

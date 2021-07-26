@@ -76,7 +76,7 @@ bool ResourceMenu::loadJsonResources()
             subTextures.reserve(arrs);
             for(const auto& currentSubtextures : subTexturesArray){
                 subTextures.emplace_back(currentSubtextures.GetString()); 
-                std::cout << "emplace "<< currentSubtextures.GetString() << std::endl;
+                std::cout << "emplace "<< currentSubtextures.GetString()<< " subtexture" << std::endl;
             }            
             loadTextureAtlas(get_path(),name, filepath,std::move(subTextures), subTextureWidth,subTextureHight);            
         }

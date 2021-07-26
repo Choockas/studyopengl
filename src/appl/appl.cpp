@@ -1,5 +1,5 @@
 #include "renderer.hpp"
-#include "resourcemanager.hpp"
+#include "resourcesprite.hpp"
 #include "resourcefinder.hpp"
 #include "resourcemenu.hpp"
 #include "resourceprimitive.hpp"
@@ -13,7 +13,7 @@
 
 const std::string LOCALPATH = "res/resourcestore.json";
 std::array<bool,349> qkeys;
-float aspect;
+float aspect; // windows ratio
 glm::ivec2 originalWindowSize;
 bool menuchange= true; 
 
@@ -37,23 +37,24 @@ void MyAppl::init(const std::string& executablePath)
     std::cout<< "Shader version:"<<RenderEngine::Renderer::getShaderVersionString() <<std::endl;
     RenderEngine::Renderer::setClearColor(0.0,0.3,0.3,1.0);
     glfwSetMouseButtonCallback(_pwndw, mouse_button_callback);
-//evaluate executablePath    
+    //evaluate executablePath    
     size_t found= executablePath.find_last_of("/\\");
     _path = executablePath.substr(0,found);
     
-    aspect = 1.f* _windsize.x/_windsize.y;
+    aspect = 1.f* _windsize.x/_windsize.y; // windows ratio
     originalWindowSize=_windsize;
     MouseViewPort::set_horAspect(1.f);
     MouseViewPort::set_verAspect(1.f);
     _rmfinder =std::make_unique<ResourceFinder>(_path,LOCALPATH);
     _rmfinder->loadJsonResources();
     std::string trp = _rmfinder->get_resultPath("startmenu");
+    
     //set up all for menu
-   _menu= std::make_shared<Menu>(_rmfinder->get_resultPath("startmenu"),_path,_windsize.x,_windsize.y);
-   
-   _menu->initMenu();
-_resourcePrimitive = std::make_shared<ResourcePrimitive>(_path, _rmfinder->get_resultPath("demofree")); 
-_resourcePrimitive->loadJsonResources();
+    _menu= std::make_shared<Menu>(_rmfinder->get_resultPath("startmenu"),_path,_windsize.x,_windsize.y);
+    
+    _menu->initMenu();
+    _resourcePrimitive = std::make_shared<ResourcePrimitive>(_path, _rmfinder->get_resultPath("demofree")); 
+    _resourcePrimitive->loadJsonResources();
     
 }
 
@@ -117,8 +118,6 @@ void MyAppl::on_offPrimitive_6vf(const std::string path, const std::string relat
 }
 
 
-
-
 void MyAppl::createPrimitiveTransform(const std::string path, const std::string relativePath,const bool on_off, const glm::ivec2 windsize)
 {
         if(on_off){   
@@ -127,10 +126,6 @@ void MyAppl::createPrimitiveTransform(const std::string path, const std::string 
      const std::string  nameVertex = path+_resourcePrimitive->getNameVertexstring(1);
      const std::string nameFragment = path+_resourcePrimitive->getNameFragmentstring(1);
     _transformShader->createDemoShader(namePS,nameVertex,nameFragment); //create shadersprogramm
-    
-    
-    
-//          _transformShader->createTransformerShader();
     } else
     {
         _transformShader=0;
@@ -138,8 +133,9 @@ void MyAppl::createPrimitiveTransform(const std::string path, const std::string 
    
 }
 
-
-
+/*
+*     this like menu message traslation
+*/
 void MyAppl::contentChanger(const unsigned int menuAct)
 {
     
@@ -149,7 +145,6 @@ void MyAppl::contentChanger(const unsigned int menuAct)
             break;
         case 1:
             on_offPrimitive_6vf("","", false,_windsize);
-//             _menu->set_actbyMenu(101);
             _applstate = 0;
             break;
         case 2: 
@@ -184,12 +179,14 @@ void MyAppl::contentChanger(const unsigned int menuAct)
     }
 }
 
+
+// busines in main loop
 void MyAppl::update( )
 {
     
         if(menuchange)
         {
-//There is it makes change 
+//There is   change maker 
             _menu->update(_windsize.y); //check point of tuch 
             const int actMenu=_menu->get_actbyMenu();
             contentChanger(actMenu);
@@ -200,8 +197,7 @@ void MyAppl::update( )
 }
 
 
-
-
+// such as windows rendering
 void MyAppl::render()
 {
       _menu->render(); 
@@ -263,10 +259,11 @@ void glfwKeyCallBack(GLFWwindow *pWindow, int key, int scancode, int action, int
 }
 
 
+
 void mouse_button_callback(GLFWwindow *pWindow, int button, int action, int mods)
 {
     double xpos, ypos;
-    char titlestring[50];
+//     char titlestring[50];
     int xsize,ysize;
     
     glfwGetFramebufferSize(pWindow,&xsize,&ysize); 
@@ -278,12 +275,9 @@ void mouse_button_callback(GLFWwindow *pWindow, int button, int action, int mods
         MouseViewPort::set_pos(xpos,ypos); 
         MouseViewPort::set_button(button);
         MouseViewPort::set_used(true);
-//         snprintf(titlestring, 50, "Xpos: %lf, Ypos:%lf ", MouseViewPort::get_xpos(),originalWindowSize.y- MouseViewPort::get_ypos());
-//         glfwSetWindowTitle(pWindow, titlestring);
-//         std::cout<<"xpos="<<xpos<<" ypos="<<ypos<<std::endl;
         menuchange = true;
     };
-//     if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+
 }
 
 

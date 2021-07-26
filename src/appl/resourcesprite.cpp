@@ -1,4 +1,4 @@
-#include "resourcemanager.hpp"
+#include "resourcesprite.hpp"
 #include "renderer.hpp"
 #include "texture2D.hpp"
 #include "sprite.hpp"
