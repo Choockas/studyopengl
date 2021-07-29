@@ -1,7 +1,5 @@
 #pragma once
 #include "mainwindow.hpp"
-// #include <iostream>
-// #include <array>
 
 #include "document.h"
 #include "error/en.h"
@@ -21,6 +19,7 @@ class ResourcePrimitive;
 class Menu;
 class ShaderBuffers;
 class PrimitiveShader;
+class TransformShader;
 namespace RenderEngine{
 class ShaderProgramm;}
 
@@ -57,7 +56,7 @@ private:
      std::shared_ptr<ResourcePrimitive>   _resourcePrimitive; 
      std::unique_ptr<ResourceFinder> _rmfinder;
      std::unique_ptr<PrimitiveShader> _primitiveShader;
-     std::unique_ptr<ShaderBuffers> _transformShader;
+     std::unique_ptr<TransformShader> _transformShader;
      std::shared_ptr<Menu> _menu;
 //   very simple shader
 //      std::shared_ptr<RenderEngine::ShaderProgramm> _shadep;

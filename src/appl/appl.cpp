@@ -92,6 +92,9 @@ void MyAppl::primitiveTransformShaderUse( float grades, float trmod)
 {
 
     _transformShader->useDemoShader();
+    _transformShader->set_grades(grades);
+    _transformShader->chageTrMode(trmod); //just dummy
+    
 }
 
 
@@ -233,7 +236,7 @@ void glfwWindowSizeCallBack(GLFWwindow *pWindow, int width, int hight)
         viewPortLeftOffset = (width - viewPortWidth)/2;
             MouseViewPort::set_viewportLeftOffset(viewPortLeftOffset);
         }
-        else { std::cout<<"viewPortWidth ="<<viewPortWidth<< "viewPortLeftOffset ="<<viewPortLeftOffset<< std::endl;}
+        else { std::cout<<"viewPortWidth ="<<viewPortWidth<< "viewPortLeftOffset ="<<viewPortLeftOffset<<"; pWindow:"<<pWindow << std::endl;}
     }        
     if (woh < aspect_ratio){
         viewPortHight =   width/aspect_ratio;
@@ -251,11 +254,14 @@ void glfwWindowSizeCallBack(GLFWwindow *pWindow, int width, int hight)
 
 void glfwKeyCallBack(GLFWwindow *pWindow, int key, int scancode, int action, int mode)
 {
+    bool tmode;
     if (key== GLFW_KEY_ESCAPE && action == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(pWindow,GL_TRUE);
     }
    qkeys[key]=action;   
+   scancode = 39;
+   tmode = mode==1? true : false;
 }
 
 
@@ -277,7 +283,7 @@ void mouse_button_callback(GLFWwindow *pWindow, int button, int action, int mods
         MouseViewPort::set_used(true);
         menuchange = true;
     };
-
+       xsize = mods;
 }
 
 

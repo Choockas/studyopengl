@@ -62,6 +62,7 @@ public:
     void createDemoShader(const std::string& shaderName,const std::string& vertexPath,const std::string& fragmentPath) override;
     void set_grades(const float grades) {_grades=grades;}
     void useDemoShader() override; 
+    void chageTrMode(float sval){sval++;} //just dummy
 private:
     std::shared_ptr<RenderEngine::ShaderProgramm> _shadet;
     float _grades = 0;
