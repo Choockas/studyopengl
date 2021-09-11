@@ -28,6 +28,7 @@ public:
     void update(const uint factorSize); //factorSize for actually positioning
     void clear_vecobjects(){_vecObjects.clear();} 
     unsigned int get_actbyMenu() const {return _actbyMenu;} //define the act that must be done
+    void set_actbyMenu(const int res){_actbyMenu=res;}
     void initMenu();
 private:
     

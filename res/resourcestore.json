@@ -6,7 +6,7 @@
             },
             {
             "name":"demosprites",
-            "path":"res/demospr.json"
+            "path":"res/demosprites.json"
             },
             {
             "name":"demotransform",

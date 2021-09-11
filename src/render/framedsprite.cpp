@@ -14,7 +14,6 @@ namespace RenderEngine{
                 
  {
      
-     std::cout<< "framed sprite  created "<<std::endl;
  }
         
 
@@ -61,16 +60,17 @@ void FramedSprite::render(const glm::vec2 position, const glm::vec2 size, const 
         auto subTexture2D = m_pTexture -> getSubtexture2D(m_currentFrame); 
         
         const GLfloat texCoords[] ={
-            //U-V
             subTexture2D.leftBottomUV.x, subTexture2D.leftBottomUV.y,
             subTexture2D.leftBottomUV.x, subTexture2D.rightTopUV.y,
             subTexture2D.rightTopUV.x,   subTexture2D.rightTopUV.y,
             subTexture2D.rightTopUV.x,   subTexture2D.leftBottomUV.y,
         };
+        
         m_textureCoordsBuffer.update(texCoords,2*4*sizeof(GLfloat)); 
         
-//         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
+//         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0); 
         m_dirty = false;
+        
     }
     Sprite::render(position, size, rotation);
     

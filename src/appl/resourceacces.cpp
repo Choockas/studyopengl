@@ -7,7 +7,7 @@ ResourceAcces::~ResourceAcces()
 {
 }
 
-ResourceAcces::ResourceAcces()
+ResourceAcces::ResourceAcces(const std::string workpath) : _path(workpath)
 {
 }
 
@@ -15,10 +15,11 @@ ResourceAcces::ResourceAcces()
 std::string ResourceAcces::getFileString(const std::string& relativePath)
 {
     std::ifstream f;
-    f.open(get_path()+"/"+relativePath,std::ios::in | std::ios::binary);
+    const std::string workPath = get_execpath();
+    f.open(workPath+"/"+relativePath,std::ios::in | std::ios::binary);
     if (!f.is_open())
     {
-        std::cerr<<"Failed to open "<< relativePath<<std::endl;
+        std::cerr<<"Failed to open "<<workPath<<relativePath<<std::endl;
         return std::string();
     }
     std::stringstream buffer;
@@ -28,14 +29,14 @@ std::string ResourceAcces::getFileString(const std::string& relativePath)
 }
 
 
-ResourceSprite::ResourceSprite()
+SpriteBuilder::SpriteBuilder(const std::string workpath): _workpath(workpath)
 {
 }
 
-ResourceSprite::~ResourceSprite()
+SpriteBuilder::~SpriteBuilder()
 {
 }
-
+/*
 std::shared_ptr<RenderEngine::ShaderProgramm> ResourceSprite::getShaderProgram(const std::string& shaderName)
 {
     return nullptr;
@@ -45,13 +46,20 @@ std::shared_ptr<RenderEngine::Sprite> ResourceSprite::getSprites(const std::stri
 {
     return nullptr;
 }
-
-
-std::shared_ptr<RenderEngine::Texture2D> ResourceSprite::getTextures(const std::string& textureName)
+*/
+/*
+bool ResourceSprite::getTextures(const std::string& textureName)
 {
-    return nullptr;
-}
+    return false;
+}*/
 
+
+// std::shared_ptr<RenderEngine::Texture2D> ResourceSprite::getTextures(const std::string& textureName)
+// {
+//     return nullptr;
+// }
+
+/*
 bool ResourceSprite::loadShaders(const std::string& shaderName, const std::string& vertexPath, const std::string& fragmentPath)
 {
     return true;
@@ -71,7 +79,7 @@ std::shared_ptr<RenderEngine::Texture2D> ResourceSprite::loadTextureAtlas(const 
 {
     return nullptr;
 }
-
+*/
 
 
 

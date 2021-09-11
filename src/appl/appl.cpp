@@ -5,6 +5,7 @@
 #include "resourceprimitive.hpp"
 #include "demoshader.hpp"
 #include "framedsprite.hpp"
+#include "spritethings.hpp"
 #include "menu.hpp"
 #include "mouse.hpp"
 #include "appl.hpp"
@@ -39,23 +40,25 @@ void MyAppl::init(const std::string& executablePath)
     glfwSetMouseButtonCallback(_pwndw, mouse_button_callback);
     //evaluate executablePath    
     size_t found= executablePath.find_last_of("/\\");
-    _path = executablePath.substr(0,found);
+    _execpath = executablePath.substr(0,found);
     
     aspect = 1.f* _windsize.x/_windsize.y; // windows ratio
     originalWindowSize=_windsize;
     MouseViewPort::set_horAspect(1.f);
     MouseViewPort::set_verAspect(1.f);
-    _rmfinder =std::make_unique<ResourceFinder>(_path,LOCALPATH);
+    _rmfinder =std::make_unique<ResourceFinder>(_execpath,LOCALPATH);
     _rmfinder->loadJsonResources();
     std::string trp = _rmfinder->get_resultPath("startmenu");
     
     //set up all for menu
-    _menu= std::make_shared<Menu>(_rmfinder->get_resultPath("startmenu"),_path,_windsize.x,_windsize.y);
-    
+    _menu= std::make_shared<Menu>(_rmfinder->get_resultPath("startmenu"),_execpath,_windsize.x,_windsize.y);
     _menu->initMenu();
-    _resourcePrimitive = std::make_shared<ResourcePrimitive>(_path, _rmfinder->get_resultPath("demofree")); 
+    //preparing for primitive shader programm
+    _resourcePrimitive = std::make_shared<ResourcePrimitive>(_execpath, _rmfinder->get_resultPath("demofree")); 
     _resourcePrimitive->loadJsonResources();
-    
+    //preparing for sprites
+    _resourceSprite = std::make_shared<ResourceManager>(_execpath, _rmfinder->get_resultPath("demosprites"));
+    _resourceSprite->loadJsonResources();
 }
 
 
@@ -83,12 +86,12 @@ void MyAppl::go()
 }
 
 //simplest using shader, drawing
-void MyAppl::primitive1ShaderUse()
+void MyAppl::primitive1ShaderUse() const
 {
      _primitiveShader->useDemoShader();
 }
  
-void MyAppl::primitiveTransformShaderUse( float grades, float trmod)
+void MyAppl::primitiveTransformShaderUse( float grades, float trmod) const
 {
 
     _transformShader->useDemoShader();
@@ -96,6 +99,14 @@ void MyAppl::primitiveTransformShaderUse( float grades, float trmod)
     _transformShader->chageTrMode(trmod); //just dummy
     
 }
+
+
+void MyAppl::simplestSpriteRender(const std::string name) const
+{
+    _spriteThings->getSprites(name)->render({200,300},{128,128},0);
+}
+
+
 
 
 
@@ -136,11 +147,98 @@ void MyAppl::createPrimitiveTransform(const std::string path, const std::string 
    
 }
 
+bool MyAppl::createSimplestSprite(const std::string demoName)
+{
+    
+    std::string  shaderName;
+    std::string initialTextName;
+    std::string textureAtlas;    
+    bool result = false;
+    // first getting names of resourses wich needed for the sprite building
+    if(_resourceSprite->get_spriteDate(demoName,shaderName,textureAtlas, initialTextName )){ 
+        const std::pair<std::string, std::string> pShaderProgram = _resourceSprite->get_shaderDate(shaderName);     
+        // parameters of loadShaders ( nameShaderProgramm, vertex, fragment)
+      result= _spriteThings->loadShaders(shaderName,pShaderProgram.first,pShaderProgram.second);
+      
+      
+    // becouse choised shader programm (vsprite.txt) has variable projectionMat it shou'd be initialised !
+    auto pSpriteShaderProgram = _spriteThings->getShaderProgram(shaderName);
+    glm::mat4 projectionMatrix = glm::ortho (0.0f, 900.0f,0.0f,600.f,-0.1f,100.0f);
+    pSpriteShaderProgram->use(); 
+    pSpriteShaderProgram->setInt("tex",0);
+    pSpriteShaderProgram -> setMatrix4("projectionMat", projectionMatrix);
+    
+    const std::pair<std::string, std::string> pPath=_resourceSprite->get_textureDate(textureAtlas);
+        // parameters of loadTextures (resourcePath, const std::string& textureName,texturePath)
+     if(result) result = _spriteThings->loadTextures(pPath.first,textureAtlas,pPath.second);
+     else std::cerr<< "shader isn't loaded for "<<textureAtlas<<std::endl;   
+        
+//        _demoSprite = 
+     if(result) _spriteThings->loadSprites(demoName, textureAtlas, shaderName, initialTextName);
+     else std::cerr<< "texture isn't loaded"<< std::endl;
+    }
+    return result;
+}
+
+bool MyAppl::createAnimatedSprite(const std::string anyName)
+{
+    std::string  shaderName;
+    std::string initialTextName;
+    std::string textureAtlas;   
+    const std::vector<std::pair<std::string,uint64_t>> danstat;
+    bool result = false;
+    if(_resourceSprite->get_spriteDate(anyName,shaderName,textureAtlas, initialTextName )){ 
+              const std::pair<std::string, std::string> pShaderProgram = _resourceSprite->get_shaderDate(shaderName);     
+        // parameters of loadShaders ( nameShaderProgramm, vertex, fragment)
+      result= _spriteThings->loadShaders(shaderName,pShaderProgram.first,pShaderProgram.second);
+      
+      
+    // becouse choised shader programm (vsprite.txt) has variable projectionMat it shou'd be initialised !
+    auto pSpriteShaderProgram = _spriteThings->getShaderProgram(shaderName);
+    glm::mat4 projectionMatrix = glm::ortho (0.0f, 900.0f,0.0f,600.f,-0.1f,100.0f);
+    pSpriteShaderProgram->use(); 
+    pSpriteShaderProgram->setInt("tex",0);
+    pSpriteShaderProgram -> setMatrix4("projectionMat", projectionMatrix);
+    
+    const std::pair<std::string, std::string> pPath=_resourceSprite->get_textureDate(textureAtlas);
+        // parameters of loadTextures (resourcePath, const std::string& textureName,texturePath)
+     if(result) result = _spriteThings->loadTextures(pPath.first,textureAtlas,pPath.second);
+     else std::cerr<< "shader isn't loaded for "<<textureAtlas<<std::endl;   
+        
+        
+        
+        
+        
+      result= _spriteThings->loadTextureAtlas("",textureAtlas,"",_resourceSprite->get_subTextures(textureAtlas) ,120,157)!=nullptr;
+//       if(result) _spriteThings->loadAnimateSprites();
+     
+      const std::map<std::string,std::vector<std::pair<std::string,uint64_t>>> _taniDate = _resourceSprite->get_aniDate(anyName);
+      if(result)result= _spriteThings->loadAnimateSprites(anyName,textureAtlas,shaderName,initialTextName,_taniDate.find("fly_rigth")->first,_taniDate.find("fly_rigth")->second); 
+      //void AnimateSprite::insertState(std::string state, std::vector<std::pair<std::string, uint64_t > > subTexturesDuration)
+      // statesname, {pair1,pair2}  pair{string,uint64_t}
+      
+//       const std::vector<pair<std::string,uint64_t>> danstat;
+//       std::shared_ptr<RenderEngine::AnimateSprite>  t_anisprite = _spriteThings->getAnimateSprites(anyName);
+      
+    }
+    
+    return result;
+}
+
+
+void MyAppl::animateSpriteRender(const std::string asname) const
+{
+//     _spriteThings->getAnimateSprites(asname)->render();
+}
+
+
+
 /*
-*     this like menu message traslation
+*     There's like menu message traslation
 */
 void MyAppl::contentChanger(const unsigned int menuAct)
 {
+    bool result=false;
     
     switch(menuAct)
     {
@@ -149,35 +247,73 @@ void MyAppl::contentChanger(const unsigned int menuAct)
         case 1:
             on_offPrimitive_6vf("","", false,_windsize);
             _applstate = 0;
+            _menu->set_actbyMenu(0);
             break;
         case 2: 
             createPrimitiveTransform("","", false,_windsize);
             _applstate = 0;
             break;
+        case 3: 
+            _spriteThings.use_count(); 
+            _spriteThings = nullptr;
+            _applstate = 0;
+            _menu->set_actbyMenu(0);
+            break;
         case 100:
             filePad();
             break;
         case 101:
-            {
+        {
             std::string resPath = _rmfinder->get_resultPath("demofree");
             if(!resPath.empty())
             {
-            on_offPrimitive_6vf(_path,resPath, true,_windsize);
-            _applstate=1;
+                on_offPrimitive_6vf(_execpath,resPath, true,_windsize);
+                _applstate=1;
             }}
+            _menu->set_actbyMenu(0);
             break;
         case 102:
-            {
+        {
             std::string resPath = _rmfinder->get_resultPath("demofree");
             if(!resPath.empty())
             {
-            createPrimitiveTransform(_path,resPath, true,_windsize);
-              _applstate=2;
+                createPrimitiveTransform(_execpath,resPath, true,_windsize);
+                _applstate=2;
             }}
-            
+            _menu->set_actbyMenu(0);
             break;
+        case 103:
+        {
+            
+            std::string resPath = _rmfinder->get_resultPath("demosprites");
+            if(!resPath.empty())
+            {              
+               if(!_spriteThings) _spriteThings= std::make_shared<SpriteThings>(_execpath,resPath);
+                result = createSimplestSprite("falkon");
+                if(result)simplestSpriteRender("falkon");else std::cerr<< " sprite isn't loaded"<<std::endl;
+                glfwSwapBuffers(_pwndw);
+                
+                _applstate=3; 
+            }
+        }
+        _menu->set_actbyMenu(0);
+        break;
+        case 104:
+        {
+            std::string resPath = _rmfinder->get_resultPath("demosprites");
+            if (!resPath.empty()){
+                if(!_spriteThings)_spriteThings= std::make_shared<SpriteThings>(_execpath,resPath);
+//                 result = createSimplestSprite("birdsAnimateSprite");
+//                 _spriteThings->loadTextureAtlas();
+                createAnimatedSprite("birdsAnimateSprite");
+               _applstate=4 ;
+            }
+        }
+        _menu->set_actbyMenu(0);
+            break;
+            
         default:
-//             std::cout<<".";
+            //             std::cout<<".";
             break;
     }
 }
@@ -203,7 +339,7 @@ void MyAppl::update( )
 // such as windows rendering
 void MyAppl::render()
 {
-      _menu->render(); 
+     
         switch (_applstate)
         {
             case 1:
@@ -212,11 +348,17 @@ void MyAppl::render()
             case 2:
                 primitiveTransformShaderUse(90.0f,0.0f);
                 break;
+            case 3:
+                simplestSpriteRender("falkon");
+                break;
+            case 4 :
+                animateSpriteRender("birdsAnimateSprite");
+                break;
             default:
                 break;
         }
+         _menu->render(); 
 }
-
 
 
 void glfwWindowSizeCallBack(GLFWwindow *pWindow, int width, int hight)

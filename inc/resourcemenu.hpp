@@ -35,7 +35,7 @@ class ItemPad;
 class ResourceMenu:public ResourceAcces
 {
 public:
-    ResourceMenu(const std::string path,const std::string resource_path );
+    ResourceMenu(const std::string path, const std::string resourcePath);
     virtual ~ResourceMenu();
 //     void managerInit(const std::string& exepath){};    
     bool loadJsonResources() override;

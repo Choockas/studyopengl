@@ -11,11 +11,11 @@
 
 namespace RenderEngine{
     
-    Sprite::Sprite(std::shared_ptr<Texture2D>  pTexture
-    ,std::string initialSubTexture = ""
-    ,std::shared_ptr<ShaderProgramm> pShaderProgramm = nullptr
-    ): m_pTexture(std::move(pTexture))
-      ,m_pShaderProgramm(std::move(pShaderProgramm))
+    Sprite::Sprite(     std::shared_ptr<Texture2D>  pTexture
+                                       ,std::string initialSubTexture 
+                   ,std::shared_ptr<ShaderProgramm> pShaderProgramm = nullptr)
+                                                  : m_pTexture(std::move(pTexture))
+                                                   ,m_pShaderProgramm(std::move(pShaderProgramm))
     
     {
         // 1-2
@@ -29,6 +29,7 @@ namespace RenderEngine{
             1.f,0.f,
             
         };
+//         m_pTexture->getSubtexture2D(std::move(initialSubTexture));
         auto subTexture2D = m_pTexture -> getSubtexture2D(std::move(initialSubTexture)); 
         
         const GLfloat texCoords[] ={
@@ -73,6 +74,10 @@ namespace RenderEngine{
     void Sprite::render(const glm::vec2 position, const glm::vec2 size, const float rotation) const
     {
         m_pShaderProgramm->use();
+//         if (position.x == 20.0) 
+//         {
+//             std::cout << "20 \t" <<std::endl;
+//         }
         glm::mat4 model(1.f);
         model = glm::translate(model,glm::vec3(position,0.f));
         model = glm::translate(model,glm::vec3(0.5f*size.x,0.5f*size.y,0.f));

@@ -1,28 +1,15 @@
 #include "resourceprimitive.hpp"
 #include "shaderprogramm.hpp"
 
-ResourcePrimitive::ResourcePrimitive(const std::string path,const std::string resource_path ) :_resultPath(resource_path)
+ResourcePrimitive::ResourcePrimitive(const std::string path,const std::string resource_path ) :ResourceAcces(path),  _resultPath(resource_path)
 {
-    set_path(path);
+    
 }
 
 ResourcePrimitive::~ResourcePrimitive()
 {
     
 }
-
-
-// std::shared_ptr<RenderEngine::ShaderProgramm> ResourcePrimitive::getShaderProgram(const std::string& shaderName)
-// {
-//         ShaderProgramsMap::const_iterator it=_shaderPrograms.find(shaderName);
-//     if(it!=_shaderPrograms.end()){
-//         return it->second;
-//     }
-//     std::cerr<<"Can't find the shader program "
-//     <<shaderName
-//     <<std::endl;
-//     return nullptr;
-// }
 
 
 void ResourcePrimitive::loadShaderString(const std::string& shaderName, const std::string& vertexPath, const std::string& fragmentPath)

@@ -27,7 +27,8 @@ set (SOURCE_EXE src/main.cpp
                 src/appl/resourcefinder.cpp 
                 src/appl/resourceacces.cpp 
                 src/appl/demoshader.cpp 
-                src/appl/resourceprimitive.cpp )
+                src/appl/resourceprimitive.cpp
+                src/appl/spritethings.cpp )
                 
 add_executable(${PROJECT_NAME} ${SOURCE_EXE}) 
 

@@ -6,11 +6,11 @@ namespace RenderEngine{
     
    
 Texture2D::Texture2D(const GLuint width,
-              const GLuint hight,
+              const GLuint height,
               const unsigned char* data,
               const GLuint chanals,
               const GLenum filter ,
-              const GLenum wrapMode): m_width(width), m_hight(hight)
+              const GLenum wrapMode): m_width(width), m_height(height)
 {
     switch(chanals){
         case 3:
@@ -26,13 +26,13 @@ Texture2D::Texture2D(const GLuint width,
     glGenTextures(1,&m_ID);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,m_ID);
-    glTexImage2D(GL_TEXTURE_2D,0, m_mode,m_width,m_hight,0,m_mode,GL_UNSIGNED_BYTE,data);
+    glTexImage2D(GL_TEXTURE_2D,0, m_mode,m_width,m_height,0,m_mode,GL_UNSIGNED_BYTE,data);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S, wrapMode);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T, wrapMode);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, filter);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER, filter);  
     glBindTexture(GL_TEXTURE_2D,0);
-    std::cout<< "just created texture "<<m_ID<< std::endl;
+    std::cout<< "******* constructor texture "<<m_ID<<" *******"<< std::endl;
 }
 
 void Texture2D::bind() const
@@ -53,7 +53,7 @@ Texture2D& Texture2D::operator=(Texture2D&& texture2D)
     texture2D.m_ID = 0;
     m_mode = texture2D.m_mode;
     m_width = texture2D.m_width;
-    m_hight = texture2D.m_hight;
+    m_height = texture2D.m_height;
     return *this;
 }
 
@@ -63,7 +63,7 @@ Texture2D& Texture2D::operator=(Texture2D&& texture2D)
     texture2D.m_ID = 0;
     m_mode = texture2D.m_mode;
     m_width = texture2D.m_width;
-    m_hight = texture2D.m_hight;  
+    m_height = texture2D.m_height;  
      
 }
 

@@ -25,7 +25,8 @@ Menu::Menu(const std::string relativepath, const std::string workpath, const int
     
     _vecObjects.reserve ( PADHIGTH * PADLENGTH*2);
     unsigned int  currentLeftOffset =0;
-    
+    // one sprite such as itempad  for each point
+    std::cout<<"Create point emplace pad: ";
     for (auto& currentPoint : rowMenu  )
     {
         
@@ -35,9 +36,9 @@ Menu::Menu(const std::string relativepath, const std::string workpath, const int
                                                     currentPoint.bvisible, 
                                                      std::make_shared<std::array<std::pair< int, std::string>,2>>
                                                      (currentPoint.acts)));
-
         currentLeftOffset+=PADLENGTH;
     }
+    std::cout<<std::endl;
 
 }
 
@@ -96,8 +97,6 @@ void Menu::update(const uint factorSize)
     
 }
 
-
-
     
 /*    
     std::string  temp_actlabel, temp_label;
@@ -132,8 +131,6 @@ void Menu::update(const uint factorSize)
     }    
     */
  
-
-
 //getting a sprite for menues point
 std::shared_ptr< ItemPad > Menu::createGOmenuPoint(const std::string label, 
                                                    glm::vec2 position, 

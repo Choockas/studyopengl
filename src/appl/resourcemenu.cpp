@@ -14,9 +14,9 @@
 
 
 
-ResourceMenu::ResourceMenu(const std::string path,const std::string resourcePath):_resourcePath(resourcePath)
+ResourceMenu::ResourceMenu(const std::string path,const std::string resourcePath):ResourceAcces(path),_resourcePath(resourcePath)
 {
-    set_path(path);
+ 
     std::cout<<"Resource menu created"<<" ("<<_resourcePath<<") "<<std::endl;
 }
 
@@ -45,8 +45,8 @@ bool ResourceMenu::loadJsonResources()
         std::cerr << "In JSONfile:" << JSONstring<<std::endl;
         return false;
     }
-
     
+//*********** read  about   S H A D E R S ***************************
        auto shadersIt = document.FindMember("shaders");
     if (shadersIt!=document.MemberEnd())
     {
@@ -59,6 +59,7 @@ bool ResourceMenu::loadJsonResources()
         }
     }
     
+//*********** read  about   T E X T U R E S ***************************   
     auto textureAtlas = document.FindMember("textureAtlass");
     if (textureAtlas!=document.MemberEnd())
     {      
@@ -72,16 +73,17 @@ bool ResourceMenu::loadJsonResources()
             const auto subTexturesArray = currentTextureAtlas["subTextureArray"].GetArray();
             std::vector<std::string> subTextures;
             arrs=subTexturesArray.Size();
-            std::cout << "Gona to be reserved " << arrs << " for subtextures"<<std::endl;
             subTextures.reserve(arrs);
             for(const auto& currentSubtextures : subTexturesArray){
-                subTextures.emplace_back(currentSubtextures.GetString()); 
-                std::cout << "emplace "<< currentSubtextures.GetString()<< " subtexture" << std::endl;
-            }            
-            loadTextureAtlas(get_path(),name, filepath,std::move(subTextures), subTextureWidth,subTextureHight);            
+                const std::string gettedString = currentSubtextures.GetString();
+                subTextures.emplace_back(gettedString); 
+            } 
+            std::cout<<std::endl;
+            loadTextureAtlas(get_execpath(),name, filepath,std::move(subTextures), subTextureWidth,subTextureHight);            
         }
     } else std::cout << "Something with textureAtalass ?" << std::endl;
     
+//*********** read  about   F R A M E D S P R I T E S ****************************    
     auto framedSpritesIt = document.FindMember("framedSprites");
     if (framedSpritesIt!=document.MemberEnd())
     {
@@ -105,24 +107,9 @@ bool ResourceMenu::loadJsonResources()
             }
         }
     }
+
     
-    auto spritesIt = document.FindMember("sprites");
-    if (spritesIt!=document.MemberEnd())
-    {
-        for (const auto& currentSprite : spritesIt-> value.GetArray())
-        {
-            const std::string name = currentSprite["name"].GetString() ;
-            const std::string atlas = currentSprite["textureAtlas"].GetString() ;
-            const std::string shader = currentSprite["shader"].GetString() ;
-            const std::string  initialSubTexture = currentSprite["initialSubTexture"].GetString();                                           
-            auto pSprite = loadSprites(name,atlas,shader,initialSubTexture);
-            if(! pSprite ){
-                std::cerr << "Can't load sprite (initial) "<< initialSubTexture << std::endl;
-                continue;
-            }            
-        }
-    }
-    
+//*********** read  about   M E N U P O I N T    
     auto menuPoints = document.FindMember("menuPoint");
     if (menuPoints!=document.MemberEnd())
     {
@@ -140,7 +127,6 @@ bool ResourceMenu::loadJsonResources()
                 const int ia = cacts["index"].GetInt();
                 const std::string  sa = cacts["statesName"].GetString();
                 const auto pisa = std::make_pair(ia,sa);
-//                idActs.insert(std::pair<const int,const std::string>(ia,sa)); 
                 idActs[ico]=pisa;
                 ico++;
             }
@@ -214,6 +200,29 @@ std::shared_ptr< RenderEngine::Texture2D > ResourceMenu::loadTextureAtlas(const 
     return pTexture; 
 }
 
+//***** F R A M E D   S P R I T E  L O A D************************************
+std::shared_ptr<RenderEngine::FramedSprite> ResourceMenu::loadFramedSprites(const std::string& spriteName, const std::string& textureName, const std::string& shaderName, const std::string& subtextureName)
+{
+        auto pTexture  = getTextures(textureName);
+    if(!pTexture){
+        std::cerr<< "Can't get textures "<<textureName <<" for the sprite:"<<spriteName<<std::endl;
+        //glfwTerminate();
+        return nullptr;
+    }
+    
+    auto pShader = getShaderProgram(shaderName);
+    if(!pShader){
+        std::cerr<< "Can't get shader "<<shaderName<<"for the sprite:"<<spriteName<<std::endl;
+        // glfwTerminate();
+        return nullptr;
+    }
+    std::shared_ptr<RenderEngine::FramedSprite> newSprite = _framesprites.emplace(spriteName,
+                                                                                  std::make_shared<RenderEngine::FramedSprite>(pTexture,
+                                                                                                                                subtextureName,
+                                                                                                                            pShader)).first->second;
+    return newSprite;                                                                                                                                
+}
+
 
 //***** S P R I T E  L O A D************************************
 std::shared_ptr<RenderEngine::Sprite> ResourceMenu::loadSprites(const std::string& spriteName,
@@ -271,7 +280,7 @@ std::shared_ptr<RenderEngine::Texture2D> ResourceMenu::loadTextures(const std::s
                                                                   chanels,
                                                                   GL_NEAREST,
                                                                   GL_CLAMP_TO_EDGE )).first->second;
-                                                                  stbi_image_free(pixels);                                                               
+    stbi_image_free(pixels);                                                               
     return newTexture;
 }
 
@@ -279,28 +288,6 @@ std::shared_ptr<RenderEngine::Texture2D> ResourceMenu::loadTextures(const std::s
 
 
 
-//***** F R A M E D   S P R I T E  L O A D************************************
-std::shared_ptr<RenderEngine::FramedSprite> ResourceMenu::loadFramedSprites(const std::string& spriteName, const std::string& textureName, const std::string& shaderName, const std::string& subtextureName)
-{
-        auto pTexture  = getTextures(textureName);
-    if(!pTexture){
-        std::cerr<< "Can't get textures "<<textureName <<" for the sprite:"<<spriteName<<std::endl;
-        //glfwTerminate();
-        return nullptr;
-    }
-    
-    auto pShader = getShaderProgram(shaderName);
-    if(!pShader){
-        std::cerr<< "Can't get shader "<<shaderName<<"for the sprite:"<<spriteName<<std::endl;
-        // glfwTerminate();
-        return nullptr;
-    }
-    std::shared_ptr<RenderEngine::FramedSprite> newSprite = _framesprites.emplace(spriteName,
-                                                                                  std::make_shared<RenderEngine::FramedSprite>(pTexture,
-                                                                                                                                subtextureName,
-                                                                                                                            pShader)).first->second;
-    return newSprite;                                                                                                                                
-}
 
 
 

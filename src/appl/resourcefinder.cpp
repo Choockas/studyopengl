@@ -1,9 +1,8 @@
 #include "resourcefinder.hpp"
 
 
-ResourceFinder::ResourceFinder(const std::string path, std::string resource_path) :_resultPath(resource_path)
+ResourceFinder::ResourceFinder(const std::string path, std::string resource_path) : ResourceAcces(path), _resultPath(resource_path)
 {
-    set_path(path);
 }
 
 
@@ -28,10 +27,10 @@ bool ResourceFinder::loadJsonResources()
     
     if (resourceIt!=document.MemberEnd())
     {
-        for (const auto& currentShader : resourceIt-> value.GetArray())
+        for (const auto& currentResource : resourceIt-> value.GetArray())
         {
-            const std::string name = currentShader["name"].GetString() ;
-            const std::string filepath_j = currentShader["path"].GetString() ;            
+            const std::string name = currentResource["name"].GetString() ;
+            const std::string filepath_j = currentResource["path"].GetString() ;            
             _resourcesMap.emplace(name,filepath_j);
         }
     }

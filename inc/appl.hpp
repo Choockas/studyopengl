@@ -20,8 +20,12 @@ class Menu;
 class ShaderBuffers;
 class PrimitiveShader;
 class TransformShader;
+class SpriteThings;
 namespace RenderEngine{
-class ShaderProgramm;}
+class ShaderProgramm;
+class Sprite;
+class AnimateSprite;
+}
 
 
 
@@ -43,20 +47,26 @@ public:
     void filePad();
     void on_offPrimitive_6vf(const std::string path, const std::string relativePath,const bool on_off, const glm::ivec2 windsize); // create _vao_primitive_6vf
     void createPrimitiveTransform(const std::string path, const std::string relativePath,const bool on_off, const glm::ivec2 windsize);
-    void primitive1ShaderUse();
-    void primitiveTransformShaderUse( float grades, float trmod);
-    
+    void primitive1ShaderUse() const;
+    void primitiveTransformShaderUse( float grades, float trmod) const ;
+    bool createSimplestSprite(const std::string demoName);
+    bool createAnimatedSprite(const std::string anyName);
+    void simplestSpriteRender(const std::string name) const;
+    void animateSpriteRender(const std::string asname) const;
 //     shaderVector get_demoShaders(){ return _demoShaders;}
      
 private:
     float _verticles[9];
      GLFWwindow* _pwndw;
-     std::string _path;
+     std::string _execpath;
      const glm::ivec2  _windsize;
      std::shared_ptr<ResourcePrimitive>   _resourcePrimitive; 
+     std::shared_ptr<ResourceManager> _resourceSprite; 
      std::unique_ptr<ResourceFinder> _rmfinder;
      std::unique_ptr<PrimitiveShader> _primitiveShader;
      std::unique_ptr<TransformShader> _transformShader;
+//      std::shared_ptr<RenderEngine::Sprite> _demoSprite;
+     std::shared_ptr<SpriteThings> _spriteThings;
      std::shared_ptr<Menu> _menu;
 //   very simple shader
 //      std::shared_ptr<RenderEngine::ShaderProgramm> _shadep;

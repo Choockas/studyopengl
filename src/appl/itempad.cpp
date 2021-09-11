@@ -13,17 +13,15 @@ ItemPad::ItemPad(const std::shared_ptr< RenderEngine::FramedSprite > ptrSprite,
                                                                const float rotation,
                                                                const std::string label,
                                                                const bool visible,
-                                                               std::shared_ptr<std::array<std::pair<int,std::string>,2>>  vacts
+                                                               const std::shared_ptr<std::array<std::pair<int,std::string>,2>>  vacts
                                                                )
                                                                :IGraphicObject(position,
                                                                                size,
                                                                                rotation,                                                        
                                                                                visible), 
-                                                                _pEmbededSprite(ptrSprite),_label(label)
+                                                                _pEmbededSprite(ptrSprite),_acts(vacts),_label(label)
 {
-    std::cout << "emplace pad "<< label<<std::endl;
-    _acts = vacts;
-
+    std::cout << label<<" \t";
 }
 
 ItemPad::~ItemPad()
@@ -68,15 +66,15 @@ int ItemPad::get_curentact()
     return  _act_Off? _acts->at(0).first : _acts->at(1).first;
 }
 
-
-// bool MenuPad::mouseCollision(double xposition, double yposition) const
-// {
-//     int leftBorder = _position.x;
-//     int rightBorder = _position.x+ _size.x;
-//     int bottomBorder = _position.y;
-//     int topBorder = _position.y+_size.y;
-//     
-//     if( xposition > leftBorder && xposition < rightBorder && yposition > bottomBorder && yposition < topBorder)
-//         return true;
-//     else return false;
-// }
+/*
+bool MenuPad::mouseCollision(double xposition, double yposition) const
+{
+    int leftBorder = _position.x;
+    int rightBorder = _position.x+ _size.x;
+    int bottomBorder = _position.y;
+    int topBorder = _position.y+_size.y;
+    
+    if( xposition > leftBorder && xposition < rightBorder && yposition > bottomBorder && yposition < topBorder)
+        return true;
+    else return false;
+}*/

@@ -6,40 +6,39 @@
       "filePath_f": "res/shaders/fsprite.txt"
     }
   ],
-  "textureAtlas": [
+  "textures2d":[
     {
-      "name": "mapTextureAtlas_8x8",
-      "filePath": "res/textures/map_8x8.png",
-      "subTextureWidth": 8,
-      "subTextureHeight": 8,
+        "name": "falkon_text",
+        "filePath":"res/textures/Falkon.png"
+    }
+  ],
+  "textureAtlas":[
+    {
+      "name": "texturebirdsAtlas",
+      "filePath": "res/textures/prbirds_1.png",
+      "subTextureWidth": 120,
+      "subTextureHeight": 157,
       "subTextureArray": [
-        "brickWall_All",
-        "brickWall_TopLeft",
-        "brickWall_TopRight",
-        "brickWall_Top",
-        "brickWall_BottomLeft",
-        "brickWall_Left",
-        "brickWall_TopRight_BottomLeft",
-        "brickWall_Top_BottomLeft",
-        "brickWall_BottomRight",
-        "brickWall_TopLeft_BottomRight",
-        "brickWall_Right",
-        "brickWall_Top_BottomRight",
-        "brickWall_Bottom",
-        "brickWall_TopLeft_Bottom",
-        "brickWall_TopRight_Bottom",
-        "water1",
-        "water2",
-        "water3",
-        "betonWall",
-        "trees",
-        "ice",
-        "border",
-        "bullet_Top",
-        "bullet_Bottom",
-        "bullet_Left",
-        "bullet_Right",
-        "nothing"
+        "stage_0_0",
+        "stage_0_1",
+        "stage_0_2",
+        "stage_0_3",
+        "stage_0_4",
+        "stage_1_0",
+        "stage_1_1",
+        "stage_1_2",
+        "stage_1_3",
+        "stage_1_4",
+        "stage_2_0",
+        "stage_2_1",
+        "stage_2_2",
+        "stage_2_3",
+        "stage_2_4",
+        "stage_3_0",
+        "stage_3_1",
+        "stage_3_2",
+        "stage_3_3",
+        "stage_3_4"
       ]
     },
     {
@@ -306,151 +305,13 @@
         "violetTyp8_Right2"
       ]
     }
-  ],
+    ],
   "sprites": [
     {
-      "name": "brickWall_All",
-      "textureAtlas": "mapTextureAtlas_8x8",
+      "name": "falkon",
+      "textureAtlas": "falkon_text",
       "shader": "spriteShader",
-      "initialSubTexture": "brickWall_All"
-    },
-    {
-      "name": "brickWall_TopLeft",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "brickWall_TopLeft"
-    },
-    {
-      "name": "brickWall_TopRight",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "brickWall_TopRight"
-    },
-    {
-      "name": "brickWall_Top",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "brickWall_Top"
-    },
-    {
-      "name": "brickWall_BottomLeft",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "brickWall_BottomLeft"
-    },
-    {
-      "name": "brickWall_Left",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "brickWall_Left"
-    },
-    {
-      "name": "brickWall_TopRight_BottomLeft",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "brickWall_TopRight_BottomLeft"
-    },
-    {
-      "name": "brickWall_Top_BottomLeft",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "brickWall_Top_BottomLeft"
-    },
-    {
-      "name": "brickWall_BottomRight",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "brickWall_BottomRight"
-    },
-    {
-      "name": "brickWall_TopLeft_BottomRight",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "brickWall_TopLeft_BottomRight"
-    },
-    {
-      "name": "brickWall_Right",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "brickWall_Right"
-    },
-    {
-      "name": "brickWall_Top_BottomRight",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "brickWall_Top_BottomRight"
-    },
-    {
-      "name": "brickWall_Bottom",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "brickWall_Bottom"
-    },
-    {
-      "name": "brickWall_TopLeft_Bottom",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "brickWall_TopLeft_Bottom"
-    },
-    {
-      "name": "brickWall_TopRight_Bottom",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "brickWall_TopRight_Bottom"
-    },
-    {
-      "name": "betonWall",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "betonWall"
-    },
-    {
-      "name": "trees",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "trees"
-    },
-    {
-      "name": "ice",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "ice"
-    },
-    {
-      "name": "border",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "border"
-    },
-    {
-      "name": "bullet_Top",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "bullet_Top"
-    },
-    {
-      "name": "bullet_Bottom",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "bullet_Bottom"
-    },
-    {
-      "name": "nothing",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "nothing"
-    },
-    {
-      "name": "bullet_Left",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "bullet_Left"
-    },
-    {
-      "name": "bullet_Right",
-      "textureAtlas": "mapTextureAtlas_8x8",
-      "shader": "spriteShader",
-      "initialSubTexture": "bullet_Right"
+      "initialSubTexture": "falkon_text"
     }
   ],
   "animatedSprites": [
@@ -513,44 +374,99 @@
           ]
         }
       ]
-    }
-  ],
-  "levels": [
-    {
-      "description": [
-        "DDDDDDDDDDDDD",
-        "D1D1D1D1D1D1D",
-        "D4D4D4D4D4D4D",
-        "D4D4D4D4D4D4D",
-        "D4D4D494D4D4D",
-        "D4D4D3D3D4D4D",
-        "D3D3D1D1D3D3D",
-        "1D11D3D3D11D1",
-        "8D33D1D1D33D8",
-        "D1D1D444D1D1D",
-        "D4D4D4D4D4D4D",
-        "D4D4D3D3D4D4D",
-        "D4D4DH1GD4D4D",
-        "DDDDD0E2DDDDD"
-      ]
     },
     {
-      "description": [
-        "MDDDDDNDDDDDO",
-        "D00D11D22D33D",
-        "D0DD1DD2DD3DD",
-        "DDDDDDDDDDDDD",
-        "D44D55D66D77D",
-        "D4DD5DD6DD7DD",
-        "DDDDDDDDDDDDD",
-        "D88D99DAADBBD",
-        "D8DD9DDADDBDD",
-        "DDDDDDDDDDDDD",
-        "DCCDGGDHHDIID",
-        "DCDDGDDHDDDDD",
-        "DDDDDH1GDDJJD",
-        "DDDDK0E2LDDDD"
-      ]
-    }
+      "name": "birdsAnimateSprite",
+      "textureAtlas": "texturebirdsAtlas",
+      "shader": "spriteShader",
+      "initialSubTexture": "stage_0_0",
+      "states":[
+      {
+      "statesName": "fly_rigth",
+      "frames": [
+            {
+              "subTexture": "stage_0_0",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "stage_0_1",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "stage_0_2",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "stage_0_3",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "stage_0_4",
+              "duration": 330000000
+            }, 
+            {
+              "subTexture": "stage_1_0",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "stage_1_1",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "stage_1_2",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "stage_1_3",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "stage_1_4",
+              "duration": 330000000
+            },
+             {
+              "subTexture": "stage_2_0",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "stage_2_1",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "stage_2_2",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "stage_2_3",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "stage_2_4",
+              "duration": 330000000
+            },
+             {
+              "subTexture": "stage_3_0",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "stage_3_1",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "stage_3_2",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "stage_3_3",
+              "duration": 330000000
+            },
+            {
+              "subTexture": "stage_3_4",
+              "duration": 330000000
+            }
+            ]
+            }
+          ]
+       }
   ]
 }
