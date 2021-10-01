@@ -57,7 +57,7 @@ void MyAppl::init(const std::string& executablePath)
     _resourcePrimitive = std::make_shared<ResourcePrimitive>(_execpath, _rmfinder->get_resultPath("demofree")); 
     _resourcePrimitive->loadJsonResources();
     //preparing for sprites
-    _resourceSprite = std::make_shared<ResourceManager>(_execpath, _rmfinder->get_resultPath("demosprites"));
+    _resourceSprite = std::make_shared<ResourceSprite>(_execpath, _rmfinder->get_resultPath("demosprites"));
     _resourceSprite->loadJsonResources();
 }
 
@@ -99,14 +99,6 @@ void MyAppl::primitiveTransformShaderUse( float grades, float trmod) const
     _transformShader->chageTrMode(trmod); //just dummy
     
 }
-
-
-void MyAppl::simplestSpriteRender(const std::string name) const
-{
-    _spriteThings->getSprites(name)->render({200,300},{128,128},0);
-}
-
-
 
 
 
@@ -175,7 +167,7 @@ bool MyAppl::createSimplestSprite(const std::string demoName)
         
 //        _demoSprite = 
      if(result) _spriteThings->loadSprites(demoName, textureAtlas, shaderName, initialTextName);
-     else std::cerr<< "texture isn't loaded"<< std::endl;
+     else std::cerr<< "texture isn't loaded for "<<demoName<< std::endl;
     }
     return result;
 }
@@ -185,6 +177,9 @@ bool MyAppl::createAnimatedSprite(const std::string anyName)
     std::string  shaderName;
     std::string initialTextName;
     std::string textureAtlas;   
+    std::string stateName;
+    std::map<std::string,std::vector<std::pair<std::string,uint64_t >>> anidate;
+    std::vector<std::pair<std::string,uint64_t>> subTexturesDuration;
     const std::vector<std::pair<std::string,uint64_t>> danstat;
     bool result = false;
     if(_resourceSprite->get_spriteDate(anyName,shaderName,textureAtlas, initialTextName )){ 
@@ -203,22 +198,22 @@ bool MyAppl::createAnimatedSprite(const std::string anyName)
     const std::pair<std::string, std::string> pPath=_resourceSprite->get_textureDate(textureAtlas);
         // parameters of loadTextures (resourcePath, const std::string& textureName,texturePath)
      if(result) result = _spriteThings->loadTextures(pPath.first,textureAtlas,pPath.second);
-     else std::cerr<< "shader isn't loaded for "<<textureAtlas<<std::endl;   
-        
-        
-        
-        
-        
-      result= _spriteThings->loadTextureAtlas("",textureAtlas,"",_resourceSprite->get_subTextures(textureAtlas) ,120,157)!=nullptr;
-//       if(result) _spriteThings->loadAnimateSprites();
-     
-      const std::map<std::string,std::vector<std::pair<std::string,uint64_t>>> _taniDate = _resourceSprite->get_aniDate(anyName);
-      if(result)result= _spriteThings->loadAnimateSprites(anyName,textureAtlas,shaderName,initialTextName,_taniDate.find("fly_rigth")->first,_taniDate.find("fly_rigth")->second); 
-      //void AnimateSprite::insertState(std::string state, std::vector<std::pair<std::string, uint64_t > > subTexturesDuration)
-      // statesname, {pair1,pair2}  pair{string,uint64_t}
+     else std::cerr<< "shader isn't loaded for "<<textureAtlas<<std::endl;  
+     const std::vector<std::string>  subTextures = _resourceSprite->get_subTextures(textureAtlas);
       
-//       const std::vector<pair<std::string,uint64_t>> danstat;
-//       std::shared_ptr<RenderEngine::AnimateSprite>  t_anisprite = _spriteThings->getAnimateSprites(anyName);
+     result=( _spriteThings->loadTextureAtlas(textureAtlas,move(subTextures) ,120,157)!=nullptr);
+//       if(result) _spriteThings->loadAnimateSprites();
+      
+      result = _resourceSprite->get_aniDate(anyName,anidate);
+      
+      result = _spriteThings->loadAnimateSprites(anyName,textureAtlas,shaderName,initialTextName,anidate);
+
+      if(result){ 
+          result = _spriteThings->setCurrentAnimateSprites(anyName);
+          
+       
+    }
+
       
     }
     
@@ -226,9 +221,17 @@ bool MyAppl::createAnimatedSprite(const std::string anyName)
 }
 
 
-void MyAppl::animateSpriteRender(const std::string asname) const
+void MyAppl::animateSpriteRender(const glm::ivec2 position,const glm::ivec2 size, float rotation) const
 {
-//     _spriteThings->getAnimateSprites(asname)->render();
+
+    _spriteThings->renderCurrentAnimationSprite(position,size,rotation);
+    
+}
+
+
+void MyAppl::simplestSpriteRender(const std::string name) const
+{
+    _spriteThings->getSprites(name)->render({200,300},{128,128},0);
 }
 
 
@@ -259,6 +262,12 @@ void MyAppl::contentChanger(const unsigned int menuAct)
             _applstate = 0;
             _menu->set_actbyMenu(0);
             break;
+        case 4: 
+            _spriteThings.use_count(); 
+            _spriteThings = nullptr;
+            _applstate = 0;
+            _menu->set_actbyMenu(0);
+            break;        
         case 100:
             filePad();
             break;
@@ -297,6 +306,7 @@ void MyAppl::contentChanger(const unsigned int menuAct)
             }
         }
         _menu->set_actbyMenu(0);
+        result=false;
         break;
         case 104:
         {
@@ -305,11 +315,14 @@ void MyAppl::contentChanger(const unsigned int menuAct)
                 if(!_spriteThings)_spriteThings= std::make_shared<SpriteThings>(_execpath,resPath);
 //                 result = createSimplestSprite("birdsAnimateSprite");
 //                 _spriteThings->loadTextureAtlas();
-                createAnimatedSprite("birdsAnimateSprite");
+                result = createAnimatedSprite("birdsAnimateSprite");
+                if(result)animateSpriteRender({100,300},{120,157},0);else std::cerr<< " sprite isn't loaded"<<std::endl;
+                glfwSwapBuffers(_pwndw);
                _applstate=4 ;
             }
         }
         _menu->set_actbyMenu(0);
+        result=false;
             break;
             
         default:
@@ -322,6 +335,13 @@ void MyAppl::contentChanger(const unsigned int menuAct)
 // busines in main loop
 void MyAppl::update( )
 {
+    switch (_applstate)
+    {
+        case 4:
+            _spriteThings->updateCurrentAnimateSprite(100000000);
+            break;
+        default: break;
+    }
     
         if(menuchange)
         {
@@ -329,9 +349,11 @@ void MyAppl::update( )
             _menu->update(_windsize.y); //check point of tuch 
             const int actMenu=_menu->get_actbyMenu();
             contentChanger(actMenu);
+            
   // on that point make reset                      
             menuchange= false;
         } 
+        
     
 }
 
@@ -352,7 +374,7 @@ void MyAppl::render()
                 simplestSpriteRender("falkon");
                 break;
             case 4 :
-                animateSpriteRender("birdsAnimateSprite");
+                animateSpriteRender({100,300},{120,157},0.f);
                 break;
             default:
                 break;

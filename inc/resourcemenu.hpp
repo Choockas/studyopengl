@@ -15,17 +15,9 @@ namespace RenderEngine
 }
 
 class Menu;
-// class ResourceManager;
-
-//this structure is container for json's file attribute
-// struct ResourceBit{
-//     std::string s_name;
-//     std::string s_path;
-// };
 
 struct MenuPoint {
     const std::string tsprite;
-//     std::map<const int,const std::string> acts;
     std::array<std::pair<int,std::string>,2> acts;
     const bool bvisible;
 } ;
@@ -36,8 +28,7 @@ class ResourceMenu:public ResourceAcces
 {
 public:
     ResourceMenu(const std::string path, const std::string resourcePath);
-    virtual ~ResourceMenu();
-//     void managerInit(const std::string& exepath){};    
+    virtual ~ResourceMenu();   
     bool loadJsonResources() override;
     std::shared_ptr<RenderEngine::Texture2D> getTextures(const std::string& textureName);
     std::shared_ptr<RenderEngine::Sprite> getSprites(const std::string& spriteName);
@@ -86,27 +77,4 @@ private:
     
 };
 
-// class PrimitiveManager:public ResourceAcces
-// {
-// public:
-// private:
-// };
- /*
-class ResourceBuilder
-{
-public:
-    ResourceBuilder();
-    virtual ~ResourceBuilder();
-    virtual bool loadShaders(const std::string& shaderName,const std::string& vertexPath,const std::string& fragmentPath )=0;
-    virtual std::string getFileString(const std::string& relativePath)=0;
-    virtual std::string get_path()const =0;
-    virtual void set_path(std::string path)=0;
-    virtual std::shared_ptr<RenderEngine::Texture2D> loadTextures(const std::string& resourcePath,
-                                                          const std::string& textureName,
-                                                          const std::string& texturePath )=0;
-    virtual std::shared_ptr<RenderEngine::ShaderProgramm> getShaderProgram(const std::string& shaderName)=0;
-    virtual std::shared_ptr<RenderEngine::Texture2D> getTextures(const std::string& textureName)=0;
-    
-    
-};
-*/
+

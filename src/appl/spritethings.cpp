@@ -1,8 +1,8 @@
 #include "renderer.hpp"
-#include "spritethings.hpp"
 #include "texture2D.hpp"
 #include "sprite.hpp"
 #include "animatesprite.hpp"
+#include "spritethings.hpp"
 #include <string>
 #include "memory"
 #ifndef STB_IMAGE_IMPLEMENTATION
@@ -30,7 +30,11 @@ bool SpriteThings::loadJsonResources()
 
 
 
-//***** S H A D E R  L O A D************************************
+/***** S H A D E R  L O A D************************************
+ * Require: typedef std::map<const std::string, std::shared_ptr<RenderEngine::ShaderProgramm>> ShaderProgramsMap;
+ *   ShaderProgramsMap _mshaderPrograms;
+ * path to file of vertex  and file of fragment
+*/
 bool SpriteThings::loadShaders(const std::string& shaderName, const std::string& vertexPath, const std::string& fragmentPath)
 {
         std::string vertexString = getFileString(vertexPath);
@@ -42,7 +46,7 @@ bool SpriteThings::loadShaders(const std::string& shaderName, const std::string&
         std::cerr<<"No fragment shader!"<< std::endl;
     }
     
-    std::shared_ptr<RenderEngine::ShaderProgramm>& newShader = _shaderPrograms.emplace(shaderName, std::make_shared<RenderEngine::ShaderProgramm>(vertexString,fragmentString)).first->second;
+    std::shared_ptr<RenderEngine::ShaderProgramm>& newShader = _mshaderPrograms.emplace(shaderName, std::make_shared<RenderEngine::ShaderProgramm>(vertexString,fragmentString)).first->second;
     if (!newShader->isCompiled()){
         std::cerr<< "Can't load shader program:"<<"\n"
         <<"Vertex: " << vertexPath<< "\n" 
@@ -82,7 +86,7 @@ bool SpriteThings::loadTextures(const std::string& resourcePath, const std::stri
                                                                                                       GL_CLAMP_TO_EDGE);
     neustexture->addSubTextures2D(textureName,leftBottomUV,rightTopUV);
     
-    std::shared_ptr<RenderEngine::Texture2D>& newTexture =  _texture2D.emplace(textureName,move(neustexture)).first->second;
+    std::shared_ptr<RenderEngine::Texture2D>& newTexture =  _mtexture2D.emplace(textureName,move(neustexture)).first->second;
     stbi_image_free(pixels);  
     if(newTexture){
 
@@ -97,9 +101,9 @@ bool SpriteThings::loadTextures(const std::string& resourcePath, const std::stri
 
 
 //***** T E X T U R E  A T L A S  L O A D************************************
-std::shared_ptr< RenderEngine::Texture2D > SpriteThings::loadTextureAtlas(const std::string& resourcePath,
+std::shared_ptr< RenderEngine::Texture2D > SpriteThings::loadTextureAtlas(
                                                                              const std::string& textureName,
-                                                                             const std::string& stexturePath,
+                                                                             
                                                                              const std::vector<std::string> subTextures,
                                                                              const unsigned int subTexwidth,
                                                                              const unsigned int subTexheight)
@@ -137,13 +141,15 @@ std::shared_ptr< RenderEngine::Texture2D > SpriteThings::loadTextureAtlas(const 
 
 
 //***** S P R I T E  L O A D************************************
-std::shared_ptr<RenderEngine::Sprite> SpriteThings::loadSprites(const std::string& spriteName, const std::string& textureAtlas, const std::string& shaderName, const std::string& subtextureName)
+std::shared_ptr<RenderEngine::Sprite> SpriteThings::loadSprites(const std::string& spriteName, 
+                                                                const std::string& textureAtlas, 
+                                                                const std::string& shaderName, 
+                                                                const std::string& subtextureName)
 {
-      std::cout<<"Start loading sprite, texturename: "<<textureAtlas <<"\t subtexturename: "<<subtextureName<<std::endl; 
-    //auto pTexture  = getTextures(subtextureName); //getting texture from map
+    //getting texture from map
     auto pTexture  = getTextures(textureAtlas);
     if(!pTexture){
-//         std::cerr<< "Can't get textures "<< subtextureName<<" for the sprite:"<<spriteName<<std::endl;
+
         std::cerr<< "Can't get textures "<< textureAtlas<<" for the sprite:"<<spriteName<<std::endl;
         return nullptr;
     }
@@ -155,28 +161,26 @@ std::shared_ptr<RenderEngine::Sprite> SpriteThings::loadSprites(const std::strin
         return nullptr; 
         
     }
-
-    std::shared_ptr<RenderEngine::Sprite> newSprite = _sprites.emplace(spriteName,
+    
+    std::shared_ptr<RenderEngine::Sprite> newSprite = _msprites.emplace(spriteName,
                                                                         std::make_shared<RenderEngine::Sprite>(pTexture,
                                                                                                                subtextureName,
                                                                                                                pShader)).first->second;
-    std::cout<<"spriteName: "<< spriteName<< " loaded"<<std::endl;  
     return newSprite;
 }
 
 
 
 //***** A N I M A T E D   S P R I T E  L O A D************************************
-bool SpriteThings::loadAnimateSprites(const std::string& spriteName, 
-                                      const std::string& textureName, 
-                                      const std::string& shaderName, 
-                                      const std::string& subtextureName,
-                                      const std::string& state, 
-                            const std::vector<std::pair<std::string, uint64_t > > subTexturesDuration)
-{
+bool SpriteThings::loadAnimateSprites(const std::string& spriteName
+                    , const std::string& textureName 
+                    , const std::string& shaderName   
+                    , const std::string& subtextureName  
+                    , std::map<std::string,std::vector<std::pair<std::string,uint64_t >>> anidate)  
+{       
     bool result=false;
     
-        auto pTexture  = getTextures(textureName);
+    auto pTexture  = getTextures(textureName);
     if(!pTexture){
         std::cerr<< "Can't get textures "<<textureName <<" for the sprite:"<<spriteName<<std::endl;
         
@@ -189,18 +193,24 @@ bool SpriteThings::loadAnimateSprites(const std::string& spriteName,
         
         return false;
     }
-    std::shared_ptr<RenderEngine::AnimateSprite> newSprite = m_anisprites.emplace(spriteName,
-                                                                                  std::make_shared<RenderEngine::AnimateSprite>(pTexture,
-                                                                                                                                subtextureName,
-                                                                                                                                 pShader)).first->second;
-  newSprite->insertState(state, subTexturesDuration);  
-  std::string newstate = "fly_rigth";  
-  newSprite->setState(newstate);
-  newSprite->render({200,300},{128,128},0);
-// std::shared_ptr<RenderEngine::AnimateSprite> newSprite = m_anisprites.emplace(spriteName, _sprites.find(spriteName)
-if(newSprite!=nullptr)result = true;                                                                                                                                 
-// void AnimateSprite::insertState(std::string state, std::vector<std::pair<std::string, uint64_t > > subTexturesDuration)                                                                                                                                
-//     newSprite->insertState();                                                                                                                                
+    
+    std::shared_ptr<RenderEngine::AnimateSprite> newSprite =  std::make_shared<RenderEngine::AnimateSprite>(pTexture,
+                                                                                                            subtextureName,
+                                                                                                            pShader);
+    
+    
+    for(auto& currADate :anidate)
+    {
+        const std::string fcDate=currADate.first;
+        const std::vector<std::pair<std::string,uint64_t>>  curdur= currADate.second;
+        newSprite->insertState(fcDate,curdur);
+        newSprite ->setState(fcDate);
+    }
+    
+    _manisprites.emplace(spriteName,newSprite);
+    
+    if(newSprite!=nullptr)result = true;                                                                                                                                 
+    
     return result;                                                                                                                                
 }
 
@@ -213,8 +223,8 @@ if(newSprite!=nullptr)result = true;
 std::shared_ptr<RenderEngine::Texture2D> SpriteThings::getTextures(const std::string& textureName)
 {
 
-    Texture2DMap::const_iterator it=_texture2D.find(textureName);
-    if(it!=_texture2D.end()){
+    Texture2DMap::const_iterator it=_mtexture2D.find(textureName);
+    if(it!=_mtexture2D.end()){
         return it->second;
     }
     std::cerr<<"Can't find texture "
@@ -226,8 +236,8 @@ std::shared_ptr<RenderEngine::Texture2D> SpriteThings::getTextures(const std::st
 //***** S H A D E R  G E T************************************
 std::shared_ptr<RenderEngine::ShaderProgramm> SpriteThings::getShaderProgram(const std::string& shaderName)
 {
-    ShaderProgramsMap::const_iterator it=_shaderPrograms.find(shaderName);
-    if(it!=_shaderPrograms.end()){
+    ShaderProgramsMap::const_iterator it=_mshaderPrograms.find(shaderName);
+    if(it!=_mshaderPrograms.end()){
         return it->second;
     }
     std::cerr<<"Can't find the shader program "
@@ -237,10 +247,10 @@ std::shared_ptr<RenderEngine::ShaderProgramm> SpriteThings::getShaderProgram(con
 }
 
 //***** S P R I T E  G E T ************************************
-std::shared_ptr<RenderEngine::Sprite> SpriteThings::getSprites(const std::string& spriteName)
+std::shared_ptr<RenderEngine::Sprite> SpriteThings::getSprites(const std::string spriteName)
 {
-    SpriteMap::const_iterator it=_sprites.find(spriteName);
-    if(it!=_sprites.end()){
+    SpriteMap::const_iterator it=_msprites.find(spriteName);
+    if(it!=_msprites.end()){
         return it->second;
     }
     std::cerr<<"Can't find sprite"<<spriteName<<std::endl;
@@ -249,40 +259,33 @@ std::shared_ptr<RenderEngine::Sprite> SpriteThings::getSprites(const std::string
 
 //***** A N I M A T E  S P R I T E  G E T ************************************
 
-std::shared_ptr<RenderEngine::AnimateSprite> SpriteThings::getAnimateSprites(const std::string& spriteName)
+bool SpriteThings::setCurrentAnimateSprites(const std::string spriteName)
 {
-    AniSpriteMap::const_iterator it = m_anisprites.find(spriteName);
-    if(it!=m_anisprites.end()){        
-        return it->second;
-    }
-    std::cerr<<"Can't find anisprite " <<spriteName <<std::endl;
-    return nullptr;
+    bool result = false;
+    AniSpriteMap::const_iterator it = _manisprites.find(spriteName);
     
-}
-/*
-std::shared_ptr<RenderEngine::AnimateSprite> SpriteThings::loadAnimateSprites(const std::string& spriteName, const std::string& textureName, const std::string& shaderName,  const std::string& subtextureName,const unsigned int subTexwidth, const unsigned int subTexheight)
-{
-    auto pTexture  = getTextures(textureName);
-    if(!pTexture){
-        std::cerr<< "Can't get textures "<<"for the sprite:"<<spriteName<<std::endl;
-        glfwTerminate();
-        return nullptr;
-    }
-    
-    auto pShader = getShaderProgram(shaderName);
-    if(!pShader){
-        std::cerr<< "Can't get shader "<<"for the sprite:"<<spriteName<<std::endl;
-        glfwTerminate();
-        return nullptr;
+    if(it!=_manisprites.end()){        
+
+        _curentAnimateSprite=it->second;
+        result=true;
         
-    }
+    } else 
+    std::cerr<<"Can't find anisprite " <<spriteName <<std::endl;
+    return result;
     
-    std::shared_ptr<RenderEngine::AnimateSprite> newSprite = m_anisprites.emplace(spriteName,
-                                                                            std::make_shared<RenderEngine::AnimateSprite>(pTexture,
-                                                                                                                        subtextureName,
-                                                                                                                        pShader)).first->second;
-    return newSprite;
-                                                                                                                        
 }
- */
+
+void SpriteThings::renderCurrentAnimationSprite(const glm::ivec2 position, const glm::ivec2 size, float rotation)
+{
+    
+    _curentAnimateSprite->render(position,size,rotation);
+}
+
+void SpriteThings::updateCurrentAnimateSprite(uint64_t dur)
+{
+    _curentAnimateSprite->update(dur);
+}
+
+
+
 

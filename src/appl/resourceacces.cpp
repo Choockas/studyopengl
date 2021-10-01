@@ -29,13 +29,6 @@ std::string ResourceAcces::getFileString(const std::string& relativePath)
 }
 
 
-SpriteBuilder::SpriteBuilder(const std::string workpath): _workpath(workpath)
-{
-}
-
-SpriteBuilder::~SpriteBuilder()
-{
-}
 /*
 std::shared_ptr<RenderEngine::ShaderProgramm> ResourceSprite::getShaderProgram(const std::string& shaderName)
 {
@@ -53,11 +46,11 @@ bool ResourceSprite::getTextures(const std::string& textureName)
     return false;
 }*/
 
-
-// std::shared_ptr<RenderEngine::Texture2D> ResourceSprite::getTextures(const std::string& textureName)
-// {
-//     return nullptr;
-// }
+/*
+std::shared_ptr<RenderEngine::Texture2D> ResourceSprite::getTextures(const std::string& textureName)
+{
+    return nullptr;
+}*/
 
 /*
 bool ResourceSprite::loadShaders(const std::string& shaderName, const std::string& vertexPath, const std::string& fragmentPath)

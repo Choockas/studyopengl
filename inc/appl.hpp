@@ -13,7 +13,7 @@
 void glfwKeyCallBack(GLFWwindow *pWindow, int key, int scancode, int action, int mode);
 void mouse_button_callback(GLFWwindow *pWindow, int button, int action, int mods);
 void glfwWindowSizeCallBack(GLFWwindow *pWindow, int width, int hight);
-class ResourceManager;
+class ResourceSprite;
 class ResourceFinder;
 class ResourcePrimitive;
 class Menu;
@@ -52,7 +52,7 @@ public:
     bool createSimplestSprite(const std::string demoName);
     bool createAnimatedSprite(const std::string anyName);
     void simplestSpriteRender(const std::string name) const;
-    void animateSpriteRender(const std::string asname) const;
+    void animateSpriteRender(const glm::ivec2,const glm::ivec2,float) const;
 //     shaderVector get_demoShaders(){ return _demoShaders;}
      
 private:
@@ -61,16 +61,13 @@ private:
      std::string _execpath;
      const glm::ivec2  _windsize;
      std::shared_ptr<ResourcePrimitive>   _resourcePrimitive; 
-     std::shared_ptr<ResourceManager> _resourceSprite; 
+     std::shared_ptr<ResourceSprite> _resourceSprite; 
      std::unique_ptr<ResourceFinder> _rmfinder;
      std::unique_ptr<PrimitiveShader> _primitiveShader;
      std::unique_ptr<TransformShader> _transformShader;
-//      std::shared_ptr<RenderEngine::Sprite> _demoSprite;
      std::shared_ptr<SpriteThings> _spriteThings;
      std::shared_ptr<Menu> _menu;
-//   very simple shader
-//      std::shared_ptr<RenderEngine::ShaderProgramm> _shadep;
-//  shader that using matrix uniform    
+     std::shared_ptr<RenderEngine::AnimateSprite> _animsprite = nullptr;
      
      unsigned int _applstate =0;
 };

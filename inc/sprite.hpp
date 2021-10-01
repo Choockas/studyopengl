@@ -27,14 +27,14 @@ namespace RenderEngine {
          virtual void render(const glm::vec2 position, const glm::vec2 size, const float rotation) const;
          
     protected:
-        std::shared_ptr<Texture2D> m_pTexture;
-        std::shared_ptr<ShaderProgramm> m_pShaderProgramm;
+        std::shared_ptr<Texture2D> _pTexture;
+        std::shared_ptr<ShaderProgramm> _pShaderProgramm;
        
         
-        VertexArray m_vertexArray;
-        VertexBuffer m_vertexCoordsBuffer;
-        VertexBuffer m_textureCoordsBuffer;
-        IndexBuffer m_indexCoordsBuffer;
+        VertexArray _vertexArray;
+        VertexBuffer _vertexCoordsBuffer;
+        VertexBuffer _textureCoordsBuffer;
+        IndexBuffer _indexCoordsBuffer;
         
 
     };

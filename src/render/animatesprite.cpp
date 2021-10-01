@@ -29,7 +29,7 @@ void AnimateSprite::insertState(std::string state, std::vector<std::pair<std::st
 }
 
 
-void AnimateSprite::setState(std::string& newState)
+void AnimateSprite::setState(const std::string& newState)
 {
     auto it = m_statesMap.find(newState);
     if (it==m_statesMap.end()){
@@ -37,10 +37,10 @@ void AnimateSprite::setState(std::string& newState)
         return;
     }
     if(it!= m_pCurrentAnimationDuration){
-        m_currentAnimationTime =0;
-        m_currentFrame = 0;
+        _currentAnimationTime =0;
+        _currentFrame = 0;
         m_pCurrentAnimationDuration =it; 
-        m_dirty = true; 
+        _dirty = true; 
     }
     
 }
@@ -48,14 +48,14 @@ void AnimateSprite::setState(std::string& newState)
 void AnimateSprite::update(const uint64_t delta) 
 {
     if(m_pCurrentAnimationDuration != m_statesMap.end()){
-        m_currentAnimationTime+= delta;
-        while(m_currentAnimationTime>= m_pCurrentAnimationDuration->second[m_currentFrame].second){
-            m_currentAnimationTime -=m_pCurrentAnimationDuration->second[m_currentFrame].second;
-            ++m_currentFrame;
-            m_dirty = true;
+        _currentAnimationTime+= delta;
+        while(_currentAnimationTime>= m_pCurrentAnimationDuration->second[_currentFrame].second){
+            _currentAnimationTime -=m_pCurrentAnimationDuration->second[_currentFrame].second;
+            ++_currentFrame;
+            _dirty = true;
         
-        if(m_currentFrame == m_pCurrentAnimationDuration->second.size()){
-            m_currentFrame =0;
+        if(_currentFrame == m_pCurrentAnimationDuration->second.size()){
+            _currentFrame =0;
         }
         }
     }
@@ -64,9 +64,9 @@ void AnimateSprite::update(const uint64_t delta)
 
 void AnimateSprite::render(const glm::vec2 position, const glm::vec2 size, const float rotation) const 
 {
-    if (m_dirty){
+    if (_dirty){
         
-        auto subTexture2D = m_pTexture -> getSubtexture2D(m_pCurrentAnimationDuration->second[m_currentFrame].first); 
+        auto subTexture2D = _pTexture -> getSubtexture2D(m_pCurrentAnimationDuration->second[_currentFrame].first); 
         
         const GLfloat texCoords[] ={
             //U-V
@@ -75,10 +75,10 @@ void AnimateSprite::render(const glm::vec2 position, const glm::vec2 size, const
             subTexture2D.rightTopUV.x,   subTexture2D.rightTopUV.y,
             subTexture2D.rightTopUV.x,   subTexture2D.leftBottomUV.y,
         };
-        m_textureCoordsBuffer.update(texCoords,2*4*sizeof(GLfloat)); 
+        _textureCoordsBuffer.update(texCoords,2*4*sizeof(GLfloat)); 
         
 //         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0);
-        m_dirty = false;
+        _dirty = false;
     }
     Sprite::render(position, size, rotation);
     

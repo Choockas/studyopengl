@@ -7,20 +7,19 @@
 
 
 
-ResourceManager::ResourceManager(const std::string path,const std::string resourcePath):ResourceAcces(path),_resourcePath(resourcePath)
+ResourceSprite::ResourceSprite(const std::string path,const std::string resourcePath):ResourceAcces(path),_resourcePath(resourcePath)
 {
     
     std::cout<<"resource m created"<<std::endl;
 }
 
-ResourceManager::~ResourceManager()
+ResourceSprite::~ResourceSprite()
 {
 }
 
-
-bool ResourceManager::loadJsonResources() 
+//parse from file  and write to memory
+bool ResourceSprite::loadJsonResources() 
 {
-    
     const std::string JSONstring = getFileString(_resourcePath);
     const std::string workpath=get_execpath();
     
@@ -39,8 +38,7 @@ bool ResourceManager::loadJsonResources()
         return false;
     }
     
-
-    
+// ************** S H A D E R *********************
     auto shadersIt = document.FindMember("shaders");
     if (shadersIt!=document.MemberEnd())
     {
@@ -50,8 +48,6 @@ bool ResourceManager::loadJsonResources()
             const std::string filepath_v = currentShader["filePath_v"].GetString() ;
             const std::string filepath_f = currentShader["filePath_f"].GetString() ;
             const std::pair<std::string, std::string>  shaderDate({filepath_v,filepath_f});
-            
-//             loadShaders(name, filepath_v,filepath_f);  
             _shadersDate.emplace(name,shaderDate); 
         }
     }
@@ -100,7 +96,7 @@ bool ResourceManager::loadJsonResources()
         
     }else std::cout << "Something with textures2D ?" << std::endl;
     
-
+//******************** S P R I T E S  **********************************
     auto spritesIt = document.FindMember("sprites");
     if (spritesIt!=document.MemberEnd())
     {
@@ -114,12 +110,11 @@ bool ResourceManager::loadJsonResources()
             std::cout<< "just loaded  name:"<< name << "\t atlas:"<< atlas <<" \t shader:"<< shader <<"\t initialSubTexture:"<< initialSubTexture<< std::endl;
             const  ThreeStringsDate threeStringsDate({atlas,shader,initialSubTexture});
             _spriteDate.emplace(name,threeStringsDate);
-
-            
         }
     }
-    
-    
+
+//******************** A N I M A T E S P R I T E S  **********************************    
+// filling two maps : _spriteDate and _anidate, _spriteDate is the same as the simple sprite date, _anidate is animated component   
     auto animateSpritesIt = document.FindMember("animatedSprites");
     if (animateSpritesIt!=document.MemberEnd())
     {
@@ -131,15 +126,12 @@ bool ResourceManager::loadJsonResources()
             const std::string  initialSubTexture = currentAnimateSprite["initialSubTexture"].GetString();   
             std::cout<< "just loaded  name:"<< name << "\t atlas:"<< atlas <<" \t shader:"<< shader <<"\t initialSubTexture:"<< initialSubTexture<< std::endl;
             const  ThreeStringsDate threeStringsDate({atlas,shader,initialSubTexture});
-            _spriteDate.emplace(name,threeStringsDate);
- /*           auto pAnimatedSprite = loadAnimateSprites(name,atlas,shader,initialSubTexture);
-            if(! pAnimatedSprite ){
-                std::cerr << "Can't load animatesprite (initial) "<< initialSubTexture << std::endl;
-                continue;
-            }  */   
+            _spriteDate.emplace(name,threeStringsDate); 
  
             const auto statesArray = currentAnimateSprite["states"].GetArray();
+            statesArray.Size();
             std::map<std::string,std::vector <std::pair<std::string, uint64_t>>> mframes;
+            
             for(const auto& currentStateArray : statesArray){
                 const std::string stateName = currentStateArray["statesName"].GetString();
                 std::vector<std::pair<std::string,uint64_t>>  frames;
@@ -152,30 +144,37 @@ bool ResourceManager::loadJsonResources()
                     frames.emplace_back(text_dur); 
                 }
                 mframes.emplace(stateName,frames);
-//                 pAnimatedSprite->insertState(stateName, std::move(frames));
+
             }
             _aniDate.emplace(name,mframes);
         }
     }
-    
     return true;    
 }
-// statesname, {pair1,pair2}  pair{string,uint64_t}
 
-const std::map<std::string,std::vector<std::pair<std::string,uint64_t>>> ResourceManager::get_aniDate(const std::string spriteName)
+bool ResourceSprite::get_aniDate(const std::string spriteName, std::map<std::string, std::vector<std::pair<std::string, uint64_t>>>& anidate)
 {
+    
+    bool result= false;
     const aniDate::const_iterator it = _aniDate.find(spriteName);
     if(it!= _aniDate.end()){
+      
+       const std::map<std::string,std::vector<std::pair<std::string,uint64_t>>>  ist = it->second;  
+       
+       for (auto& currentI : ist)
+       {
+           std::string statename = currentI.first ;    
+          std::vector<std::pair<std::string, uint64_t>> subTexturesDuration = currentI.second;
+          anidate.emplace(statename,subTexturesDuration);
+       } 
+        result = true;
         
-        return it->second;
     }
-    return it->second;
-    
+    return result;
 }
 
 
-
-bool  ResourceManager::get_spriteDate(const std::string spriteName, std::string& shaderName, std::string& textureName, std::string& initialTextName)
+bool  ResourceSprite::get_spriteDate(const std::string spriteName, std::string& shaderName, std::string& textureName, std::string& initialTextName)
 {
     
     const spriteDate::const_iterator it = _spriteDate.find(spriteName);
@@ -190,7 +189,7 @@ bool  ResourceManager::get_spriteDate(const std::string spriteName, std::string&
 }
 
 
-const std::pair<std::string, std::string>  ResourceManager::get_shaderDate(const std::string shaderProgName)
+const std::pair<std::string, std::string>  ResourceSprite::get_shaderDate(const std::string shaderProgName)
 {
    const std::map<const std::string ,std::pair<std::string, std::string> >::const_iterator it = _shadersDate.find(shaderProgName);
    if (it!= _shadersDate.end()){
@@ -201,9 +200,8 @@ const std::pair<std::string, std::string>  ResourceManager::get_shaderDate(const
     return {"error first path","error second path"};
 }
 
-const std::pair<std::string,std::string> ResourceManager::get_textureDate(const std::string textureName)
+const std::pair<std::string,std::string> ResourceSprite::get_textureDate(const std::string textureName)
 {
-//     const TwoStringsDate errSD{"",""}; 
     const std::map<const std::string ,std::pair<std::string,std::string>>::const_iterator it = _textureDate.find(textureName);
     if (it!= _textureDate.end()) 
         return it->second;
@@ -213,7 +211,7 @@ const std::pair<std::string,std::string> ResourceManager::get_textureDate(const 
     return {"error first path","error second path"};
 }
 
-const std::vector<std::string> ResourceManager::get_subTextures(const std::string texturesName)
+const std::vector<std::string> ResourceSprite::get_subTextures(const std::string texturesName)
 {
     const std::map<const std::string ,std::vector<std::string> >::const_iterator it = _subTextures.find(texturesName);
    if (it!= _subTextures.end()){

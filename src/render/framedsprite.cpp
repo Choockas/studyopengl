@@ -57,7 +57,7 @@ void FramedSprite::render(const glm::vec2 position, const glm::vec2 size, const 
 {
     if (m_dirty){
         
-        auto subTexture2D = m_pTexture -> getSubtexture2D(m_currentFrame); 
+        auto subTexture2D = _pTexture -> getSubtexture2D(m_currentFrame); 
         
         const GLfloat texCoords[] ={
             subTexture2D.leftBottomUV.x, subTexture2D.leftBottomUV.y,
@@ -66,7 +66,7 @@ void FramedSprite::render(const glm::vec2 position, const glm::vec2 size, const 
             subTexture2D.rightTopUV.x,   subTexture2D.leftBottomUV.y,
         };
         
-        m_textureCoordsBuffer.update(texCoords,2*4*sizeof(GLfloat)); 
+        _textureCoordsBuffer.update(texCoords,2*4*sizeof(GLfloat)); 
         
 //         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,0); 
         m_dirty = false;

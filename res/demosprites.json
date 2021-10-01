@@ -382,7 +382,7 @@
       "initialSubTexture": "stage_0_0",
       "states":[
       {
-      "statesName": "fly_rigth",
+      "statesName": "fly_left",
       "frames": [
             {
               "subTexture": "stage_0_0",

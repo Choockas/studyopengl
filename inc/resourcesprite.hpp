@@ -7,11 +7,13 @@
 #include <map>
 
 
-class ResourceManager:public ResourceAcces
+//there are class for working with any sprites
+
+class ResourceSprite:public ResourceAcces
 {
 public:
-    ResourceManager(const std::string path, const std::string resourcePath);
-    virtual ~ResourceManager();
+    ResourceSprite(const std::string path, const std::string resourcePath);
+    virtual ~ResourceSprite();
   
     bool loadJsonResources() override;
 
@@ -26,7 +28,7 @@ struct ThreeStringsDate
     const std::pair<std::string, std::string>  get_shaderDate(const std::string shaderProgName);
     const std::pair<std::string, std::string>  get_textureDate(const std::string textureName);
     const std::vector<std::string> get_subTextures(const std::string texturesName);
-    const std::map<std::string,std::vector<std::pair<std::string,uint64_t>>> get_aniDate(const std::string spriteName);
+    bool get_aniDate(const std::string spriteName,std::map<std::string,std::vector<std::pair<std::string,uint64_t>>>& anidate);
     
 private:
     
@@ -47,22 +49,3 @@ public:
 };
 
 
-/*
-class ResourceBuilder
-{
-public:
-    ResourceBuilder();
-    virtual ~ResourceBuilder();
-    virtual bool loadShaders(const std::string& shaderName,const std::string& vertexPath,const std::string& fragmentPath )=0;
-    virtual std::string getFileString(const std::string& relativePath)=0;
-    virtual std::string get_path()const =0;
-    virtual void set_path(std::string path)=0;
-    virtual std::shared_ptr<RenderEngine::Texture2D> loadTextures(const std::string& resourcePath,
-                                                          const std::string& textureName,
-                                                          const std::string& texturePath )=0;
-    virtual std::shared_ptr<RenderEngine::ShaderProgramm> getShaderProgram(const std::string& shaderName)=0;
-    virtual std::shared_ptr<RenderEngine::Texture2D> getTextures(const std::string& textureName)=0;
-    
-    
-};
-*/

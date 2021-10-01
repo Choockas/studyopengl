@@ -14,8 +14,8 @@ namespace RenderEngine{
     Sprite::Sprite(     std::shared_ptr<Texture2D>  pTexture
                                        ,std::string initialSubTexture 
                    ,std::shared_ptr<ShaderProgramm> pShaderProgramm = nullptr)
-                                                  : m_pTexture(std::move(pTexture))
-                                                   ,m_pShaderProgramm(std::move(pShaderProgramm))
+                                                  : _pTexture(std::move(pTexture))
+                                                   ,_pShaderProgramm(std::move(pShaderProgramm))
     
     {
         // 1-2
@@ -30,7 +30,7 @@ namespace RenderEngine{
             
         };
 //         m_pTexture->getSubtexture2D(std::move(initialSubTexture));
-        auto subTexture2D = m_pTexture -> getSubtexture2D(std::move(initialSubTexture)); 
+        auto subTexture2D = _pTexture -> getSubtexture2D(std::move(initialSubTexture)); 
         
         const GLfloat texCoords[] ={
             //U-V
@@ -45,35 +45,35 @@ namespace RenderEngine{
             2,3,0             
         };
         
-        m_vertexCoordsBuffer.init(vertexCoords,2*4*sizeof(GLfloat));
+        _vertexCoordsBuffer.init(vertexCoords,2*4*sizeof(GLfloat));
         VertexBufferLayout vertexCordsLayout;
         vertexCordsLayout.addElementLayoutFloat(2,false);
-        m_vertexArray.addBuffer(m_vertexCoordsBuffer, vertexCordsLayout);
+        _vertexArray.addBuffer(_vertexCoordsBuffer, vertexCordsLayout);
         
-        m_textureCoordsBuffer.init(texCoords,2*4*sizeof(GLfloat));
+        _textureCoordsBuffer.init(texCoords,2*4*sizeof(GLfloat));
         
         VertexBufferLayout textureCoordsLayout;
         textureCoordsLayout.addElementLayoutFloat(2,false);
-        m_vertexArray.addBuffer(m_textureCoordsBuffer,textureCoordsLayout); 
+        _vertexArray.addBuffer(_textureCoordsBuffer,textureCoordsLayout); 
         
-        m_indexCoordsBuffer.init(indices,6);
+        _indexCoordsBuffer.init(indices,6);
         
-        m_vertexArray.unbind();
-        m_indexCoordsBuffer.unbind();
+        _vertexArray.unbind();
+        _indexCoordsBuffer.unbind();
 
     }
     
     Sprite::~Sprite(){
         
         std::cout<<"sprites delayed "<<std::endl;
-        m_pShaderProgramm.use_count();
-        m_pTexture.use_count();
+        _pShaderProgramm.use_count();
+        _pTexture.use_count();
     }
 
     
     void Sprite::render(const glm::vec2 position, const glm::vec2 size, const float rotation) const
     {
-        m_pShaderProgramm->use();
+        _pShaderProgramm->use();
 //         if (position.x == 20.0) 
 //         {
 //             std::cout << "20 \t" <<std::endl;
@@ -86,10 +86,10 @@ namespace RenderEngine{
         model = glm::scale(model,glm::vec3(size,1.f));
         
         //m_vertexArray.bind();
-        m_pShaderProgramm->setMatrix4("modelMat",model);
+        _pShaderProgramm->setMatrix4("modelMat",model);
         glActiveTexture(GL_TEXTURE0);
-        m_pTexture->bind();
-        Renderer::draw(m_vertexArray,m_indexCoordsBuffer,*m_pShaderProgramm);
+        _pTexture->bind();
+        Renderer::draw(_vertexArray,_indexCoordsBuffer,*_pShaderProgramm);
                 
     }
 }
