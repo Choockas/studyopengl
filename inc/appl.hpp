@@ -1,6 +1,5 @@
 #pragma once
 #include "mainwindow.hpp"
-
 #include "document.h"
 #include "error/en.h"
 #include <memory>
@@ -17,7 +16,7 @@ class ResourceSprite;
 class ResourceFinder;
 class ResourcePrimitive;
 class Menu;
-class ShaderBuffers;
+class ShaderBuffAndProg;
 class PrimitiveShader;
 class TransformShader;
 class SpriteThings;
@@ -26,8 +25,6 @@ class ShaderProgramm;
 class Sprite;
 class AnimateSprite;
 }
-
-
 
 
 class MyAppl{
@@ -45,15 +42,15 @@ private:
 public:
     void contentChanger(const unsigned int menuAct); //implement menu command
     void filePad();
-    void on_offPrimitive_6vf(const std::string path, const std::string relativePath,const bool on_off, const glm::ivec2 windsize); // create _vao_primitive_6vf
-    void createPrimitiveTransform(const std::string path, const std::string relativePath,const bool on_off, const glm::ivec2 windsize);
+    void on_offShader(const std::string path, const std::string relativePath,const bool on_off, const glm::ivec2 windsize, uint8_t shcase);
+    template <class T>
+    std::shared_ptr<T> createPrimitive(const std::string path, const std::string relativePath, const glm::ivec2 windsize, const uint8_t shcase, std::shared_ptr<T> t);
     void primitive1ShaderUse() const;
     void primitiveTransformShaderUse( float grades, float trmod) const ;
     bool createSimplestSprite(const std::string demoName);
     bool createAnimatedSprite(const std::string anyName);
     void simplestSpriteRender(const std::string name) const;
     void animateSpriteRender(const glm::ivec2,const glm::ivec2,float) const;
-//     shaderVector get_demoShaders(){ return _demoShaders;}
      
 private:
     float _verticles[9];
@@ -63,8 +60,8 @@ private:
      std::shared_ptr<ResourcePrimitive>   _resourcePrimitive; 
      std::shared_ptr<ResourceSprite> _resourceSprite; 
      std::unique_ptr<ResourceFinder> _rmfinder;
-     std::unique_ptr<PrimitiveShader> _primitiveShader;
-     std::unique_ptr<TransformShader> _transformShader;
+     std::shared_ptr<PrimitiveShader> _primitiveShader;
+     std::shared_ptr<TransformShader> _transformShader;
      std::shared_ptr<SpriteThings> _spriteThings;
      std::shared_ptr<Menu> _menu;
      std::shared_ptr<RenderEngine::AnimateSprite> _animsprite = nullptr;

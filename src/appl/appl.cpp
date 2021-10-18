@@ -63,9 +63,8 @@ void MyAppl::init(const std::string& executablePath)
 
 
 
-
+// main loop of aplication
 void MyAppl::go()
-
 {
     
 // it's needed to mirroring ordinate
@@ -85,12 +84,13 @@ void MyAppl::go()
     _menu->clear_vecobjects();
 }
 
-//simplest using shader, drawing
+//call simplest using shader, drawing
 void MyAppl::primitive1ShaderUse() const
 {
      _primitiveShader->useDemoShader();
 }
- 
+
+//call primitive transform shader
 void MyAppl::primitiveTransformShaderUse( float grades, float trmod) const
 {
 
@@ -104,40 +104,22 @@ void MyAppl::primitiveTransformShaderUse( float grades, float trmod) const
 
 void MyAppl::filePad()
 {
+    //for future development
    std::string secondRes;
-   
 }
 
-void MyAppl::on_offPrimitive_6vf(const std::string path, const std::string relativePath,const bool on_off, const glm::ivec2 windsize)
+
+template<typename T> std::shared_ptr<T> MyAppl::createPrimitive(const std::string path, const std::string relativePath, const glm::ivec2 windsize, const uint8_t shcase, std::shared_ptr<T> t)
 {
-    if(on_off){   
-    _primitiveShader = std::make_unique<PrimitiveShader>(path,relativePath,windsize);//create buffers
-     const std::string  namePS = _resourcePrimitive->getNameSPstring(0);
-     const std::string  nameVertex = path+_resourcePrimitive->getNameVertexstring(0);
-     const std::string nameFragment = path+_resourcePrimitive->getNameFragmentstring(0);
-    _primitiveShader->createDemoShader(namePS,nameVertex,nameFragment); //create shadersprogramm
-    } else
-    {
-        _primitiveShader=0;
-    }
-    
+    // shcase  - number in vector of a pointer to shaderprogram
+    const std::string  namePS = _resourcePrimitive->getNameSPstring(shcase);
+    const std::string  nameVertex = path+_resourcePrimitive->getNameVertexstring(shcase);
+    const std::string nameFragment = path+_resourcePrimitive->getNameFragmentstring(shcase);
+    std::shared_ptr<T>  m = std::make_shared<T>(path,relativePath,windsize);
+    m->createDemoShader(namePS,nameVertex,nameFragment);    
+    return m;
 }
 
-
-void MyAppl::createPrimitiveTransform(const std::string path, const std::string relativePath,const bool on_off, const glm::ivec2 windsize)
-{
-        if(on_off){   
-    _transformShader = std::make_unique<TransformShader>(path,relativePath,windsize);
-    const std::string  namePS = _resourcePrimitive->getNameSPstring(1);
-     const std::string  nameVertex = path+_resourcePrimitive->getNameVertexstring(1);
-     const std::string nameFragment = path+_resourcePrimitive->getNameFragmentstring(1);
-    _transformShader->createDemoShader(namePS,nameVertex,nameFragment); //create shadersprogramm
-    } else
-    {
-        _transformShader=0;
-    }
-   
-}
 
 bool MyAppl::createSimplestSprite(const std::string demoName)
 {
@@ -164,8 +146,6 @@ bool MyAppl::createSimplestSprite(const std::string demoName)
         // parameters of loadTextures (resourcePath, const std::string& textureName,texturePath)
      if(result) result = _spriteThings->loadTextures(pPath.first,textureAtlas,pPath.second);
      else std::cerr<< "shader isn't loaded for "<<textureAtlas<<std::endl;   
-        
-//        _demoSprite = 
      if(result) _spriteThings->loadSprites(demoName, textureAtlas, shaderName, initialTextName);
      else std::cerr<< "texture isn't loaded for "<<demoName<< std::endl;
     }
@@ -183,44 +163,36 @@ bool MyAppl::createAnimatedSprite(const std::string anyName)
     const std::vector<std::pair<std::string,uint64_t>> danstat;
     bool result = false;
     if(_resourceSprite->get_spriteDate(anyName,shaderName,textureAtlas, initialTextName )){ 
-              const std::pair<std::string, std::string> pShaderProgram = _resourceSprite->get_shaderDate(shaderName);     
+        const std::pair<std::string, std::string> pShaderProgram = _resourceSprite->get_shaderDate(shaderName);     
         // parameters of loadShaders ( nameShaderProgramm, vertex, fragment)
-      result= _spriteThings->loadShaders(shaderName,pShaderProgram.first,pShaderProgram.second);
-      
-      
-    // becouse choised shader programm (vsprite.txt) has variable projectionMat it shou'd be initialised !
-    auto pSpriteShaderProgram = _spriteThings->getShaderProgram(shaderName);
-    glm::mat4 projectionMatrix = glm::ortho (0.0f, 900.0f,0.0f,600.f,-0.1f,100.0f);
-    pSpriteShaderProgram->use(); 
-    pSpriteShaderProgram->setInt("tex",0);
-    pSpriteShaderProgram -> setMatrix4("projectionMat", projectionMatrix);
-    
-    const std::pair<std::string, std::string> pPath=_resourceSprite->get_textureDate(textureAtlas);
-        // parameters of loadTextures (resourcePath, const std::string& textureName,texturePath)
-     if(result) result = _spriteThings->loadTextures(pPath.first,textureAtlas,pPath.second);
-     else std::cerr<< "shader isn't loaded for "<<textureAtlas<<std::endl;  
-     const std::vector<std::string>  subTextures = _resourceSprite->get_subTextures(textureAtlas);
-      
-     result=( _spriteThings->loadTextureAtlas(textureAtlas,move(subTextures) ,120,157)!=nullptr);
-//       if(result) _spriteThings->loadAnimateSprites();
-      
-      result = _resourceSprite->get_aniDate(anyName,anidate);
-      
-      result = _spriteThings->loadAnimateSprites(anyName,textureAtlas,shaderName,initialTextName,anidate);
-
-      if(result){ 
-          result = _spriteThings->setCurrentAnimateSprites(anyName);
-          
-       
-    }
-
-      
+        result= _spriteThings->loadShaders(shaderName,pShaderProgram.first,pShaderProgram.second);
+        // becouse choised shader programm (vsprite.txt) has variable projectionMat it shou'd be initialised !
+        auto pSpriteShaderProgram = _spriteThings->getShaderProgram(shaderName);
+        glm::mat4 projectionMatrix = glm::ortho (0.0f, 900.0f,0.0f,600.f,-0.1f,100.0f);
+        pSpriteShaderProgram->use(); 
+        pSpriteShaderProgram->setInt("tex",0);
+        pSpriteShaderProgram -> setMatrix4("projectionMat", projectionMatrix);
+        
+        const std::pair<std::string, std::string> pPath=_resourceSprite->get_textureDate(textureAtlas);
+        if(result) result = _spriteThings->loadTextures(pPath.first,textureAtlas,pPath.second);
+        else std::cerr<< "shader isn't loaded for "<<textureAtlas<<std::endl;  
+        const std::vector<std::string>  subTextures = _resourceSprite->get_subTextures(textureAtlas);
+        
+        result=( _spriteThings->loadTextureAtlas(textureAtlas,move(subTextures) ,120,157)!=nullptr);      
+        if(result)result = _resourceSprite->get_aniDate(anyName,anidate);
+        else std::cerr<<"Can't find date for anisprite"<<std::endl;
+        
+        if(result)result = _spriteThings->loadAnimateSprites(anyName,textureAtlas,shaderName,initialTextName,anidate);
+        else std::cerr<<"Can't load anisprite"<<std::endl;
+        if(result){ 
+            result = _spriteThings->setCurrentAnimateSprites(anyName);
+        }
     }
     
     return result;
 }
 
-
+//draw animatesprite
 void MyAppl::animateSpriteRender(const glm::ivec2 position,const glm::ivec2 size, float rotation) const
 {
 
@@ -228,7 +200,7 @@ void MyAppl::animateSpriteRender(const glm::ivec2 position,const glm::ivec2 size
     
 }
 
-
+// draw simplest sprite
 void MyAppl::simplestSpriteRender(const std::string name) const
 {
     _spriteThings->getSprites(name)->render({200,300},{128,128},0);
@@ -242,30 +214,28 @@ void MyAppl::simplestSpriteRender(const std::string name) const
 void MyAppl::contentChanger(const unsigned int menuAct)
 {
     bool result=false;
-    
+    _applstate = 0;
     switch(menuAct)
     {
         case 0:
             break;
         case 1:
-            on_offPrimitive_6vf("","", false,_windsize);
-            _applstate = 0;
+            _primitiveShader = 0;           
             _menu->set_actbyMenu(0);
             break;
         case 2: 
-            createPrimitiveTransform("","", false,_windsize);
-            _applstate = 0;
+            _transformShader = 0;
             break;
         case 3: 
             _spriteThings.use_count(); 
             _spriteThings = nullptr;
-            _applstate = 0;
+            
             _menu->set_actbyMenu(0);
             break;
         case 4: 
             _spriteThings.use_count(); 
             _spriteThings = nullptr;
-            _applstate = 0;
+            
             _menu->set_actbyMenu(0);
             break;        
         case 100:
@@ -273,20 +243,26 @@ void MyAppl::contentChanger(const unsigned int menuAct)
             break;
         case 101:
         {
+            /*
+             * List of shaders in jsonfile
+             * "freeshader1" - 0
+             * "transshader1" - 1
+             */
+            
             std::string resPath = _rmfinder->get_resultPath("demofree");
             if(!resPath.empty())
             {
-                on_offPrimitive_6vf(_execpath,resPath, true,_windsize);
+                _primitiveShader = createPrimitive(_execpath,resPath,_windsize, 0,_primitiveShader);
                 _applstate=1;
             }}
             _menu->set_actbyMenu(0);
             break;
-        case 102:
+        case 102: 
         {
             std::string resPath = _rmfinder->get_resultPath("demofree");
             if(!resPath.empty())
             {
-                createPrimitiveTransform(_execpath,resPath, true,_windsize);
+                _transformShader = createPrimitive(_execpath,resPath,_windsize, 1,_transformShader);
                 _applstate=2;
             }}
             _menu->set_actbyMenu(0);
@@ -297,7 +273,7 @@ void MyAppl::contentChanger(const unsigned int menuAct)
             std::string resPath = _rmfinder->get_resultPath("demosprites");
             if(!resPath.empty())
             {              
-               if(!_spriteThings) _spriteThings= std::make_shared<SpriteThings>(_execpath,resPath);
+                if(!_spriteThings) _spriteThings= std::make_shared<SpriteThings>(_execpath,resPath);
                 result = createSimplestSprite("falkon");
                 if(result)simplestSpriteRender("falkon");else std::cerr<< " sprite isn't loaded"<<std::endl;
                 glfwSwapBuffers(_pwndw);
@@ -313,23 +289,21 @@ void MyAppl::contentChanger(const unsigned int menuAct)
             std::string resPath = _rmfinder->get_resultPath("demosprites");
             if (!resPath.empty()){
                 if(!_spriteThings)_spriteThings= std::make_shared<SpriteThings>(_execpath,resPath);
-//                 result = createSimplestSprite("birdsAnimateSprite");
-//                 _spriteThings->loadTextureAtlas();
                 result = createAnimatedSprite("birdsAnimateSprite");
                 if(result)animateSpriteRender({100,300},{120,157},0);else std::cerr<< " sprite isn't loaded"<<std::endl;
                 glfwSwapBuffers(_pwndw);
-               _applstate=4 ;
+                _applstate=4 ;
             }
         }
         _menu->set_actbyMenu(0);
         result=false;
-            break;
-            
+        break;
+        
         default:
-            //             std::cout<<".";
             break;
     }
 }
+
 
 
 // busines in main loop
@@ -385,7 +359,7 @@ void MyAppl::render()
 
 void glfwWindowSizeCallBack(GLFWwindow *pWindow, int width, int hight)
 {
-
+    
     const float aspect_ratio = aspect;
     unsigned int viewPortWidth = width;
     unsigned int viewPortHight = hight;
@@ -393,26 +367,26 @@ void glfwWindowSizeCallBack(GLFWwindow *pWindow, int width, int hight)
     unsigned int viewPortBottomOffset =0;
     float woh;
     woh =1.f*width/hight;
+    
+    // define viewport along windows size
     if (woh >= aspect_ratio){
         viewPortWidth = aspect_ratio * hight;
         
         if (width>viewPortWidth){
-        viewPortLeftOffset = (width - viewPortWidth)/2;
+            viewPortLeftOffset = (width - viewPortWidth)/2;
             MouseViewPort::set_viewportLeftOffset(viewPortLeftOffset);
         }
-        else { std::cout<<"viewPortWidth ="<<viewPortWidth<< "viewPortLeftOffset ="<<viewPortLeftOffset<<"; pWindow:"<<pWindow << std::endl;}
     }        
     if (woh < aspect_ratio){
         viewPortHight =   width/aspect_ratio;
         if(hight>viewPortHight){
-        viewPortBottomOffset = (hight - viewPortHight)/2;
-        MouseViewPort::set_viewporBottomOffset(viewPortBottomOffset);}
-        else { std::cout<<" viewPortHight ="<<viewPortHight<<" viewPortBottomOffset ="<<viewPortBottomOffset<<std::endl;}
+            viewPortBottomOffset = (hight - viewPortHight)/2;
+            MouseViewPort::set_viewporBottomOffset(viewPortBottomOffset);}
     }
     RenderEngine::Renderer::setViewPort(viewPortWidth,viewPortHight,viewPortLeftOffset,viewPortBottomOffset);
-   
-     MouseViewPort::set_horAspect(1.f*originalWindowSize.x/viewPortWidth);
-     MouseViewPort::set_verAspect(1.f*originalWindowSize.y/viewPortHight);     
+    
+    MouseViewPort::set_horAspect(1.f*originalWindowSize.x/viewPortWidth);
+    MouseViewPort::set_verAspect(1.f*originalWindowSize.y/viewPortHight);     
 }
 
 
@@ -433,11 +407,11 @@ void glfwKeyCallBack(GLFWwindow *pWindow, int key, int scancode, int action, int
 void mouse_button_callback(GLFWwindow *pWindow, int button, int action, int mods)
 {
     double xpos, ypos;
-//     char titlestring[50];
+    //     char titlestring[50];
     int xsize,ysize;
     
     glfwGetFramebufferSize(pWindow,&xsize,&ysize); 
-    
+    //read mouse status in window    
     if (action == GLFW_PRESS)
     { 
         glfwGetCursorPos(pWindow, &xpos, &ypos);
@@ -447,7 +421,7 @@ void mouse_button_callback(GLFWwindow *pWindow, int button, int action, int mods
         MouseViewPort::set_used(true);
         menuchange = true;
     };
-       xsize = mods;
+    xsize = mods;
 }
 
 

@@ -6,7 +6,7 @@
 #include <vector>
 #define SIMPLEOFFSET {0.6f,0.4f}
 
-ShaderBuffers::ShaderBuffers(const std::string path,const std::string relativePath,const  glm::ivec2 windsize) : _path(path) , _relativePath(relativePath) , _fWindsize({static_cast<float>(windsize.x),static_cast<float>(windsize.y)}) 
+ShaderBuffAndProg::ShaderBuffAndProg(const std::string path,const std::string relativePath,const  glm::ivec2 windsize) : _path(path) , _relativePath(relativePath) , _fWindsize({static_cast<float>(windsize.x),static_cast<float>(windsize.y)}) 
 {
     
         float tverticles[]={
@@ -54,28 +54,32 @@ ShaderBuffers::ShaderBuffers(const std::string path,const std::string relativePa
     
 }
 
-ShaderBuffers::~ShaderBuffers()
+ShaderBuffAndProg::~ShaderBuffAndProg()
 {
     std::cout<<"demoshader deleted"<<std::endl;
 }
 
 
-void ShaderBuffers::createDemoShader(const std::string& shaderName,const std::string& vertexPath,const std::string& fragmentPath)
+
+
+void ShaderBuffAndProg::createDemoShader(const std::string& shaderName,const std::string& vertexPath,const std::string& fragmentPath)
 {
-        _shader = loadShaders(shaderName,vertexPath,fragmentPath); 
-    _shader->use();
+    //_shaderProgramm - shared ptr
+     
+    _shaderProgramm = loadShadersProg(shaderName,vertexPath,fragmentPath); 
+    _shaderProgramm->use();
     
      _primitiveInitialized = true;
 }
 
-void ShaderBuffers::useDemoShader()
+void ShaderBuffAndProg::useDemoShader()
 {
     
     std::cout<<"using parents class"<<std::endl;
 }
 
 
-std::string ShaderBuffers::get_Filestring(const std::string& filepath)
+std::string ShaderBuffAndProg::get_Filestring(const std::string& filepath)
 {
 
     std::ifstream f;
@@ -93,10 +97,10 @@ std::string ShaderBuffers::get_Filestring(const std::string& filepath)
 }
 
 
-
- std::shared_ptr<RenderEngine::ShaderProgramm> ShaderBuffers::loadShaders(const std::string& shaderName, const std::string& vertexPath, const std::string& fragmentPath)
+/* load shaders program    */
+ std::shared_ptr<RenderEngine::ShaderProgramm> ShaderBuffAndProg::loadShadersProg(const std::string& shaderName, const std::string& vertexPath, const std::string& fragmentPath)
 {
-
+  
        std::string vertexString = get_Filestring(vertexPath);
     if (vertexString.empty()){
         std::cerr<<"No vertex shader!"<< std::endl;
@@ -121,10 +125,21 @@ std::string ShaderBuffers::get_Filestring(const std::string& filepath)
 
 
 PrimitiveShader::PrimitiveShader(const std::string path, const std::string relativePath, const glm::ivec2 windsize) : 
-                                 ShaderBuffers(path,relativePath,windsize)
+                                 ShaderBuffAndProg(path,relativePath,windsize)
 {
     std::cout<<"primitive shaderprogramm created"<<std::endl;
 }
+
+PrimitiveShader::PrimitiveShader(PrimitiveShader && primitiveShader)
+{
+}
+
+PrimitiveShader & PrimitiveShader::operator=(PrimitiveShader && primitiveShader)
+{
+    return *this;
+}
+
+
 
 PrimitiveShader::~PrimitiveShader()
 {
@@ -135,9 +150,9 @@ void PrimitiveShader::createDemoShader(const std::string& shaderName,const std::
   
     
 //     auto pSimpleShaderProgram = _resourcePrimitive->getShaderProgram("freeshader1"); 
-    _shadep = loadShaders(shaderName,vertexPath,fragmentPath); 
-    _shadep->use();
-    _shadep->setVec2("offsete",SIMPLEOFFSET);
+    _shadePrimitiveProgram = loadShadersProg(shaderName,vertexPath,fragmentPath); 
+    _shadePrimitiveProgram->use();
+    _shadePrimitiveProgram->setVec2("offsete",SIMPLEOFFSET);
      _primitiveInitialized = true;
 }
 
@@ -145,7 +160,7 @@ void PrimitiveShader::useDemoShader()
 {
             //using pointer to shader
     if(_primitiveInitialized){
-    _shadep->use();
+    _shadePrimitiveProgram->use();
     
     glBindVertexArray(_vao_primitive_6vf);
     glDrawArrays(GL_TRIANGLES,0,6);
@@ -153,31 +168,42 @@ void PrimitiveShader::useDemoShader()
 }
 
 TransformShader::TransformShader(const std::string path, const std::string relativePath, const glm::ivec2 windsize): 
-                                 ShaderBuffers(path,relativePath,windsize)
+                                 ShaderBuffAndProg(path,relativePath,windsize)
 {
     
 }
+
+TransformShader::TransformShader(TransformShader && transformShader)
+{
+}
+
+TransformShader & TransformShader::operator=(TransformShader && transformShader)
+{
+    return *this;
+}
+
 
 TransformShader::~TransformShader()
 {
 }
 
 
+
 void TransformShader::createDemoShader(const std::string& shaderName,const std::string& vertexPath,const std::string& fragmentPath)
 {
    
-   _shadet = loadShaders(shaderName,vertexPath,fragmentPath);  
+   _shadeTransformProgram = loadShadersProg(shaderName,vertexPath,fragmentPath);  
      glm::mat4 projectionMatrix = glm::ortho (0.0f,_fWindsize.x,0.0f,_fWindsize.y,-10.0f,100.0f);
 //     _shadet = _resourcePrimitive->getShaderProgram("transshader1"); 
-    _shadet->use();
-    _shadet->setMatrix4("projectionMat", projectionMatrix);
+    _shadeTransformProgram->use();
+    _shadeTransformProgram->setMatrix4("projectionMat", projectionMatrix);
 }
 
 
 void TransformShader::useDemoShader()
 {
             const glm::vec2 size= {0.33f*_fWindsize.x,0.33f*_fWindsize.y};
-    _shadet->use();
+    _shadeTransformProgram->use();
     glBindVertexArray(_vao_primitive_6vf);
     glm::mat4 modelMatrix_t00  = glm::mat4(1.0f);
     modelMatrix_t00   = glm::translate(modelMatrix_t00  ,glm::vec3(0.5f*_fWindsize.x,0.5f*_fWindsize.y,0.f));
@@ -185,14 +211,14 @@ void TransformShader::useDemoShader()
 
     modelMatrix_t00  = glm::translate(modelMatrix_t00 ,glm::vec3(100.0f,100.0f,0.0f));  
     modelMatrix_t00  = glm::scale(modelMatrix_t00  ,glm::vec3(size,.5f));
-    _shadet->setMatrix4("modelMat",modelMatrix_t00 );
+    _shadeTransformProgram->setMatrix4("modelMat",modelMatrix_t00 );
     
     glLineWidth(3); 
     glDrawArrays( GL_TRIANGLES,0,6);
     modelMatrix_t00  = glm::rotate(modelMatrix_t00 ,glm::radians(_grades/2),glm::vec3(0.f,0.f,1.f)); 
     modelMatrix_t00   = glm::translate(modelMatrix_t00  ,glm::vec3(.5f,.5f,0.f));
     modelMatrix_t00  = glm::scale(modelMatrix_t00  ,glm::vec3(0.5f,0.5f,.5f));
-    _shadet->setMatrix4("modelMat",modelMatrix_t00 );
+    _shadeTransformProgram->setMatrix4("modelMat",modelMatrix_t00 );
     glLineWidth(3); 
     glDrawArrays( GL_TRIANGLES,0,6);
     
@@ -204,12 +230,12 @@ void TransformShader::useDemoShader()
     
     modelMatrix_t01  = glm::scale(modelMatrix_t01  ,glm::vec3(100.f,100.f,.05f));
     modelMatrix_t01   = glm::translate(modelMatrix_t01 ,glm::vec3(.3,1.0f,0.f));
-    _shadet->setMatrix4("modelMat",modelMatrix_t01 );
+    _shadeTransformProgram->setMatrix4("modelMat",modelMatrix_t01 );
     glDrawArrays( GL_LINE_LOOP,0,3);
     glDrawArrays( GL_TRIANGLES,3,3);
     modelMatrix_t01   = glm::rotate(modelMatrix_t01  ,-1.0f*glm::radians(_grades*2),glm::vec3(0.f,0.f,1.f));
     
-    _shadet->setMatrix4("modelMat",modelMatrix_t01 );
+    _shadeTransformProgram->setMatrix4("modelMat",modelMatrix_t01 );
     glBindVertexArray(_vao_primitive_6vf);
     
     glDrawArrays( GL_LINE_LOOP,0,3);
