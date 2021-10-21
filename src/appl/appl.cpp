@@ -319,12 +319,11 @@ void MyAppl::update( )
     
         if(menuchange)
         {
-//There is   change maker 
+//There is  change maker 
             _menu->update(_windsize.y); //check point of tuch 
             const int actMenu=_menu->get_actbyMenu();
             contentChanger(actMenu);
-            
-  // on that point make reset                      
+// flag off                     
             menuchange= false;
         } 
         
@@ -399,6 +398,7 @@ void glfwKeyCallBack(GLFWwindow *pWindow, int key, int scancode, int action, int
     }
    qkeys[key]=action;   
    scancode = 39;
+   //for future
    tmode = mode==1? true : false;
 }
 
@@ -406,22 +406,25 @@ void glfwKeyCallBack(GLFWwindow *pWindow, int key, int scancode, int action, int
 
 void mouse_button_callback(GLFWwindow *pWindow, int button, int action, int mods)
 {
+    bool tmode;
     double xpos, ypos;
-    //     char titlestring[50];
+/*
+ *There expose in title if it needed   
+ * char titlestring[50];
     int xsize,ysize;
-    
     glfwGetFramebufferSize(pWindow,&xsize,&ysize); 
+*/  
     //read mouse status in window    
     if (action == GLFW_PRESS)
     { 
         glfwGetCursorPos(pWindow, &xpos, &ypos);
-        
         MouseViewPort::set_pos(xpos,ypos); 
         MouseViewPort::set_button(button);
         MouseViewPort::set_used(true);
         menuchange = true;
     };
-    xsize = mods;
+    //for future
+  tmode = mods==1? true : false;
 }
 
 
